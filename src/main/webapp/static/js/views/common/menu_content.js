@@ -264,7 +264,7 @@ var initMainMenu_ = function () {
         '<div class="pull-right">' +
         '<a href="https://bsn.foundation" class="ico-item" target=\'_blank\' style="font-size: 16px"> Foundation Website </a>' +
         '<a href="https://github.com/BSN-Spartan/Data-Center-System" class="ico-item" target=\'_blank\' style="font-size: 16px"><img src="/static/images/system/icon_github.png" style="width: 25px;height: 25px;">&nbsp;GitHub</a>' +
-        '<a href="https://github.com/bsn-spartan" class="ico-item" target=\'_blank\' style="font-size: 16px"><img src="/static/images/system/icon_start.png" style="width: 25px;height: 25px">&nbsp;Quick Start</a>' +
+        '<a href="/static/book/index.html" class="ico-item" target=\'_blank\' style="font-size: 16px"><img src="/static/images/system/icon_start.png" style="width: 25px;height: 25px">&nbsp;Quick Start</a>' +
         '<a href="javascript:;" class="ico-item" onclick="updatedInstructions()"  style="font-size: 16px"><img src="/static/images/system/icon_version.png" style="width: 25px;height: 25px">&nbsp;Version</a>' +
         '<a href="javascript:;" class="ico-item fa fa-lock" onclick="modifyPass()" title="Change Password"></a>' +
         '<a href="javascript:;" class="ico-item fa fa-power-off logout_" onclick="logOut()" title="Logout"></a>' +
