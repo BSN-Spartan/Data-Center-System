@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit;
 public class CacheManager {
     private static Logger logger = LoggerFactory.getLogger("CacheManager");
     private static final long GUAVA_CACHE_SIZE = 10;
-    private static final long GUAVA_CACHE_DAY = 1;
+    private static final long GUAVA_CACHE_TIME = 20;
     public static final String PASSWORD_CACHE_KEY = "keystore";
     static LoadingCache<String, String> loadingCache;
 
     static {
-        if (GUAVA_CACHE_DAY <= 0) {
+        if (GUAVA_CACHE_TIME <= 0) {
             loadingCache = CacheBuilder.newBuilder()
                     .maximumSize(GUAVA_CACHE_SIZE)
                     .build(new CacheLoader<String, String>() {
@@ -32,8 +32,8 @@ public class CacheManager {
         } else {
             loadingCache = CacheBuilder.newBuilder()
                     .maximumSize(GUAVA_CACHE_SIZE)
-                    .expireAfterAccess(GUAVA_CACHE_DAY, TimeUnit.DAYS)
-                    .expireAfterWrite(GUAVA_CACHE_DAY, TimeUnit.DAYS)
+                    .expireAfterAccess(GUAVA_CACHE_TIME, TimeUnit.MINUTES)
+                    .expireAfterWrite(GUAVA_CACHE_TIME, TimeUnit.MINUTES)
                     .removalListener(new RemovalListener<String, String>() {
                         @Override
                         public void onRemoval(RemovalNotification<String, String> removalNotification) {
