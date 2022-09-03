@@ -12,7 +12,7 @@ chain:
   # Node's JSON-RPC interface of the default chain
   nodeRpcAddress: "http://[node-IP]:[node-rpc-port]"
   # Default chain's netWork ID
-  chainId: 8888
+  chainId: 9090
   # Query the transaction pool's waiting time: millisecond, recommended 1.5 seconds
   txPoolSleep: 1500
   # Path of the Keystore file
