@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.NttTxRecordMapper">
+    <select id="queryNttList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        r.tx_hash txHash,
+        r.type type,
+        d.ntt_account_address accountAddress,
+        1 digestType,
+        CONCAT(r.from_ntt_balance) nttBalance,
+        CONCAT(r.ntt_count) nttCount,
+        DATE_FORMAT(
+        r.tx_time,
+        '%Y-%m-%d %T'
+        ) txTime
+        FROM
+        ntt_tx_record r,
+        sys_data_center d
+        WHERE
+        r.from_address = d.ntt_account_address
+        <if test="txHash != null and txHash != ''">
+            and r.tx_hash = #{txHash}
+        </if>
+        <if test="type != null">
+            and r.type = #{type}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND r.tx_time <![CDATA[ >= ]]> CONCAT(#{startTime},' 00:00:00')
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND r.tx_time <![CDATA[ <= ]]> CONCAT(#{endTime},' 23:59:59')
+        </if>
+        UNION ALL
+        SELECT
+        r.tx_hash txHash,
+        r.type type,
+        d.ntt_account_address accountAddress,
+        2 digestType,
+        CONCAT(r.to_ntt_balance) nttBalance,
+        CONCAT(r.ntt_count) nttCount,
+        DATE_FORMAT(
+        r.tx_time,
+        '%Y-%m-%d %T'
+        ) txTime
+        FROM
+        ntt_tx_record r,
+        sys_data_center d
+        WHERE
+        r.to_address = d.ntt_account_address
+        <if test="txHash != null and txHash != ''">
+            and r.tx_hash = #{txHash}
+        </if>
+        <if test="type != null">
+            and r.type = #{type}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND r.tx_time <![CDATA[ >= ]]> CONCAT(#{startTime},' 00:00:00')
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND r.tx_time <![CDATA[ <= ]]> CONCAT(#{endTime},' 23:59:59')
+        </if>
+        ORDER BY
+        txTime DESC
+    </select>
+
+    <select id="getOneByTxHash" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        ntt_tx_record
+        where
+        tx_hash = #{txHash} and type = #{txType}
+        limit 1
+    </select>
+
+    <select id="getNTTRecentAward" resultType="com.spartan.dc.model.vo.resp.NttRewardRespVO">
+        select CONCAT(ntt_count) nttCount,
+               DATE_FORMAT(tx_time, '%Y-%m-%d %H:%i:%s') txTime
+        from ntt_tx_record
+        where type = 0 or type = 1
+        order by create_time desc limit 1
+    </select>
+
+    <select id="getOneByMd5SignAndTxType" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from
+            ntt_tx_record
+        where
+            md5_sign = #{md5Sign} and type = #{txType}
+        limit 1
+    </select>
+
+</mapper>

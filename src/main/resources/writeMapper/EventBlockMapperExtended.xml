@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.EventBlockMapper">
+
+  <select id="getOne" resultMap="BaseResultMap">
+    select
+      ifnull(block_height, 0) block_height
+    from
+      event_block
+    limit 1
+  </select>
+
+  <select id="increment">
+    update
+        event_block
+    SET
+        block_height = block_height + 1;
+  </select>
+
+  <update id="updateEventBlock" parameterType="com.spartan.dc.model.EventBlock">
+    update event_block
+    <set>
+      <if test="blockHeight != null">
+        block_height = #{blockHeight},
+      </if>
+    </set>
+  </update>
+
+</mapper>

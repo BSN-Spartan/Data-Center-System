@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcNodeMapper">
+    <select id="queryNodeList" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        n.node_id nodeId,
+        c.chain_id chainId,
+        c.chain_name chainName,
+        n.node_address nodeAddress,
+        n.rpc_address rpcAddress,
+        n.node_code nodeCode,
+        n.state,
+        n.remarks,
+        date_format(n.create_time, '%Y-%m-%d %T') createTime,
+        date_format(n.apply_result_time, '%Y-%m-%d %T') joinTime,
+        n.reason
+        from dc_node n left join dc_chain c on n.chain_id = c.chain_id
+        <where>
+            <if test="chainId != null and chainId != ''">
+                n.chain_id = #{chainId}
+            </if>
+            <if test="state != null and state != ''">
+                and n.state = #{state}
+            </if>
+        </where>
+        order by n.create_time desc
+    </select>
+
+    <select id="getStayNodeUpChainList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        dc_node
+        where
+        state = 0
+    </select>
+
+    <select id="getOneByNodeID" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        dc_node
+        where
+        node_code = #{nodeID}
+        and state <![CDATA[<>]]> 3
+        limit 1
+        for update
+    </select>
+
+</mapper>

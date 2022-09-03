@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.NttTxRecordMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.NttTxRecord">
+    <id column="tx_record_id" jdbcType="BIGINT" property="txRecordId" />
+    <result column="tx_hash" jdbcType="VARCHAR" property="txHash" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="from_address" jdbcType="VARCHAR" property="fromAddress" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="ntt_count" jdbcType="DECIMAL" property="nttCount" />
+    <result column="from_ntt_balance" jdbcType="DECIMAL" property="fromNttBalance" />
+    <result column="to_ntt_balance" jdbcType="DECIMAL" property="toNttBalance" />
+    <result column="tx_time" jdbcType="TIMESTAMP" property="txTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="md5_sign" jdbcType="VARCHAR" property="md5Sign" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tx_record_id, tx_hash, operator, type, from_address, to_address, ntt_count, from_ntt_balance, 
+    to_ntt_balance, tx_time, create_time, md5_sign
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntt_tx_record
+    where tx_record_id = #{txRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ntt_tx_record
+    where tx_record_id = #{txRecordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.NttTxRecord">
+    insert into ntt_tx_record (tx_record_id, tx_hash, operator, 
+      type, from_address, to_address, 
+      ntt_count, from_ntt_balance, to_ntt_balance, 
+      tx_time, create_time, md5_sign)
+    values (#{txRecordId,jdbcType=BIGINT}, #{txHash,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{type,jdbcType=SMALLINT}, #{fromAddress,jdbcType=VARCHAR}, #{toAddress,jdbcType=VARCHAR}, 
+      #{nttCount,jdbcType=DECIMAL}, #{fromNttBalance,jdbcType=DECIMAL}, #{toNttBalance,jdbcType=DECIMAL}, 
+      #{txTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{md5Sign,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.NttTxRecord">
+    insert into ntt_tx_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="txRecordId != null">
+        tx_record_id,
+      </if>
+      <if test="txHash != null">
+        tx_hash,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="fromAddress != null">
+        from_address,
+      </if>
+      <if test="toAddress != null">
+        to_address,
+      </if>
+      <if test="nttCount != null">
+        ntt_count,
+      </if>
+      <if test="fromNttBalance != null">
+        from_ntt_balance,
+      </if>
+      <if test="toNttBalance != null">
+        to_ntt_balance,
+      </if>
+      <if test="txTime != null">
+        tx_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="md5Sign != null">
+        md5_sign
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="txRecordId != null">
+        #{txRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="txHash != null">
+        #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="fromAddress != null">
+        #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nttCount != null">
+        #{nttCount,jdbcType=DECIMAL},
+      </if>
+      <if test="fromNttBalance != null">
+        #{fromNttBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="toNttBalance != null">
+        #{toNttBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="txTime != null">
+        #{txTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="md5Sign != null">
+        #{md5Sign,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.NttTxRecord">
+    update ntt_tx_record
+    <set>
+      <if test="txHash != null">
+        tx_hash = #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="fromAddress != null">
+        from_address = #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        to_address = #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nttCount != null">
+        ntt_count = #{nttCount,jdbcType=DECIMAL},
+      </if>
+      <if test="fromNttBalance != null">
+        from_ntt_balance = #{fromNttBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="toNttBalance != null">
+        to_ntt_balance = #{toNttBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="txTime != null">
+        tx_time = #{txTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="md5Sign != null">
+        #{md5Sign,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where tx_record_id = #{txRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.NttTxRecord">
+    update ntt_tx_record
+    set tx_hash = #{txHash,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      type = #{type,jdbcType=SMALLINT},
+      from_address = #{fromAddress,jdbcType=VARCHAR},
+      to_address = #{toAddress,jdbcType=VARCHAR},
+      ntt_count = #{nttCount,jdbcType=DECIMAL},
+      from_ntt_balance = #{fromNttBalance,jdbcType=DECIMAL},
+      to_ntt_balance = #{toNttBalance,jdbcType=DECIMAL},
+      tx_time = #{txTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      md5_sign = #{md5Sign,jdbcType=VARCHAR}
+    where tx_record_id = #{txRecordId,jdbcType=BIGINT}
+  </update>
+</mapper>

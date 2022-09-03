@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcNodeMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcNode">
+    <id column="node_id" jdbcType="BIGINT" property="nodeId" />
+    <result column="chain_id" jdbcType="BIGINT" property="chainId" />
+    <result column="node_code" jdbcType="VARCHAR" property="nodeCode" />
+    <result column="rpc_address" jdbcType="VARCHAR" property="rpcAddress" />
+    <result column="node_address" jdbcType="VARCHAR" property="nodeAddress" />
+    <result column="apply_sign" jdbcType="VARCHAR" property="applySign" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="tx_hash" jdbcType="VARCHAR" property="txHash" />
+    <result column="tx_time" jdbcType="TIMESTAMP" property="txTime" />
+    <result column="apply_result_time" jdbcType="TIMESTAMP" property="applyResultTime" />
+    <result column="apply_result_tx_hash" jdbcType="VARCHAR" property="applyResultTxHash" />
+    <result column="ntt_count" jdbcType="DECIMAL" property="nttCount" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    node_id, chain_id, node_code, rpc_address, node_address, apply_sign, state, remarks,
+    create_time, tx_hash, tx_time, apply_result_time, apply_result_tx_hash, ntt_count, reason
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dc_node
+    where node_id = #{nodeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dc_node
+    where node_id = #{nodeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.DcNode">
+    insert into dc_node (node_id, chain_id, node_code,
+                         rpc_address, node_address, apply_sign,
+                         state, remarks, create_time,
+                         tx_hash, tx_time, apply_result_time,
+                         apply_result_tx_hash, ntt_count, reason)
+    values (#{nodeId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{nodeCode,jdbcType=VARCHAR},
+            #{rpcAddress,jdbcType=VARCHAR}, #{nodeAddress,jdbcType=VARCHAR}, #{applySign,jdbcType=VARCHAR},
+            #{state,jdbcType=SMALLINT}, #{remarks,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+            #{txHash,jdbcType=VARCHAR}, #{txTime,jdbcType=TIMESTAMP}, #{applyResultTime,jdbcType=TIMESTAMP},
+            #{applyResultTxHash,jdbcType=VARCHAR}, #{nttCount,jdbcType=DECIMAL}, #{reason,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcNode">
+    insert into dc_node
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        node_id,
+      </if>
+      <if test="chainId != null">
+        chain_id,
+      </if>
+      <if test="nodeCode != null">
+        node_code,
+      </if>
+      <if test="rpcAddress != null">
+        rpc_address,
+      </if>
+      <if test="nodeAddress != null">
+        node_address,
+      </if>
+      <if test="applySign != null">
+        apply_sign,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="txHash != null">
+        tx_hash,
+      </if>
+      <if test="txTime != null">
+        tx_time,
+      </if>
+      <if test="applyResultTime != null">
+        apply_result_time,
+      </if>
+      <if test="applyResultTxHash != null">
+        apply_result_tx_hash,
+      </if>
+      <if test="nttCount != null">
+        ntt_count,
+      </if>
+      <if test="reason != null">
+        reason
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        #{nodeId,jdbcType=BIGINT},
+      </if>
+      <if test="chainId != null">
+        #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeCode != null">
+        #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rpcAddress != null">
+        #{rpcAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeAddress != null">
+        #{nodeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="applySign != null">
+        #{applySign,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="txHash != null">
+        #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="txTime != null">
+        #{txTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyResultTime != null">
+        #{applyResultTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyResultTxHash != null">
+        #{applyResultTxHash,jdbcType=VARCHAR},
+      </if>
+      <if test="nttCount != null">
+        #{nttCount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.DcNode">
+    update dc_node
+    <set>
+      <if test="chainId != null">
+        chain_id = #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeCode != null">
+        node_code = #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rpcAddress != null">
+        rpc_address = #{rpcAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeAddress != null">
+        node_address = #{nodeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="applySign != null">
+        apply_sign = #{applySign,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="txHash != null">
+        tx_hash = #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="txTime != null">
+        tx_time = #{txTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyResultTime != null">
+        apply_result_time = #{applyResultTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyResultTxHash != null">
+        apply_result_tx_hash = #{applyResultTxHash,jdbcType=VARCHAR},
+      </if>
+      <if test="nttCount != null">
+        ntt_count = #{nttCount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where node_id = #{nodeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcNode">
+    update dc_node
+    set chain_id = #{chainId,jdbcType=BIGINT},
+        node_code = #{nodeCode,jdbcType=VARCHAR},
+        rpc_address = #{rpcAddress,jdbcType=VARCHAR},
+        node_address = #{nodeAddress,jdbcType=VARCHAR},
+        apply_sign = #{applySign,jdbcType=VARCHAR},
+        state = #{state,jdbcType=SMALLINT},
+        remarks = #{remarks,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        tx_hash = #{txHash,jdbcType=VARCHAR},
+        tx_time = #{txTime,jdbcType=TIMESTAMP},
+        apply_result_time = #{applyResultTime,jdbcType=TIMESTAMP},
+        apply_result_tx_hash = #{applyResultTxHash,jdbcType=VARCHAR},
+        ntt_count = #{nttCount,jdbcType=DECIMAL},
+        reason = #{reason,jdbcType=VARCHAR}
+    where node_id = #{nodeId,jdbcType=BIGINT}
+  </update>
+</mapper>

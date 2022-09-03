@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.ChainAccountRechargeMetaMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.ChainAccountRechargeMeta">
+    <id column="recharge_meta_id" jdbcType="BIGINT" property="rechargeMetaId" />
+    <result column="chain_account_address" jdbcType="VARCHAR" property="chainAccountAddress" />
+    <result column="gas" jdbcType="DECIMAL" property="gas" />
+    <result column="deadline" jdbcType="BIGINT" property="deadline" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    recharge_meta_id, chain_account_address, gas, deadline, sign
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from chain_account_recharge_meta
+    where recharge_meta_id = #{rechargeMetaId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from chain_account_recharge_meta
+    where recharge_meta_id = #{rechargeMetaId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.ChainAccountRechargeMeta">
+    insert into chain_account_recharge_meta (recharge_meta_id, chain_account_address, 
+      gas, deadline, sign)
+    values (#{rechargeMetaId,jdbcType=BIGINT}, #{chainAccountAddress,jdbcType=VARCHAR}, 
+      #{gas,jdbcType=DECIMAL}, #{deadline,jdbcType=BIGINT}, #{sign,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.ChainAccountRechargeMeta">
+    insert into chain_account_recharge_meta
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rechargeMetaId != null">
+        recharge_meta_id,
+      </if>
+      <if test="chainAccountAddress != null">
+        chain_account_address,
+      </if>
+      <if test="gas != null">
+        gas,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rechargeMetaId != null">
+        #{rechargeMetaId,jdbcType=BIGINT},
+      </if>
+      <if test="chainAccountAddress != null">
+        #{chainAccountAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="gas != null">
+        #{gas,jdbcType=DECIMAL},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=BIGINT},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.ChainAccountRechargeMeta">
+    update chain_account_recharge_meta
+    <set>
+      <if test="chainAccountAddress != null">
+        chain_account_address = #{chainAccountAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="gas != null">
+        gas = #{gas,jdbcType=DECIMAL},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=BIGINT},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where recharge_meta_id = #{rechargeMetaId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.ChainAccountRechargeMeta">
+    update chain_account_recharge_meta
+    set chain_account_address = #{chainAccountAddress,jdbcType=VARCHAR},
+      gas = #{gas,jdbcType=DECIMAL},
+      deadline = #{deadline,jdbcType=BIGINT},
+      sign = #{sign,jdbcType=VARCHAR}
+    where recharge_meta_id = #{rechargeMetaId,jdbcType=BIGINT}
+  </update>
+</mapper>

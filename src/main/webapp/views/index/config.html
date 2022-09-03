@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="index_"/>
+    <meta name="menuId" content="index_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+
+
+        .link-top {
+            width: 100%;
+            height: 1px;
+            margin-top: 40px;
+            border-top: solid #1b1f20 1px;
+        }
+
+        .exists {
+            font-size: 24px;
+            color: #ff3838;
+        }
+        .pwd {
+            text-security: disc;
+            -webkit-text-security: disc;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Data Center Information</div>
+                    <div class="link-top"></div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Email Address:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="email" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="dcCode" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Data Center ID:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="dcCode" id="dcCode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="token" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Token：</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="token" id="token">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="nttAccountAddress" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>NTT Wallet Address:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="nttAccountAddress" id="nttAccountAddress">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px" id="confirm_chainAccountAddress">
+                        <div class="form-group">
+                            <label for="confirmNttAccountAddress" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Confirm NTT Wallet Address:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="confirmNttAccountAddress"
+                                       id="confirmNttAccountAddress">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12" id="submit_div" style="display: none">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <form class="form-horizontal" id="submit_keyStore">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">
+                        Keystore Information
+
+                    </div>
+                    <div style="color: #ff3838;">The above information is configured locally, and we will not obtain any information from you in any form!</div>
+
+
+                    <div class="link-top"></div>
+                    <div id="keystore_info" style="display: none">
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Keystore Password：</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control pwd" name="password" id="password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="confirmPassword" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Confirm Keystore Password：</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control pwd" name="confirmPassword" id="confirmPassword">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="privateKey" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>PrivateKey：</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="privateKey" id="privateKey">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="confirmPrivateKey" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Confirm PrivateKey：</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="confirmPrivateKey"
+                                           id="confirmPrivateKey">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" id="btn_Submit_keyStore">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-8">
+                                    <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">
+                                        Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="keystore_info_already_exists" style="height:200px;margin-top:100px">
+                        <span class="exists">You must NEVER share the secret key with anyone! The key controls access to your funds!</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/views/index/index.js"></script>
+
+</body>
+</html>

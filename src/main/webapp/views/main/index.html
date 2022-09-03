@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link rel="stylesheet" href="/static/css/custom/custom.style.css">
+</head>
+<body>
+
+<div id="single-wrapper">
+    <form id="login_form_" method="post">
+        <div class="frm-single">
+            <div class="inside" id="login_info">
+                <div class="title" style=" margin-top: 80px;">
+                    <strong class="system_name"></strong>
+                </div>
+
+                <div class="frm-input" style="margin-top:30px;margin-left: 80px;margin-right: 80px;">
+                    <input type="text" id="email" name="email" placeholder="Email address"
+                           class="frm-inp form-control"
+                           style="height:50px ">
+                    <i class="fa fa-user frm-ico" style="line-height: 50px"></i>
+                </div>
+
+                <div class="frm-input" style="margin-top:30px;margin-left: 80px;margin-right: 80px;">
+                    <input type="password" id="password" name="password" placeholder="Password"
+                           class="frm-inp form-control"
+                           style="height:50px">
+                    <i class="fa fa-lock frm-ico" style="line-height: 50px"></i>
+                </div>
+
+                <div class="frm-input" style="margin-left: 80px;margin-right: 80px;">
+                    <input type="text" id="code" name="code" class="frm-inp" placeholder="Captcha"
+                           maxlength="6"
+                           style="width: 50%;height:50px ">
+                    <i class="fa fa-shield frm-ico" style="line-height: 50px"></i>
+                    <img class="yzm_img" src="/code/getCode"
+                         style="cursor:pointer;float: right;width: 180px;height: 48px;"/>
+                </div>
+
+                <div class="frm-input" style="margin-left: 80px;margin-right: 80px;">
+                    <button type="button" id="loginBtn" class="frm-submit"
+                            style="height: 50px;line-height: 50px;font-size: 20px;">
+                        Login
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </button>
+                </div>
+                <div class="frm-input" style="margin-left: 80px;margin-right: 80px;">
+                    <div class="frm-footer" style="text-align: center">
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- .inside -->
+        </div>
+    </form>
+    <!-- /.frm-single -->
+</div><!--/#single-wrapper -->
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/system/sweetalert.min.js"></script>
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+
+<script src="/static/js/views/index.js?<%=new Date().getTime()%>"></script>
+
+</body>
+</html>

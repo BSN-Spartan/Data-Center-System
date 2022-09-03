@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcGasRechargeRecordMapper">
+
+
+    <select id="getUnSubmitGasRechargeRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        dc_gas_recharge_record
+        where
+        `state` = 1 and recharge_state = 3
+    </select>
+
+    <select id="getOneByTxHash" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        dc_gas_recharge_record
+        where
+        `state` = 2 and tx_hash = #{txHash}
+        limit 1
+    </select>
+
+    <select id="getSuccessSubmit" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        dc_gas_recharge_record
+        where
+        `state` = 3 and recharge_state = 0
+    </select>
+
+    <select id="getSuccessSubmitAndRechargingRecords" resultType="com.spartan.dc.core.dto.dc.GasRechargeRecordDTO"
+            parameterType="com.spartan.dc.core.dto.task.req.GasRechargeRecordReqVO">
+        SELECT
+        tx_hash txHash,
+        state,
+        recharge_state rechargeState,
+        recharge_record_id rechargeRecordId
+        FROM
+        dc_gas_recharge_record
+        <where>
+            <if test="state != null">
+                and state = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="rechargeState != null">
+                and recharge_state = #{rechargeState,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryChargeList" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        c.chain_id chainId,
+        c.chain_name chainName,
+        c.recharge_unit rechargeUnit,
+        r.chain_address chainAddress,
+        CONCAT(r.gas,'') gas,
+        CONCAT(r.ntt,'') ntt,
+        DATE_FORMAT(r.recharge_time, '%Y-%m-%d %H:%i:%s') rechargeTime,
+        r.recharge_state rechargeState,
+        r.recharge_code rechargeCode,
+        r.tx_hash txHash,
+        r.recharge_result reason
+        from dc_gas_recharge_record r left join dc_chain c on c.chain_id = r.chain_id
+        <where>
+            <if test="chainId != null">
+                r.chain_id = #{chainId}
+            </if>
+            <if test="chainAddress != null and chainAddress != ''">
+                and r.chain_address = #{chainAddress}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND r.recharge_time <![CDATA[ >= ]]> CONCAT(#{startTime},' 00:00:00')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND r.recharge_time <![CDATA[ <= ]]> CONCAT(#{endTime},' 23:59:59')
+            </if>
+            <if test="txType != null">
+                AND r.recharge_state = #{txType}
+            </if>
+        </where>
+        order by r.recharge_time desc
+    </select>
+
+    <insert id="insertRechargeRecord" useGeneratedKeys="true" keyProperty="rechargeRecordId"
+            parameterType="com.spartan.dc.model.DcGasRechargeRecord">
+        insert into dc_gas_recharge_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rechargeRecordId != null">
+                recharge_record_id,
+            </if>
+            <if test="chainId != null">
+                chain_id,
+            </if>
+            <if test="chainAddress != null">
+                chain_address,
+            </if>
+            <if test="gas != null">
+                gas,
+            </if>
+            <if test="rechargeTime != null">
+                recharge_time,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="txHash != null">
+                tx_hash,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="rechargeCode != null">
+                recharge_code,
+            </if>
+            <if test="ntt != null">
+                ntt,
+            </if>
+            <if test="rechargeResult != null">
+                recharge_result,
+            </if>
+            <if test="rechargeState != null">
+                recharge_state,
+            </if>
+            <if test="nonce != null">
+                nonce,
+            </if>
+            <if test="md5Sign != null">
+                md5_sign
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rechargeRecordId != null">
+                #{rechargeRecordId,jdbcType=BIGINT},
+            </if>
+            <if test="chainId != null">
+                #{chainId,jdbcType=BIGINT},
+            </if>
+            <if test="chainAddress != null">
+                #{chainAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="gas != null">
+                #{gas,jdbcType=DECIMAL},
+            </if>
+            <if test="rechargeTime != null">
+                #{rechargeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=SMALLINT},
+            </if>
+            <if test="txHash != null">
+                #{txHash,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="rechargeCode != null">
+                #{rechargeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="ntt != null">
+                #{ntt,jdbcType=DECIMAL},
+            </if>
+            <if test="rechargeResult != null">
+                #{rechargeResult,jdbcType=VARCHAR},
+            </if>
+            <if test="rechargeState != null">
+                #{rechargeState,jdbcType=SMALLINT},
+            </if>
+            <if test="nonce != null">
+                #{nonce,jdbcType=BIGINT},
+            </if>
+            <if test="md5Sign != null">
+                #{md5Sign,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateRechargeStateById" parameterType="com.spartan.dc.core.dto.task.req.GasRechargeRecordReqVO">
+        update dc_gas_recharge_record
+        <set>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            update_time = now()
+        </set>
+        where recharge_record_id = #{rechargeRecordId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getOneByMd5Sign" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from
+            dc_gas_recharge_record
+        where
+            md5_sign = #{md5Sign}
+        limit 1
+    </select>
+</mapper>

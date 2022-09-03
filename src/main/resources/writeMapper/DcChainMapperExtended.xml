@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcChainMapper">
+
+    <select id="queryChainList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT dc.chain_name        chainName,
+               dc.recharge_unit     rechargeUnit,
+               CONCAT(cp.ntt_count) nttCount,
+               CONCAT(cp.gas)       gas
+        FROM dc_chain dc
+                 LEFT JOIN
+             chain_price cp ON dc.chain_id = cp.chain_id
+        order by dc.chain_id
+    </select>
+
+    <select id="getOpbChainList" resultType="com.spartan.dc.model.DcChain" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_chain order by chain_id
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        dc_chain order by chain_id
+    </select>
+
+</mapper>

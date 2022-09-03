@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.NttTxSumMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.NttTxSum">
+    <id column="ntt_tx_sum_id" jdbcType="BIGINT" property="nttTxSumId" />
+    <result column="flow_in" jdbcType="DECIMAL" property="flowIn" />
+    <result column="flow_out" jdbcType="DECIMAL" property="flowOut" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ntt_tx_sum_id, flow_in, flow_out
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntt_tx_sum
+    where ntt_tx_sum_id = #{nttTxSumId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ntt_tx_sum
+    where ntt_tx_sum_id = #{nttTxSumId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.NttTxSum">
+    insert into ntt_tx_sum (ntt_tx_sum_id, flow_in, flow_out
+      )
+    values (#{nttTxSumId,jdbcType=BIGINT}, #{flowIn,jdbcType=DECIMAL}, #{flowOut,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.NttTxSum">
+    insert into ntt_tx_sum
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nttTxSumId != null">
+        ntt_tx_sum_id,
+      </if>
+      <if test="flowIn != null">
+        flow_in,
+      </if>
+      <if test="flowOut != null">
+        flow_out,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nttTxSumId != null">
+        #{nttTxSumId,jdbcType=BIGINT},
+      </if>
+      <if test="flowIn != null">
+        #{flowIn,jdbcType=DECIMAL},
+      </if>
+      <if test="flowOut != null">
+        #{flowOut,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.NttTxSum">
+    update ntt_tx_sum
+    <set>
+      <if test="flowIn != null">
+        flow_in = #{flowIn,jdbcType=DECIMAL},
+      </if>
+      <if test="flowOut != null">
+        flow_out = #{flowOut,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ntt_tx_sum_id = #{nttTxSumId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.NttTxSum">
+    update ntt_tx_sum
+    set flow_in = #{flowIn,jdbcType=DECIMAL},
+      flow_out = #{flowOut,jdbcType=DECIMAL}
+    where ntt_tx_sum_id = #{nttTxSumId,jdbcType=BIGINT}
+  </update>
+</mapper>

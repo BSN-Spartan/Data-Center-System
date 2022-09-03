@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysDataCenterMapper">
+
+    <select id="getDataCenter" resultType="com.spartan.dc.core.dto.dc.DataCenter">
+        select contacts_email                          contactsEmail,
+               ntt_account_address                     nttAccountAddress,
+               token,
+               dc_code dcCode,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') createTime
+        from sys_data_center limit 1
+    </select>
+
+
+    <select id="getSysDataCenter" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_data_center
+        limit 1
+    </select>
+
+</mapper>

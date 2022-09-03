@@ -1,0 +1,80 @@
+#single-wrapper {
+    min-height: 100%;
+    background: url('/static/images/system/bj.png') no-repeat;
+    background-size: 100% 100%;
+    overflow: hidden;
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+}
+
+#login_info {
+    background: url(/static/images/system/body_login.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 600px;
+    height: 550px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+}
+
+#login_info .system_name {
+    color: #000000;
+    font-family: '微软雅黑';
+    font-size: 20px;
+}
+
+
+#page-404 {
+    height: 100%;
+    background: url('/static/images/system/bj.png') no-repeat;
+    background-size:100% 100%;
+    background-position: center center;
+    background-attachment: fixed;
+    overflow: hidden;
+    width: 100%;
+    padding: 0px 0px 0px 0px
+}
+
+#page-404 .content {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0px auto 0px;
+    float: none;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
+
+#page-404 p {
+    padding: 30px 0px 30px 0px;
+    color: #777;
+    font-size: 16px;
+    line-height: 30px;
+    margin: 0px
+}
+
+@media (max-height: 359px) {
+    #page-404 {
+        min-height: 100%;
+        height: auto
+    }
+
+    #page-404 .content {
+        transform: translate(0, 0);
+        -webkit-transform: translate(0, 0);
+        -moz-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        top: 0px;
+        margin-top: 60px;
+        margin-bottom: 60px
+    }
+}

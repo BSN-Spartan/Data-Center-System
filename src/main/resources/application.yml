@@ -1,0 +1,47 @@
+spring:
+  profiles:
+    active: prod
+  mvc:
+    view:
+      prefix: /views/
+      suffix: .html
+mysql_conf:
+  driver: com.mysql.cj.jdbc.Driver
+  write_mapper_path: /writeMapper/**.xml
+  read_mapper_path: /readMapper/**.xml
+  config_file: mybatis-config.xml
+
+server:
+  servlet:
+    session:
+      timeout: 1800 #uint: second
+
+
+system:
+  name: BSN Spartan Data Center System
+  icon: /static/images/system/favicon.ico
+  logo: /static/images/system/spartan.png
+  adminName: admin
+  adminEmail: admin@reddatetech.com
+  defaultPassword: 888888
+
+thread-pool:
+  cfg:
+    switch: true
+    core-size: 20
+    max-size: 30
+    keep-alive: 1000
+    queue_capacity: 500
+    prefix: default-task
+
+chainaddresscheck:
+  list:
+    - chainid: 1
+      regularformat: "^enode:\\/\\/[A-Za-z0-9]{128}"
+      containsnodeid: true
+    - chainid: 3
+      regularformat: "^\\/(dns|ip4|ip6)\\/[A-Za-z0-9.]{0,100}\\/tcp\\/[1|2|3|4|5|6|7|8|9][0-9]{0,4}\\/p2p\\/[A-Za-z0-9]{0,100}+$"
+      containsnodeid: true
+    - chainid: 2
+      regularformat: "[\\w\\W]*"
+      containsnodeid: true

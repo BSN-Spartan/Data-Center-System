@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcChainMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcChain">
+    <id column="chain_id" jdbcType="BIGINT" property="chainId" />
+    <result column="chain_type" jdbcType="VARCHAR" property="chainType" />
+    <result column="chain_name" jdbcType="VARCHAR" property="chainName" />
+    <result column="recharge_unit" jdbcType="VARCHAR" property="rechargeUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    chain_id, chain_type, chain_name, recharge_unit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dc_chain
+    where chain_id = #{chainId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dc_chain
+    where chain_id = #{chainId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.DcChain">
+    insert into dc_chain (chain_id, chain_type, chain_name, 
+      recharge_unit)
+    values (#{chainId,jdbcType=BIGINT}, #{chainType,jdbcType=VARCHAR}, #{chainName,jdbcType=VARCHAR}, 
+      #{rechargeUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcChain">
+    insert into dc_chain
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="chainId != null">
+        chain_id,
+      </if>
+      <if test="chainType != null">
+        chain_type,
+      </if>
+      <if test="chainName != null">
+        chain_name,
+      </if>
+      <if test="rechargeUnit != null">
+        recharge_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="chainId != null">
+        #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="chainType != null">
+        #{chainType,jdbcType=VARCHAR},
+      </if>
+      <if test="chainName != null">
+        #{chainName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeUnit != null">
+        #{rechargeUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.DcChain">
+    update dc_chain
+    <set>
+      <if test="chainType != null">
+        chain_type = #{chainType,jdbcType=VARCHAR},
+      </if>
+      <if test="chainName != null">
+        chain_name = #{chainName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeUnit != null">
+        recharge_unit = #{rechargeUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where chain_id = #{chainId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcChain">
+    update dc_chain
+    set chain_type = #{chainType,jdbcType=VARCHAR},
+      chain_name = #{chainName,jdbcType=VARCHAR},
+      recharge_unit = #{rechargeUnit,jdbcType=VARCHAR}
+    where chain_id = #{chainId,jdbcType=BIGINT}
+  </update>
+</mapper>

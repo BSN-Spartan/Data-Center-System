@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.NttTxSumMapper">
+
+    <select id="getOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        ntt_tx_sum
+        limit 1
+    </select>
+
+    <select id="getNTTDealsSummary" resultType="com.spartan.dc.model.vo.resp.NttTxSumRespVO">
+        select CONCAT(flow_in) flowIn,
+               CONCAT(flow_out) flowOut
+        from ntt_tx_sum
+    </select>
+
+</mapper>
