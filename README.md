@@ -14,7 +14,7 @@
 
 #### 1.2.1 Create the Database
 
-1. Get the mysql script from [github](https://github.com/)
+1. Get the mysql script from [github](https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.0/bsn_spartan_dc.sql)
 
 2. Create the database
 
@@ -114,13 +114,13 @@
 #### 3.1.1 Download the Package
 
 ```shell
-  git clone https://github.com/
+  git clone https://github.com/BSN-Spartan/Data-Center-System/releases/tag/
 ```
 
 #### 3.1.2 Download the Source Code
 
 ```shell
-  git clone https://github.com/
+  git clone https://github.com/BSN-Spartan/Data-Center-System/
 ```
 
 ### 3.2 Start the Service
