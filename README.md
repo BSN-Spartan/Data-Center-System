@@ -111,17 +111,10 @@
 
 ### 3.1 Download the Service Package
 
-#### 3.1.1 Download the Package
+#### 3.1.1 [Download the Package](https://github.com/BSN-Spartan/Data-Center-System/releases/)
 
-```shell
-  git clone https://github.com/BSN-Spartan/Data-Center-System/releases/tag/
-```
+#### 3.1.2 [Download the Source Code](https://github.com/BSN-Spartan/Data-Center-System/)
 
-#### 3.1.2 Download the Source Code
-
-```shell
-  git clone https://github.com/BSN-Spartan/Data-Center-System/
-```
 
 ### 3.2 Start the Service
 
