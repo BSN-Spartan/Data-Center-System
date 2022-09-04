@@ -21,9 +21,9 @@ system:
   name: BSN Spartan Data Center System
   icon: /static/images/system/favicon.ico
   logo: /static/images/system/spartan.png
-  adminName: admin
-  adminEmail: admin@reddatetech.com
-  defaultPassword: 888888
+  adminName: xxxx
+  adminEmail: xxxx@xxxx.com
+  defaultPassword: xxxx
 
 thread-pool:
   cfg:
