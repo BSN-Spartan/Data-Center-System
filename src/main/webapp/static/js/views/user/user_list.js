@@ -119,15 +119,15 @@ var initTableBut = function (data, type, row) {
     var contactsName = row.contactsName;
     var butStr = '';
     if (state == 0) {
-        butStr += '<button type="button" class="btn-info btn-xs" onclick="updateUserState(' + userId + ',\'' + contactsName + '\',\'Enable\',1)"><img src="/static/images/btn/btn_able_icon.png">&nbsp;Enable</button>';
+        butStr += '<button type="button" class="btn-info btn-xs" onclick="updateUserState(' + userId + ',\'' + contactsName + '\',\'enable\',1)"><img src="/static/images/btn/btn_able_icon.png">&nbsp;Enable</button>';
     } else {
-        butStr += '<button type="button" class="btn-danger btn-xs" onclick="updateUserState(' + userId + ',\'' + contactsName + '\',\'Disable\',0)"><img src="/static/images/btn/btn_unable_icon.png">&nbsp;Disable</button>';
+        butStr += '<button type="button" class="btn-danger btn-xs" onclick="updateUserState(' + userId + ',\'' + contactsName + '\',\'disable\',0)"><img src="/static/images/btn/btn_unable_icon.png">&nbsp;Disable</button>';
     }
     return butStr == "" ? "--" : butStr;
 };
 
 function updateUserState(userId, loginName, stateName, state) {
-    alert_confirm("", "Confirm" + stateName + "\"" + loginName + "\"User Information?", function () {
+    alert_confirm("", "Confirm to " + stateName + " \"" + loginName + "\"?", function () {
         var data = {};
         data.userId = userId;
         data.userState = state;
@@ -202,8 +202,8 @@ var search = function () {
 
 var USER_HANDLE = {
     STATE_: [
-        {"code": 1, "name": "Enable"},
-        {"code": 0, "name": "Disable"}
+        {"code": 1, "name": "Enabled"},
+        {"code": 0, "name": "Disabled"}
     ],
     getStateSelect: function () {
         var op = '<option value="">All</option>';
