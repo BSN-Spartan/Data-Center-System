@@ -1,5 +1,7 @@
 package com.spartan.dc.core.util.common;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -34,6 +36,9 @@ public class CryptoUtils {
     }
 
     public static String getStringEncrypt(String src){
+        if (StringUtils.isEmpty(src)){
+            return null;
+        }
         try{
             byte key[] = keyAll.getBytes("utf-8");
             String enc = byteToHexString(encrypt(src, key));
@@ -45,6 +50,9 @@ public class CryptoUtils {
 
     }
     public static String getStringDecrypt(String src) throws Exception {
+        if (StringUtils.isEmpty(src)){
+            return null;
+        }
         try{
             byte key[] = keyAll.getBytes("utf-8");
             byte[] original = decrypt(src, key);

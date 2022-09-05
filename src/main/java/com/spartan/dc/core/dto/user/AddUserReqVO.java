@@ -1,15 +1,20 @@
 package com.spartan.dc.core.dto.user;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * @Author : rjx
  * @Date : 2022/7/26 11:22
  **/
 public class AddUserReqVO {
 
+    @NotEmpty(message = "userName can not be empty")
     private String userName;
 
+    @NotEmpty(message = "password can not be empty")
     private String password;
 
+    @NotEmpty(message = "email can not be empty")
     private String email;
 
     private String phone;

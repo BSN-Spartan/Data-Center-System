@@ -43,17 +43,13 @@ public class DcUserServiceImpl implements DcUserService {
 
     @Override
     public UserLoginInfo handleLogin(UserLoginReqVO userLoginReqVO) {
-
-        String email = null;
-        String pwd = null;
+        String email;
+        String pwd;
         try {
             email = CryptoUtils.getStringDecrypt(userLoginReqVO.getEmail());
             pwd = CryptoUtils.getStringDecrypt(userLoginReqVO.getPassword());
         } catch (Exception e) {
             throw new GlobalException("Password decryption failed");
-        }
-        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(pwd)) {
-            throw new GlobalException("Username/Password is incorrect");
         }
 
         DcUser dcUser = dcUserMapper.selectByEmail(email);
@@ -70,8 +66,6 @@ public class DcUserServiceImpl implements DcUserService {
         if (dcUser.getState() == 0) {
             throw new GlobalException("The user is disabled.");
         }
-
-
         UserLoginInfo userLoginInfo = new UserLoginInfo();
         userLoginInfo.setUserName(dcUser.getContactsName());
         userLoginInfo.setUserId(dcUser.getUserId());
@@ -79,7 +73,6 @@ public class DcUserServiceImpl implements DcUserService {
         userLoginInfo.setSystemName(systemConf.getName());
         userLoginInfo.setSystemIcon(systemConf.getIcon());
         userLoginInfo.setSystemLogo(systemConf.getLogo());
-
         return userLoginInfo;
     }
 
@@ -107,21 +100,32 @@ public class DcUserServiceImpl implements DcUserService {
         if (Objects.isNull(addUserReqVO)) {
             throw new GlobalException("user information can not be empty");
         }
-        DcUser user = dcUserMapper.selectUser(addUserReqVO.getEmail(), addUserReqVO.getUserName());
+        String userName;
+        String password;
+        String email;
+        try {
+            userName = CryptoUtils.getStringDecrypt(addUserReqVO.getUserName());
+            password = CryptoUtils.getStringDecrypt(addUserReqVO.getPassword());
+            email = CryptoUtils.getStringDecrypt(addUserReqVO.getEmail());
+        } catch (Exception e) {
+            throw new GlobalException("Password decryption failed");
+        }
+
+        DcUser user = dcUserMapper.selectUser(email, userName);
         if (user != null) {
             throw new GlobalException("Email or name already registered");
         }
+
         DcUser dcUser = new DcUser();
-        dcUser.setContactsEmail(addUserReqVO.getEmail());
-        dcUser.setContactsName(addUserReqVO.getUserName());
+        dcUser.setContactsEmail(email);
+        dcUser.setContactsName(userName);
         String salt = UUIDUtil.generate().toLowerCase();
         dcUser.setSalt(salt);
-        String encryptPass = encryptPass(salt, addUserReqVO.getPassword());
+        String encryptPass = encryptPass(salt, password);
         dcUser.setPassword(encryptPass);
         dcUser.setContactsPhone(addUserReqVO.getPhone());
         dcUser.setState(Short.valueOf("1"));
         dcUser.setCreateTime(new Date());
-
         return dcUserMapper.insert(dcUser);
     }
 
@@ -138,28 +142,33 @@ public class DcUserServiceImpl implements DcUserService {
 
     @Override
     public Integer modifyPass(ModifyPassReqVO modifyPassReqVO, Long userId, HttpSession session) {
+        String oldPassword;
+        String newPassword;
+        try {
+            oldPassword = CryptoUtils.getStringDecrypt(modifyPassReqVO.getOldPassword());
+            newPassword = CryptoUtils.getStringDecrypt(modifyPassReqVO.getNewPassword());
+        } catch (Exception e) {
+            throw new GlobalException("Password decryption failed");
+        }
 
         DcUser dcUser = dcUserMapper.selectByPrimaryKey(userId);
         if (Objects.isNull(dcUser)) {
             throw new GlobalException("User does not exist");
         }
-        String oldEncryptPass = encryptPass(dcUser.getSalt(), modifyPassReqVO.getOldPassword());
+        String oldEncryptPass = encryptPass(dcUser.getSalt(), oldPassword);
         if (!Objects.equals(oldEncryptPass, dcUser.getPassword())) {
             throw new GlobalException("Incorrect password");
         }
 
-
         String salt = UUIDUtil.generate().toLowerCase();
-        String newEncryptPass = encryptPass(salt, modifyPassReqVO.getNewPassword());
+        String newEncryptPass = encryptPass(salt, newPassword);
         dcUser.setSalt(salt);
         dcUser.setPassword(newEncryptPass);
         int count = dcUserMapper.updateByPrimaryKeySelective(dcUser);
 
-
         if (count > 0) {
             session.removeAttribute(UserGlobals.USER_SESSION_KEY);
         }
-
         return count;
     }
 

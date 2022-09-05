@@ -1,6 +1,7 @@
 var dataTable;
 var user_list_ = "#user_list_";
-
+const key = CryptoJS.enc.Utf8.parse('reddatespartan25');
+const iv = CryptoJS.enc.Utf8.parse('hongzao25spartan');
 $(document).ready(function () {
     initUserList();
 
@@ -162,9 +163,9 @@ var addUser = function () {
         const phone = $("#phone").val();
 
         var data = {};
-        data.userName = userName;
-        data.email = email;
-        data.password = password;
+        data.userName = getEncryptionData(userName);
+        data.email = getEncryptionData(email);
+        data.password = getEncryptionData(password);
         data.phone = phone;
 
         $.ajax({
@@ -223,3 +224,16 @@ var USER_HANDLE = {
         return "";
     }
 };
+
+
+function getEncryptionData(data) {
+    if (data == "" || data == null) return '';
+    var srcs = CryptoJS.enc.Utf8.parse(data + '');
+    var encrypted = CryptoJS.AES.encrypt(srcs, key, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+    var encryptedStr = encrypted.ciphertext.toString().toUpperCase();
+    return encryptedStr;
+}

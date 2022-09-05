@@ -1,8 +1,8 @@
 $(document).ready(function () {
     handleSubmit();
-
 });
-
+const key = CryptoJS.enc.Utf8.parse('reddatespartan25');
+const iv = CryptoJS.enc.Utf8.parse('hongzao25spartan');
 var handleSubmit = function () {
     $('#submit_modify_pass').validate({
         errorElement: 'span',
@@ -60,9 +60,9 @@ var submitForm = function () {
     var againPassword = $("#againPassword").val();
 
     var data = {};
-    data.oldPassword = oldPassword;
-    data.newPassword = newPassword;
-    data.againPassword = againPassword;
+    data.oldPassword = getEncryptionData(oldPassword);
+    data.newPassword = getEncryptionData(newPassword);
+    data.againPassword = getEncryptionData(againPassword);
 
 
     $.ajax({
@@ -83,3 +83,16 @@ var submitForm = function () {
     });
 
 };
+
+
+function getEncryptionData(data) {
+    if (data == "" || data == null) return '';
+    var srcs = CryptoJS.enc.Utf8.parse(data + '');
+    var encrypted = CryptoJS.AES.encrypt(srcs, key, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+    var encryptedStr = encrypted.ciphertext.toString().toUpperCase();
+    return encryptedStr;
+}

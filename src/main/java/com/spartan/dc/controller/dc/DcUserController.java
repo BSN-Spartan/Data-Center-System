@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -121,7 +122,7 @@ public class DcUserController extends BaseController {
     }
 
     @PostMapping(value = "addUser")
-    public ResultInfo addUser(@RequestBody AddUserReqVO addUserReqVO) {
+    public ResultInfo addUser(@RequestBody @Validated AddUserReqVO addUserReqVO) {
         return ResultInfoUtil.successResult(dcUserService.addUser(addUserReqVO));
     }
 
@@ -131,7 +132,7 @@ public class DcUserController extends BaseController {
     }
 
     @PostMapping(value = "modifyPass")
-    public ResultInfo modifyPass(@RequestBody ModifyPassReqVO modifyPassReqVO, HttpSession session) {
+    public ResultInfo modifyPass(@RequestBody @Validated ModifyPassReqVO modifyPassReqVO, HttpSession session) {
         UserLoginInfo userInfo = this.getUserInfo(session);
         return ResultInfoUtil.successResult(dcUserService.modifyPass(modifyPassReqVO, userInfo.getUserId(), session));
     }
