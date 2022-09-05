@@ -103,8 +103,6 @@ Download the YAML files from [here](https://github.com/BSN-Spartan/Data-Center-S
     gasRechargeResult: "0/10 * * * * ?"
     # Submit node registration application
     nodeUpChain: "0/10 * * * * ?"
-    # Query transaction status
-    checkTxStates: "0/10 * * * * ?"
     # Query gas price
     chainGasPrice: "0/60 * * * * ?"
   ```
@@ -140,7 +138,7 @@ The container is `/bsn/spartan-dc` and the service working directory can be conf
 ```yml
 version: "3"
 services:
-  nodeManager:
+  spartan-dc:
     image: oracle-jdk11
     container_name: spartan-dc
     working_dir: /bsn/spartan-dc

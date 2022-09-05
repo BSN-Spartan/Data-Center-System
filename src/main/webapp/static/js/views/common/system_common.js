@@ -1,5 +1,5 @@
 var COMMON_HANDLE = {
-    ENERGY_RECHARGE_: "https://bsn.foundation/main/ntt-account-energy-recharge",
+    ENERGY_RECHARGE_: "https://bsn.foundation//main/ntt-account-energy-recharge",
     FOUNDATION_WEBSITE_: "https://bsn.foundation",
     RECHARGE_STATE: [
         {"type": 0, "name": "In Progress"},

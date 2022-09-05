@@ -17,6 +17,9 @@ $(document).ready(function () {
     });
 });
 
+const key = CryptoJS.enc.Utf8.parse('reddatespartan25');
+const iv = CryptoJS.enc.Utf8.parse('hongzao25spartan');
+
 function initSystemConf() {
     $.ajax({
         "type": "get",
@@ -42,8 +45,9 @@ function changeCode() {
 }
 
 function subLogin() {
-    var email = $("#email").val();
-    if (isNull(email)) {
+
+    var userEmail = $("#email").val();
+    if (isNull(userEmail)) {
         alert_error_text("Please enter Email");
         return false;
     }
@@ -57,11 +61,9 @@ function subLogin() {
         alert_error_text("Please enter Captcha");
         return false;
     }
-
-
     var data = {};
-    data.email = email;
-    data.password = password;
+    data.email = getEncryptionData(userEmail);
+    data.password = getEncryptionData(password);
     data.code = code;
 
     $.ajax({
@@ -83,4 +85,31 @@ function subLogin() {
 
 function isNull(str) {
     return str == null || str.length == 0
+}
+
+
+function getEncryptionData(data) {
+    if (data == "" || data == null) return '';
+    var srcs = CryptoJS.enc.Utf8.parse(data + '');
+    var encrypted = CryptoJS.AES.encrypt(srcs, key, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+    var encryptedStr = encrypted.ciphertext.toString().toUpperCase();
+    return encryptedStr;
+}
+
+
+function getDecryptionData(data) {
+    if (data == "" || data == null) return '';
+    var encryptedHexStr = CryptoJS.enc.Hex.parse(data + '');
+    var srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
+    var decrypt = CryptoJS.AES.decrypt(srcs, key, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+    var decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
+    return decryptedStr.toString();
 }

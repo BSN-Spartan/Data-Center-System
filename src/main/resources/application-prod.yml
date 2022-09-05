@@ -37,8 +37,6 @@ task:
   gasRechargeResult: "0/10 * * * * ?"
   # Submit node registration application
   nodeUpChain: "0/10 * * * * ?"
-  # Query transaction status
-  checkTxStates: "0/10 * * * * ?"
   # Query gasPrice
   chainGasPrice: "0/60 * * * * ?"
 

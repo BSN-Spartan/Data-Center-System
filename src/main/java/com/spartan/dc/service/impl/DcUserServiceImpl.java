@@ -8,6 +8,7 @@ import com.spartan.dc.core.dto.user.ModifyPassReqVO;
 import com.spartan.dc.core.dto.user.UpdateUserStateReqVO;
 import com.spartan.dc.core.dto.user.UserLoginReqVO;
 import com.spartan.dc.core.exception.GlobalException;
+import com.spartan.dc.core.util.common.CryptoUtils;
 import com.spartan.dc.core.util.common.Md5Utils;
 import com.spartan.dc.core.util.common.UUIDUtil;
 import com.spartan.dc.core.util.user.UserGlobals;
@@ -15,6 +16,7 @@ import com.spartan.dc.core.util.user.UserLoginInfo;
 import com.spartan.dc.dao.write.DcUserMapper;
 import com.spartan.dc.model.DcUser;
 import com.spartan.dc.service.DcUserService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,19 +44,30 @@ public class DcUserServiceImpl implements DcUserService {
     @Override
     public UserLoginInfo handleLogin(UserLoginReqVO userLoginReqVO) {
 
-        DcUser dcUser = dcUserMapper.selectByEmail(userLoginReqVO.getEmail());
+        String email = null;
+        String pwd = null;
+        try {
+            email = CryptoUtils.getStringDecrypt(userLoginReqVO.getEmail());
+            pwd = CryptoUtils.getStringDecrypt(userLoginReqVO.getPassword());
+        } catch (Exception e) {
+            throw new GlobalException("Password decryption failed");
+        }
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(pwd)) {
+            throw new GlobalException("Username/Password is incorrect");
+        }
+
+        DcUser dcUser = dcUserMapper.selectByEmail(email);
         if (dcUser == null) {
             throw new GlobalException("Username/Password is incorrect");
         }
 
-        String password = userLoginReqVO.getPassword();
         String salt = dcUser.getSalt();
-        String encryptPass = encryptPass(salt, password);
+        String encryptPass = encryptPass(salt, pwd);
         if (!Objects.equals(encryptPass, dcUser.getPassword())) {
             throw new GlobalException("Username/Password is incorrect");
         }
 
-        if(dcUser.getState() == 0){
+        if (dcUser.getState() == 0) {
             throw new GlobalException("The user is disabled.");
         }
 
@@ -62,7 +75,7 @@ public class DcUserServiceImpl implements DcUserService {
         UserLoginInfo userLoginInfo = new UserLoginInfo();
         userLoginInfo.setUserName(dcUser.getContactsName());
         userLoginInfo.setUserId(dcUser.getUserId());
-        userLoginInfo.setEmail(userLoginReqVO.getEmail());
+        userLoginInfo.setEmail(email);
         userLoginInfo.setSystemName(systemConf.getName());
         userLoginInfo.setSystemIcon(systemConf.getIcon());
         userLoginInfo.setSystemLogo(systemConf.getLogo());

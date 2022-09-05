@@ -60,7 +60,7 @@ public class NodeUpChainTask {
         }
 
         List<DcNode> dcNodes = dcNodeMapper.getStayNodeUpChainList();
-        LOG.info("Task Node Up Chain Contract: {}", JSONObject.toJSONString(dcNodes));
+        LOG.info("Task Node Up Chain dcNodes: {}", JSONObject.toJSONString(dcNodes));
         if (dcNodes == null || dcNodes.size() == 0) {
             return;
         }

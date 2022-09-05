@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.reddate.spartan.SpartanSdkClient;
 import com.reddate.spartan.dto.wuhanchain.ReqJsonWithOfflineHashBean;
 import com.spartan.dc.core.dto.task.req.GasRechargeReqVO;
+import com.spartan.dc.core.exception.GlobalException;
 import com.spartan.dc.dao.write.DcGasRechargeRecordMapper;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.core.util.enums.RechargeStateEnum;
@@ -11,6 +12,7 @@ import com.spartan.dc.core.util.enums.RechargeSubmitStateEnum;
 import com.spartan.dc.model.DcGasRechargeRecord;
 import com.spartan.dc.model.SysDataCenter;
 import com.spartan.dc.service.WalletService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +111,9 @@ public class GasRechargeRecordSubmitTask {
     private void gasRecharge(GasRechargeReqVO gasRechargeReqVO, DcGasRechargeRecord dcGasRechargeRecord) throws Exception {
         ReqJsonWithOfflineHashBean reqJsonWithOfflineHashBean = spartanSdkClient.gasCreditRechargeService.gcRechg(gasRechargeReqVO.getSender(), gasRechargeReqVO.getReceiver(), gasRechargeReqVO.getEngAmt(), gasRechargeReqVO.getChainID());
         String offLineHash = reqJsonWithOfflineHashBean.getOffLineHash();
+        if (StringUtils.isEmpty(offLineHash)) {
+            throw new GlobalException("simulate offLineHash failed");
+        }
         dcGasRechargeRecord.setTxHash(offLineHash);
 
         spartanSdkClient.gasCreditRechargeService.send(reqJsonWithOfflineHashBean.getReqJsonRpcBean());
