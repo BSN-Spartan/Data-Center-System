@@ -4,7 +4,7 @@ var node_list_ = "#node_list_";
 var rechargeDataTable;
 var recharge_list_ = "#recharge_list_";
 
-var MIN_GAS_ = 10000000000000000;
+var MIN_GAS_ = 5000000000000000 * 100000;
 
 $(document).ready(function () {
     initNodeList();

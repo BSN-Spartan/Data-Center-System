@@ -1,9 +1,6 @@
 package com.spartan.dc.core.conf;
 
-import com.spartan.dc.dao.write.EventBlockMapper;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

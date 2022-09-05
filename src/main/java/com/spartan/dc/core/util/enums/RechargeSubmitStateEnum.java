@@ -6,10 +6,10 @@ package com.spartan.dc.core.util.enums;
  * @description recharge state
  */
 public enum RechargeSubmitStateEnum {
-    PENDING_SUBMIT((short) 1, "PENDING_SUBMIT"),
-    SUBMITTING((short) 2, "SUBMITTING"),
-    SUBMITTED_SUCCESSFULLY((short) 3, "SUCCESS"),
-    SUBMISSION_FAILED((short) 4, "FAILED");
+    PENDING_SUBMIT((short) 1, "Pending Submit"),
+    SUBMITTING((short) 2, "Submitting"),
+    SUBMITTED_SUCCESSFULLY((short) 3, "success"),
+    SUBMISSION_FAILED((short) 4, "failed");
     private final Short code;
     private final String name;
 

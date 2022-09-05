@@ -1,13 +1,10 @@
 package com.spartan.dc.controller.dc.rechorge;
 
-import com.reddate.spartan.constant.ErrorMessage;
-import com.reddate.spartan.exception.SpartanException;
 import com.spartan.dc.config.interceptor.RequiredPermission;
 import com.spartan.dc.controller.BaseController;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
-import com.spartan.dc.core.util.common.CacheManager;
 import com.spartan.dc.model.vo.req.MetaDataTxReqVO;
 import com.spartan.dc.model.vo.req.RechargeReqVO;
 import com.spartan.dc.model.vo.resp.MetaDataTxRespVO;
@@ -22,7 +19,6 @@ import org.web3j.crypto.Credentials;
 
 import java.util.Map;
 
-import static com.spartan.dc.core.util.common.CacheManager.PASSWORD_CACHE_KEY;
 
 
 /**

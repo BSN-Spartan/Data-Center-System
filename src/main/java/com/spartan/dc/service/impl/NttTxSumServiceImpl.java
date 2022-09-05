@@ -1,7 +1,6 @@
 package com.spartan.dc.service.impl;
 
 import com.spartan.dc.dao.write.NttTxSumMapper;
-import com.spartan.dc.model.NttTxSum;
 import com.spartan.dc.model.vo.resp.NttTxSumRespVO;
 import com.spartan.dc.service.NttTxSumService;
 import org.springframework.beans.factory.annotation.Autowired;

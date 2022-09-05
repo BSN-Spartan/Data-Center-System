@@ -1,14 +1,9 @@
 package com.spartan.dc.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.reddate.spartan.constant.ErrorMessage;
-import com.reddate.spartan.exception.SpartanException;
-import com.reddate.spartan.net.SpartanGovern;
 import com.spartan.dc.core.datatables.DataTable;
-import com.spartan.dc.core.dto.dc.DataCenter;
 import com.spartan.dc.core.exception.GlobalException;
 import com.spartan.dc.core.util.common.AddressUtils;
-import com.spartan.dc.core.util.common.CacheManager;
 import com.spartan.dc.core.util.enums.ChainTypeEnum;
 import com.spartan.dc.dao.write.ChainAccountRechargeMetaMapper;
 import com.spartan.dc.dao.write.ChainPriceMapper;
@@ -148,11 +143,11 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
         resp.setReceiver(reqVO.getNttWallet());
         resp.setChainID(chainId);
         resp.setEngAmt(reqVO.getNttCount());
-        resp.setNonce(BigInteger.valueOf(metaTx.getRechargeMetaId()));
+        resp.setNonce(metaTx.getRechargeMetaId().toString());
         resp.setDeadline(String.valueOf(timestamp));
         resp.setDomainSeparator(domainSeparator);
         resp.setMetaTransferTypeHash(metaTransferTypeHash);
-        resp.setMateTxId(BigInteger.valueOf(metaTx.getRechargeMetaId()));
+        resp.setMateTxId(metaTx.getRechargeMetaId().toString());
         return resp;
     }
 
@@ -168,7 +163,7 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
         Sign.SignatureData signatureData = Sign.signMessage(Numeric.hexStringToByteArray(reqVO.getMetaTxSign()), credentials.getEcKeyPair(), false);
         String txSignature = Numeric.toHexStringNoPrefix(signatureData.getR()) + Numeric.toHexStringNoPrefix(signatureData.getS()) + Numeric.toHexStringNoPrefix(signatureData.getV());
         ChainAccountRechargeMeta rechargeMeta = new ChainAccountRechargeMeta();
-        rechargeMeta.setRechargeMetaId(reqVO.getRechargeMetaId());
+        rechargeMeta.setRechargeMetaId(Long.valueOf(reqVO.getRechargeMetaId()));
         rechargeMeta.setSign(txSignature);
         rechargeMetaMapper.updateByPrimaryKeySelective(rechargeMeta);
         return txSignature;
@@ -182,6 +177,5 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
         }
         return chainPrice.getNttCount().toPlainString();
     }
-
 
 }

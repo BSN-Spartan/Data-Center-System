@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Deploy Data Center Management System · Spartan DCMS</title>
+        <title>Deploy Data Center Management System · BSN Spartan Data Center Software</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -250,7 +250,7 @@
                 <a href="../8AdditionalNodeRegistration/8.html">
             
                     
-                    Register Additional Node(Opentional)
+                    Establish Additional Full Node(Opentional)
             
                 </a>
             
@@ -337,11 +337,12 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-anchor"></i><ul><li><span class="title-icon "></span><a href="#deploy-data-center-management-system"><b></b>Deploy Data Center Management System</a></li><ul><li><span class="title-icon "></span><a href="#installation"><b></b>Installation</a></li><ul><li><span class="title-icon "></span><a href="#prerequisites"><b></b>Prerequisites</a></li><li><span class="title-icon "></span><a href="#database"><b></b>Database</a></li><li><span class="title-icon "></span><a href="#management-system-configuration"><b></b>Management System Configuration</a></li><li><span class="title-icon "></span><a href="#deployment-package"><b></b>Deployment Package</a></li><li><span class="title-icon "></span><a href="#start-the-service"><b></b>Start the Service</a></li></ul></ul></ul></div><a href="#deploy-data-center-management-system" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="deploy-data-center-management-system"><a name="deploy-data-center-management-system" class="anchor-navigation-ex-anchor" href="#deploy-data-center-management-system"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Deploy Data Center Management System</font></h1>
-<p>This local system will help you manage your data center, and can easily manage your nodes and NTT business.</p>
+                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-anchor"></i><ul><li><span class="title-icon "></span><a href="#deploy-the-data-center-management-system"><b></b>Deploy the Data Center Management System</a></li><ul><li><span class="title-icon "></span><a href="#installation"><b></b>Installation</a></li><ul><li><span class="title-icon "></span><a href="#prerequisites"><b></b>Prerequisites</a></li><li><span class="title-icon "></span><a href="#database"><b></b>Database</a></li></ul><li><span class="title-icon "></span><a href="#download-and-configuration"><b></b>Download and Configuration</a></li><ul><li><span class="title-icon "></span><a href="#download-package-and-source-code"><b></b>Download Package and Source Code</a></li><li><span class="title-icon "></span><a href="#download-yaml-files"><b></b>Download YAML Files</a></li><li><span class="title-icon "></span><a href="#edit-files"><b></b>Edit Files</a></li></ul><li><span class="title-icon "></span><a href="#start-the-service"><b></b>Start the Service</a></li><ul><li><span class="title-icon "></span><a href="#start-by-package"><b></b>Start by Package</a></li><li><span class="title-icon "></span><a href="#start-by-docker"><b></b>Start by Docker</a></li></ul></ul></ul></div><a href="#deploy-the-data-center-management-system" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="deploy-the-data-center-management-system"><a name="deploy-the-data-center-management-system" class="anchor-navigation-ex-anchor" href="#deploy-the-data-center-management-system"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Deploy the Data Center Management System</font></h1>
+<p>This local system will help you to manage your data center, such daily works like nodes monitoring and Gas Credit top-up could be done easily by using this system. </p>
 <blockquote>
-<p>[!Tip|style:flat]</p>
-<font color="red">All data directly interacts with Spartan Non-Cryptocurrency Public.</font>
+<p>[!Tip]</p>
+<font color="red">The Data Center Management System are directly interacted with the chain, the submitted data will be directly uploaded to the chain, and the data used for display is obtained by parsing events from the chain or from local database.</font>
+
 
 
 </blockquote>
@@ -349,7 +350,6 @@
 <h2 id="installation"><a name="installation" class="anchor-navigation-ex-anchor" href="#installation"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Installation</font></h2>
 <hr>
 <h3 id="prerequisites"><a name="prerequisites" class="anchor-navigation-ex-anchor" href="#prerequisites"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Prerequisites</font></h3>
-<hr>
 <ul>
 <li><p>Java 1.8 or later</p>
 </li>
@@ -362,113 +362,113 @@
 </ul>
 <p><br></p>
 <h3 id="database"><a name="database" class="anchor-navigation-ex-anchor" href="#database"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Database</font></h3>
-<hr>
 <h4 id="create-the-database"><a name="create-the-database" class="anchor-navigation-ex-anchor" href="#create-the-database"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Create the database</font></h4>
 <ol>
-<li><p><a href="https://github.com/BSN-Spartan/Data-Center-System" target="_blank">Get the mysql script from</a></p>
+<li><p>Get the mysql script from <a href="https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.0/bsn_spartan_dc.sql" target="_blank"><strong>here</strong></a></p>
 </li>
 <li><p>Create the database</p>
 <pre><code class="lang-sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">DATABASE</span> [db_name] <span class="hljs-keyword">DEFAULT</span> <span class="hljs-built_in">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> = utf8_general_ci;
 </code></pre>
 </li>
 <li><p>Execute mysql script to initialize the table</p>
-<pre><code class="lang-sql"> <span class="hljs-keyword">use</span> [db_name]; 
-
- # <span class="hljs-keyword">Execute</span> <span class="hljs-keyword">sql</span>
+<pre><code class="lang-sql"> <span class="hljs-keyword">use</span> [db_name];
 </code></pre>
+<p>Then execute the rest commands in sequence.</p>
 </li>
 </ol>
 <p><br></p>
-<h3 id="management-system-configuration"><a name="management-system-configuration" class="anchor-navigation-ex-anchor" href="#management-system-configuration"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Management System Configuration</font></h3>
+<h2 id="download-and-configuration"><a name="download-and-configuration" class="anchor-navigation-ex-anchor" href="#download-and-configuration"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Download and Configuration</font></h2>
 <hr>
+<h3 id="download-package-and-source-code"><a name="download-package-and-source-code" class="anchor-navigation-ex-anchor" href="#download-package-and-source-code"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Download Package and Source Code</font></h3>
+<p>Download the package and source code of the Data Center System from <a href="https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.0.0" target="_blank"><strong>here</strong></a>.</p>
+<h3 id="download-yaml-files"><a name="download-yaml-files" class="anchor-navigation-ex-anchor" href="#download-yaml-files"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Download YAML Files</font></h3>
+<p>Download the YAML files from <a href="https://github.com/BSN-Spartan/Data-Center-System/tree/main/src/main/resources" target="_blank"><strong>here</strong></a>.</p>
+<h3 id="edit-files"><a name="edit-files" class="anchor-navigation-ex-anchor" href="#edit-files"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Edit Files</font></h3>
 <h4 id="edit-applicationyml"><a name="edit-applicationyml" class="anchor-navigation-ex-anchor" href="#edit-applicationyml"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Edit <code>application.yml</code></font></h4>
 <ul>
-<li><p><strong>Change the default login account</strong></p>
-<p><code>If the database has never been initialized with any account, the service will be initialized with this information when it is first started.</code></p>
-<pre><code class="lang-yml"><span class="hljs-attr">system:</span>
-<span class="hljs-attr">  adminName:</span> admin
-<span class="hljs-attr">  adminEmail:</span> admin@reddatetech.com
-<span class="hljs-attr">  defaultPassword:</span> <span class="hljs-number">888888</span>
+<li><strong>Change the default login account</strong></li>
+</ul>
+<p>If the database has never been initialized with any account, the service will be initialized with this information when started.</p>
+<pre><code class="lang-yml"><span class="hljs-attr"> system:</span>
+<span class="hljs-attr">      adminName:</span> [username]
+<span class="hljs-attr">      adminEmail:</span> [admin@email.com]
+<span class="hljs-attr">      defaultPassword:</span> [password]
+</code></pre>
+<h4 id="edit-application-prodyml"><a name="edit-application-prodyml" class="anchor-navigation-ex-anchor" href="#edit-application-prodyml"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Edit <code>application-prod.yml</code></font></h4>
+<ul>
+<li><strong>Configure the data source</strong><pre><code class="lang-yml"><span class="hljs-attr">mysql:</span>
+<span class="hljs-comment"># Specity the IP address, port number and the name of your database</span>
+<span class="hljs-attr">write_url:</span> jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=<span class="hljs-literal">true</span>&amp;characterEncoding=utf<span class="hljs-bullet">-8</span>&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC&amp;allowMultiQueries=<span class="hljs-literal">true</span>&amp;useSSL=<span class="hljs-literal">false</span>
+<span class="hljs-comment"># Enter the username</span>
+<span class="hljs-attr">write_username:</span> [db_username]
+<span class="hljs-comment"># Enter the password</span>
+<span class="hljs-attr">write_password:</span> [db_password]
+<span class="hljs-comment"># Specity the IP address, port number and the name of your database</span>
+<span class="hljs-attr">read_url:</span> jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=<span class="hljs-literal">true</span>&amp;characterEncoding=utf<span class="hljs-bullet">-8</span>&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC&amp;allowMultiQueries=<span class="hljs-literal">true</span>&amp;useSSL=<span class="hljs-literal">false</span>
+<span class="hljs-comment"># Enter the username</span>
+<span class="hljs-attr">read_username:</span> [db_username]
+<span class="hljs-comment"># Enter the password</span>
+<span class="hljs-attr">read_password:</span> [db_password]
 </code></pre>
 </li>
 </ul>
-<h4 id="edit-application-prodyml"><a name="edit-application-prodyml" class="anchor-navigation-ex-anchor" href="#edit-application-prodyml"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Edit <code>application-prod.yml</code></font></h4>
 <ul>
-<li><p><strong>Configure the data source</strong></p>
-<pre><code class="lang-yml"><span class="hljs-attr">mysql:</span>
-<span class="hljs-attr">write_url:</span> jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=<span class="hljs-literal">true</span>&amp;characterEncoding=utf<span class="hljs-bullet">-8</span>&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC&amp;allowMultiQueries=<span class="hljs-literal">true</span>&amp;useSSL=<span class="hljs-literal">false</span>
-<span class="hljs-attr">write_username:</span> db_username
-<span class="hljs-attr">write_password:</span> db_password
-<span class="hljs-attr">read_url:</span> jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=<span class="hljs-literal">true</span>&amp;characterEncoding=utf<span class="hljs-bullet">-8</span>&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC&amp;allowMultiQueries=<span class="hljs-literal">true</span>&amp;useSSL=<span class="hljs-literal">false</span>
-<span class="hljs-attr">read_username:</span> db_username
-<span class="hljs-attr">read_password:</span> db_password
-</code></pre>
-</li>
 <li><p><strong>Configure the node information</strong></p>
 <pre><code class="lang-yml"><span class="hljs-attr">chain:</span>
-  <span class="hljs-comment"># Node&apos;s gsonRpc interface of the default chain </span>
-<span class="hljs-attr">  nodeRpcAddress:</span> <span class="hljs-string">&quot;http://[127.0.0.1]:8545&quot;</span>
-  <span class="hljs-comment"># Default chain&apos;s netWork ID</span>
-<span class="hljs-attr">  chainId:</span> <span class="hljs-number">8888</span>
-  <span class="hljs-comment"># Query the transaction pool&apos;s waiting time: millisecond, recommended 1.5 seconds</span>
-<span class="hljs-attr">  txPoolSleep:</span> <span class="hljs-number">1500</span>
-  <span class="hljs-comment"># Path of the Keystore file </span>
-<span class="hljs-attr">  walletFilePath:</span> <span class="hljs-string">&quot;src/main/resources/wallet&quot;</span>
+<span class="hljs-comment"># Node&apos;s JSON-RPC interface of the default chain</span>
+<span class="hljs-attr">nodeRpcAddress:</span> <span class="hljs-string">&quot;http://[node-IP]:[node-rpc-port]&quot;</span>
+<span class="hljs-comment"># Default chain&apos;s netWork ID, do not change this parameter</span>
+<span class="hljs-attr">chainId:</span> <span class="hljs-number">9090</span>
+<span class="hljs-comment"># Query the transaction pool&apos;s waiting time: millisecond, recommended 1.5 seconds</span>
+<span class="hljs-attr">txPoolSleep:</span> <span class="hljs-number">1500</span>
+<span class="hljs-comment"># Path of the Keystore file</span>
+<span class="hljs-attr">walletFilePath:</span> <span class="hljs-string">&quot;[your-directory]/wallet&quot;</span>
+<span class="hljs-comment"># After the system started, the event parsing can be started from this block height. This number can be determined based on the latest block height before the system started.</span>
+<span class="hljs-attr">blockHeight:</span> [<span class="hljs-number">10000</span>]
 </code></pre>
 </li>
-<li><p><strong>Configure the task time</strong></p>
+<li><p><strong>Configure the task time, in the Cron time string format</strong></p>
 <pre><code class="lang-yml"><span class="hljs-attr">task:</span>
 <span class="hljs-comment"># Whether to start a timed task to submit a transaction/time parse</span>
 <span class="hljs-attr">enabled:</span> <span class="hljs-literal">false</span>
 <span class="hljs-comment"># Parse event</span>
 <span class="hljs-attr">eventAnalytics:</span> <span class="hljs-string">&quot;0/2 * * * * ?&quot;</span>
-<span class="hljs-comment"># Submit Gas Credit top-up transaction </span>
+<span class="hljs-comment"># Submit Gas Credit top-up transaction</span>
 <span class="hljs-attr">gasRechargeSubmit:</span> <span class="hljs-string">&quot;0/10 * * * * ?&quot;</span>
 <span class="hljs-comment"># Query Gas Credit top-up result</span>
 <span class="hljs-attr">gasRechargeResult:</span> <span class="hljs-string">&quot;0/10 * * * * ?&quot;</span>
 <span class="hljs-comment"># Submit node registration application</span>
 <span class="hljs-attr">nodeUpChain:</span> <span class="hljs-string">&quot;0/10 * * * * ?&quot;</span>
-<span class="hljs-comment"># Query transaction status </span>
+<span class="hljs-comment"># Query transaction status</span>
 <span class="hljs-attr">checkTxStates:</span> <span class="hljs-string">&quot;0/10 * * * * ?&quot;</span>
+<span class="hljs-comment"># Query gas price</span>
+<span class="hljs-attr">chainGasPrice:</span> <span class="hljs-string">&quot;0/60 * * * * ?&quot;</span>
 </code></pre>
 </li>
-<li><p><strong>Configure the effective time period of emergency NTT top-up</strong></p>
+<li><p><strong>Configure the effective time period of emergency Gas Credit top-up</strong></p>
 <pre><code class="lang-yml"><span class="hljs-attr">metaTx:</span>
-  <span class="hljs-comment"># Only used by the default chain, do not change this configuration</span>
-<span class="hljs-attr">  chainId:</span> <span class="hljs-number">1</span>
-  <span class="hljs-comment"># Effective time period, in hour</span>
-<span class="hljs-attr">  deadline:</span> <span class="hljs-number">12</span>
-  <span class="hljs-comment"># Do not change this configuration</span>
-<span class="hljs-attr">  domainSeparator:</span> <span class="hljs-string">&quot;0xd4040b06a739f7fde202fb8503cffd1cb92d5ff5812ce9a4adf602c464a1f0f5&quot;</span>
-  <span class="hljs-comment"># Do not change this configuration</span>
-<span class="hljs-attr">  metaTransferTypeHash:</span> <span class="hljs-string">&quot;0xbf13ac0a2964a57037372fadd1f7b4fa6785ffdc315c85dfe8d1f9b1b01a7a51&quot;</span>
+<span class="hljs-comment"># Only used by the default chain, do not change this configuration</span>
+<span class="hljs-attr">chainId:</span> <span class="hljs-number">1</span>
+<span class="hljs-comment"># Effective time period, in hour</span>
+<span class="hljs-attr">deadline:</span> <span class="hljs-number">12</span>
+<span class="hljs-comment"># Do not change this configuration</span>
+<span class="hljs-attr">domainSeparator:</span> <span class="hljs-string">&quot;0x9d5e39915081369daa50abc8dc23f93c9c174abc4fc01efd13e3660e5d080276&quot;</span>
+<span class="hljs-comment"># Do not change this configuration</span>
+<span class="hljs-attr">metaTransferTypeHash:</span> <span class="hljs-string">&quot;0xbf13ac0a2964a57037372fadd1f7b4fa6785ffdc315c85dfe8d1f9b1b01a7a51&quot;</span>
 </code></pre>
 </li>
 </ul>
 <p><br></p>
-<h3 id="deployment-package"><a name="deployment-package" class="anchor-navigation-ex-anchor" href="#deployment-package"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Deployment Package</font></h3>
+<h2 id="start-the-service"><a name="start-the-service" class="anchor-navigation-ex-anchor" href="#start-the-service"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Start the Service</font></h2>
 <hr>
-<p><strong>Download the latest service package or source code:</strong></p>
-<ul>
-<li><p>Download the package: <a href="https://github.com/BSN-Spartan/Data-Center-System" target="_blank">Binary Package</a></p>
-</li>
-<li><p>Download the source code: <a href="https://github.com/BSN-Spartan/Data-Center-System" target="_blank">Source code</a></p>
-</li>
-</ul>
-<p><br></p>
-<h3 id="start-the-service"><a name="start-the-service" class="anchor-navigation-ex-anchor" href="#start-the-service"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Start the Service</font></h3>
-<hr>
-<ul>
-<li><p><strong>Start by jar</strong></p>
-<pre><code class="lang-yml">nohup java -jar spartan_dc<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-dev.yml --logging.config=./conf/logback-spring.xml - LANG=zh_CN.UTF<span class="hljs-bullet">-8</span> &amp;
+<h3 id="start-by-package"><a name="start-by-package" class="anchor-navigation-ex-anchor" href="#start-by-package"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Start by Package</font></h3>
+<p>Put <code>Data-Center-System-0.0.1-SNAPSHOT.jar</code> package, <code>application.yml</code> and <code>application-prod.yml</code> files into the same directory and run the command below:</p>
+<pre><code class="lang-yml">nohup java -jar Data-Center-System<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF<span class="hljs-bullet">-8</span> &gt;/dev/<span class="hljs-literal">null</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &amp;
 </code></pre>
-</li>
-<li><p><strong>Start by Docker</strong></p>
-</li>
-</ul>
-<p><code>The container is &quot;/bsn/spartan-dc&quot; and the service working directory can be configured by the data center operator.</code></p>
-<pre><code class="lang-yml"><span class="hljs-attr">  version:</span> <span class="hljs-string">&quot;3&quot;</span>
-<span class="hljs-attr">  services:</span>
+<h3 id="start-by-docker"><a name="start-by-docker" class="anchor-navigation-ex-anchor" href="#start-by-docker"><i class="fa fa-link" aria-hidden="true"></i></a><font color="Black">Start by Docker</font></h3>
+<p>The container is <code>/bsn/spartan-dc</code> and the service working directory can be configured by the data center operator.</p>
+<pre><code class="lang-yml"><span class="hljs-attr">version:</span> <span class="hljs-string">&quot;3&quot;</span>
+<span class="hljs-attr">services:</span>
 <span class="hljs-attr">  nodeManager:</span>
 <span class="hljs-attr">    image:</span> oracle-jdk11
 <span class="hljs-attr">    container_name:</span> spartan-dc
@@ -478,7 +478,7 @@
 <span class="hljs-attr">    ports:</span>
 <span class="hljs-bullet">      -</span> <span class="hljs-string">&quot;8085:8085&quot;</span>
 <span class="hljs-attr">    volumes:</span>
-<span class="hljs-bullet">      -</span> ./spartan_dc<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar:/bsn/spartan-dc/spartan_dc<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar
+<span class="hljs-bullet">      -</span> ./Data-Center-System<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar:/bsn/spartan-dc/Data-Center-System<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar
 <span class="hljs-bullet">      -</span> ./conf:/bsn/spartan-dc/conf
 <span class="hljs-bullet">      -</span> ./logs/:/bsn/spartan-dc/logs
 <span class="hljs-bullet">      -</span> ./wallet:/bsn/spartan-dc/src/main/resources/wallet
@@ -487,11 +487,8 @@
 <span class="hljs-attr">    environment:</span>
       <span class="hljs-comment"># Specify the time zone</span>
 <span class="hljs-bullet">      -</span> TZ=Asia/Shanghai
-<span class="hljs-attr">    entrypoint:</span> java -jar spartan_dc<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml - LANG=zh_CN.UTF<span class="hljs-bullet">-8</span>
+<span class="hljs-attr">    entrypoint:</span> java -jar Data-Center-System<span class="hljs-bullet">-0.0</span><span class="hljs-number">.1</span>-SNAPSHOT.jar --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml - LANG=zh_CN.UTF<span class="hljs-bullet">-8</span>
 </code></pre>
-<p><br>
-<br>
-<br></p>
 <p><br>
 <br>
 <br> </p>
@@ -557,7 +554,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Deploy Data Center Management System","level":"1.1.2","depth":2,"next":{"title":"Get an NTT Wallet Address","level":"1.1.3","depth":2,"path":"3GetanNTTWallet/3.md","ref":"3GetanNTTWallet/3.md","articles":[]},"previous":{"title":"Deploy Full Node of Default Chain (Spartan-I Chain)","level":"1.1.1","depth":2,"path":"1DefaultChainDeployment/1.md","ref":"1DefaultChainDeployment/1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-fontsettings","-livereload","-sharing","-lunr","code","addcssjs","splitter","sharing-plus","hide-element","search-pro","insert-logo","tbfed-pagefooter","theme-comscore","favicon-absolute","popup","toggle-chapters","chapter-fold","ancre-navigation","auto-scroll-table","flexible-alerts"],"styles":{"website":"styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 2022 Red Date (Hong Kong) Technology Limited","modify_label":" ","modify_format":" "},"chapter-fold":{},"pluginsConfig":{"flexible-alerts":{"note":{"label":"Hinweis"},"tip":{"label":"Tipp"},"warning":{"label":"Warnung"},"danger":{"label":"Achtung"},"pluginsConfig":{"flexible-alerts":{"style":"callout","comment":{"label":"Comment","icon":"fa fa-comments","className":"info"}}}}},"splitter":{},"search-pro":{},"search":{},"addcssjs":{"css":[],"js":["js/custom.js"]},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"popup":{},"lunr":{"maxIndexSize":20000},"code":{"copyButtons":true},"favicon-absolute":{"appleTouchIconMore":{},"appleTouchIconPrecomposed152":"https://ccn.bsnbase.com/static/img/favicon_top.png","appleTouchIconPrecomposedMore":{},"favicon":"https://ccn.bsnbase.com/static/img/favicon_top.png"},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"theme-comscore":{},"ancre-navigation":{"associatedWithSummary":true,"float":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showLevel":true},"flexible-alerts":{"danger":{"className":"danger","icon":"fa fa-ban","label":"Attention"},"note":{"className":"info","icon":"fa fa-info-circle","label":"Note"},"style":"callout","tip":{"className":"tip","icon":"fa fa-lightbulb-o","label":"Tip"},"warning":{"className":"warning","icon":"fa fa-exclamation-triangle","label":"Warning"}},"sharing":{"facebook":true,"twitter":true,"qq":true,"weibo":true},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{},"insert-logo":{"style":"background:none;max-height:50px;min-height:50px;margin-left:-50px;","url":"../img/spartanlogo.png"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Spartan DCMS","language":"zn-hans","gitbook":"*"},"file":{"path":"2DataCenterDeployment/2.md","mtime":"2022-09-03T12:38:13.174Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-09-03T13:16:11.973Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Deploy Data Center Management System","level":"1.1.2","depth":2,"next":{"title":"Get an NTT Wallet Address","level":"1.1.3","depth":2,"path":"3GetanNTTWallet/3.md","ref":"3GetanNTTWallet/3.md","articles":[]},"previous":{"title":"Deploy Full Node of Default Chain (Spartan-I Chain)","level":"1.1.1","depth":2,"path":"1DefaultChainDeployment/1.md","ref":"1DefaultChainDeployment/1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-fontsettings","-livereload","-sharing","-lunr","code","addcssjs","splitter","sharing-plus","hide-element","search-pro","insert-logo","tbfed-pagefooter","theme-comscore","favicon-absolute","popup","toggle-chapters","chapter-fold","ancre-navigation","auto-scroll-table","flexible-alerts"],"styles":{"website":"styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 2022 Red Date (Hong Kong) Technology Limited","modify_label":" ","modify_format":" "},"chapter-fold":{},"pluginsConfig":{"flexible-alerts":{"note":{"label":"Hinweis"},"tip":{"label":"Tipp"},"warning":{"label":"Warnung"},"danger":{"label":"Achtung"},"pluginsConfig":{"flexible-alerts":{"style":"callout","comment":{"label":"Comment","icon":"fa fa-comments","className":"info"}}}}},"splitter":{},"search-pro":{},"search":{},"addcssjs":{"css":[],"js":["js/custom.js"]},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"popup":{},"lunr":{"maxIndexSize":20000},"code":{"copyButtons":true},"favicon-absolute":{"appleTouchIconMore":{},"appleTouchIconPrecomposed152":"https://ccn.bsnbase.com/static/img/favicon_top.png","appleTouchIconPrecomposedMore":{},"favicon":"https://ccn.bsnbase.com/static/img/favicon_top.png"},"hide-element":{"elements":[".gitbook-link"]},"highlight":{},"theme-comscore":{},"ancre-navigation":{"associatedWithSummary":true,"float":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showLevel":true},"flexible-alerts":{"danger":{"className":"danger","icon":"fa fa-ban","label":"Attention"},"note":{"className":"info","icon":"fa fa-info-circle","label":"Note"},"style":"callout","tip":{"className":"tip","icon":"fa fa-lightbulb-o","label":"Tip"},"warning":{"className":"warning","icon":"fa fa-exclamation-triangle","label":"Warning"}},"sharing":{"facebook":true,"twitter":true,"qq":true,"weibo":true},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{},"insert-logo":{"style":"background:none;max-height:50px;min-height:50px;margin-left:-50px;","url":"../img/spartanlogo.png"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"BSN Spartan Data Center Software","language":"zn-hans","gitbook":"*"},"file":{"path":"2DataCenterDeployment/2.md","mtime":"2022-09-05T08:21:29.945Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-09-05T08:54:26.154Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

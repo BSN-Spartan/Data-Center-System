@@ -17,21 +17,12 @@ public class DataTable<T> {
 
 
     public Map<String, Object> getReturnData(List list) {
-        Map<String, Object> maps = new HashMap<>();
-
+        Map<String, Object> maps = new HashMap<>(3);
 
         com.github.pagehelper.PageInfo<Map<String, Object>> pageInfo = new com.github.pagehelper.PageInfo<Map<String, Object>>(list);
-
-
-        // maps.put("sEcho", System.currentTimeMillis());
-
-
         maps.put("iTotalRecords", getTotalPage(pageInfo.getTotal()));
-
         maps.put("iTotalDisplayRecords", pageInfo.getTotal());
-
         maps.put("data", list == null ? new ArrayList<Map<String, Object>>() : list);
-
         return maps;
     }
 

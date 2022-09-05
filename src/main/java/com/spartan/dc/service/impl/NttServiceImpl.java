@@ -2,9 +2,7 @@ package com.spartan.dc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.spartan.dc.core.datatables.DataTable;
-import com.spartan.dc.dao.write.DcGasRechargeRecordMapper;
 import com.spartan.dc.dao.write.NttTxRecordMapper;
-import com.spartan.dc.model.NttTxRecord;
 import com.spartan.dc.model.vo.resp.NttRewardRespVO;
 import com.spartan.dc.service.NttService;
 import org.springframework.beans.factory.annotation.Autowired;

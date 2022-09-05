@@ -3,8 +3,6 @@ package com.spartan.dc.controller.dc;
 import com.spartan.dc.core.datatables.PageInfo;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
-import com.spartan.dc.model.NttTxRecord;
-import com.spartan.dc.model.NttTxSum;
 import com.spartan.dc.model.vo.req.GetBlockNumberReqVO;
 import com.spartan.dc.model.vo.resp.NttBalanceRespVO;
 import com.spartan.dc.model.vo.resp.NttRewardRespVO;
@@ -16,8 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Map;
 import java.util.Objects;
 

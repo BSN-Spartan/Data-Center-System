@@ -1,8 +1,6 @@
 package com.spartan.dc.core.util.common;
 
 import okhttp3.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -11,8 +9,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
- *
  * @author xingjie
  */
 public class OkHttpUtils {
@@ -77,7 +73,7 @@ public class OkHttpUtils {
     }
 
     public static String doPost(String url, Map<String, String> headers, String json) throws IOException {
-        RequestBody body = FormBody.create(MEDIA_TYPE_JSON, json);
+        RequestBody body = FormBody.create(json, MEDIA_TYPE_JSON);
         Request.Builder builder = new Request.Builder();
         buildHeader(builder, headers);
         Request request = builder.url(url).post(body).build();

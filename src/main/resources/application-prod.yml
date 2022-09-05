@@ -1,26 +1,34 @@
 server:
   port: 8085
 mysql:
+  # Specity the IP address, port number and the name of your database
   write_url: jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
-  write_username: db_username
-  write_password: db_password
+  # Enter the username
+  write_username: [db_username]
+  # Enter the password
+  write_password: [db_password]
+  # Specity the IP address, port number and the name of your database
   read_url: jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
-  read_username: db_username
-  read_password: db_password
+  # Enter the username
+  read_username: [db_username]
+  # Enter the password
+  read_password: [db_password]
 
 chain:
   # Node's JSON-RPC interface of the default chain
   nodeRpcAddress: "http://[node-IP]:[node-rpc-port]"
-  # Default chain's netWork ID
+  # Default chain's netWork ID, do not change this parameter
   chainId: 9090
   # Query the transaction pool's waiting time: millisecond, recommended 1.5 seconds
   txPoolSleep: 1500
   # Path of the Keystore file
-  walletFilePath: "your-directory/wallet"
+  walletFilePath: "[your-directory]/wallet"
+  # After the system started, the event parsing can be started from this block height. This number can be determined based on the latest block height before the system started.
+  blockHeight: [10000]
 
 task:
   # Whether to start a timed task to submit a transaction/time parse
-  enabled: false
+  enabled: true
   # Parse event
   eventAnalytics: "0/2 * * * * ?"
   # Submit Gas Credit top-up transaction

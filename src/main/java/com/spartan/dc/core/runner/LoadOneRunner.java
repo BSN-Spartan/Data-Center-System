@@ -11,6 +11,7 @@ import com.spartan.dc.dao.write.NttTxSumMapper;
 import com.spartan.dc.model.DcUser;
 import com.spartan.dc.model.EventBlock;
 import com.spartan.dc.model.NttTxSum;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -43,35 +44,9 @@ public class LoadOneRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        String adminName = systemConf.getAdminName();
-        String adminEmail = systemConf.getAdminEmail();
-        String defaultPassword = systemConf.getDefaultPassword();
-
-
-        DcUser dcUser = dcUserMapper.selectByEmail(adminEmail);
-        if (Objects.isNull(dcUser)) {
-            dcUser = new DcUser();
-            dcUser.setContactsEmail(adminEmail);
-            dcUser.setContactsName(adminName);
-            dcUser.setContactsPhone("123456");
-
-            String salt = UUIDUtil.generate().toLowerCase();
-            dcUser.setSalt(salt);
-            try {
-                defaultPassword = Md5Utils.encodeUtf8(salt + defaultPassword);
-            } catch (Exception e) {
-                throw new GlobalException("Failed to encrypt the password");
-            }
-            dcUser.setPassword(defaultPassword);
-            dcUser.setState(Short.valueOf("1"));
-            dcUser.setCreateTime(new Date());
-
-            int count = dcUserMapper.insertSelective(dcUser);
-        }
-
-
+        // init eventBlock
         EventBlock eventBlock = eventBlockMapper.getOne();
-        if (eventBlock == null) {
+        if (Objects.isNull(eventBlock)) {
             eventBlock = new EventBlock();
             eventBlock.setBlockHeight(0L);
             eventBlockMapper.insertSelective(eventBlock);
@@ -85,13 +60,41 @@ public class LoadOneRunner implements CommandLineRunner {
             EventBlockConf.eventBlock = new AtomicLong(eventBlock.getBlockHeight());
         }
 
-
+        // init ntt transaction summary
         NttTxSum nttTxSum = nttTxSumMapper.getOne();
-        if (nttTxSum == null) {
+        if (Objects.isNull(nttTxSum)) {
             nttTxSum = new NttTxSum();
             nttTxSum.setFlowIn(BigDecimal.ZERO);
             nttTxSum.setFlowOut(BigDecimal.ZERO);
             nttTxSumMapper.insertSelective(nttTxSum);
+        }
+
+        // init user
+        String adminName = systemConf.getAdminName();
+        String adminEmail = systemConf.getAdminEmail();
+        String defaultPassword = systemConf.getDefaultPassword();
+        if (StringUtils.isEmpty(adminName) || StringUtils.isEmpty(adminEmail) || StringUtils.isEmpty(defaultPassword)) {
+            return;
+        }
+
+        DcUser dcUser = dcUserMapper.selectByEmail(adminEmail);
+        if (Objects.isNull(dcUser)) {
+            dcUser = new DcUser();
+            dcUser.setContactsEmail(adminEmail);
+            dcUser.setContactsName(adminName);
+
+            String salt = UUIDUtil.generate().toLowerCase();
+            dcUser.setSalt(salt);
+            try {
+                defaultPassword = Md5Utils.encodeUtf8(salt + defaultPassword);
+            } catch (Exception e) {
+                throw new GlobalException("Failed to encrypt the password");
+            }
+            dcUser.setPassword(defaultPassword);
+            dcUser.setState(Short.valueOf("1"));
+            dcUser.setCreateTime(new Date());
+
+            dcUserMapper.insertSelective(dcUser);
         }
     }
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spartan.dc.core.dto.dc.DataCenter;
 import com.spartan.dc.core.exception.GlobalException;
-import com.spartan.dc.core.util.common.CacheManager;
 import com.spartan.dc.core.util.common.FileUtil;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.service.WalletService;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.*;
-import org.web3j.tuples.generated.Tuple2;
 import org.web3j.utils.Strings;
 
 import java.io.File;
@@ -32,14 +30,14 @@ import java.util.Objects;
 @Service
 public class WalletServiceImpl implements WalletService {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Value("${chain.walletFilePath}")
     public String walletFilePath;
 
     static {
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Autowired
@@ -112,7 +110,7 @@ public class WalletServiceImpl implements WalletService {
         fileName = fileName + ".json";
 
         File destination = new File(destinationDirectory, fileName);
-        objectMapper.writeValue(destination, walletFile);
+        OBJECT_MAPPER.writeValue(destination, walletFile);
 
         return fileName;
     }

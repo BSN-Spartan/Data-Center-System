@@ -98,28 +98,6 @@ public class FileUtil {
         }
     }
 
-
-    public static boolean writeFileFromIS(File file, InputStream is, boolean append) {
-        if (file == null || is == null) {
-            return false;
-        }
-        if (!createOrExistsFile(file)) {
-            return false;
-        }
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file, append))) {
-            byte[] data = new byte[1024];
-            int len;
-            while ((len = is.read(data, 0, 1024)) != -1) {
-                os.write(data, 0, len);
-            }
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
     public static boolean writeFileFromByte(File file, byte[] data, boolean append) {
         if (file == null || data == null) {
             return false;

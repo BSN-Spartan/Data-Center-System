@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod
+    active: dev
   mvc:
     view:
       prefix: /views/
@@ -21,9 +21,9 @@ system:
   name: BSN Spartan Data Center System
   icon: /static/images/system/favicon.ico
   logo: /static/images/system/spartan.png
-  adminName: xxxx
-  adminEmail: xxxx@xxxx.com
-  defaultPassword: xxxx
+  adminName:
+  adminEmail:
+  defaultPassword:
 
 thread-pool:
   cfg:

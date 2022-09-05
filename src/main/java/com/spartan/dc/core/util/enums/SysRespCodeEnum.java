@@ -8,16 +8,7 @@ package com.spartan.dc.core.util.enums;
  */
 public enum SysRespCodeEnum {
 
-    SUCCESS("0000", "SUCCESS"),
-
-
-
-
-
-
-
-    ;
-
+    SUCCESS("0000", "SUCCESS");
 
     private final String code;
 

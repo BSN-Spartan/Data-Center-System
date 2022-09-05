@@ -38,9 +38,9 @@ Download the package and source code of the Data Center System from [here](https
 
 Download the YAML files from [here](https://github.com/BSN-Spartan/Data-Center-System/tree/main/src/main/resources)
 
-### 2.2 Edit Files
+### 2.3 Edit Files
 
-#### 2.2.1 Edit `application.yml`
+#### 2.3.1 Edit `application.yml`
 
 - Change the default login account information
 
@@ -48,12 +48,12 @@ Download the YAML files from [here](https://github.com/BSN-Spartan/Data-Center-S
 
   ```yml
   system:
-    adminName: [username]
-    adminEmail: [admin@email.com]
-    defaultPassword: [password]
+    adminName: [xxx]
+    adminEmail: [xxx@xxx.com]
+    defaultPassword: [xxx]
   ```
 
-#### 2.2.2 Edit `application-prod.yml`
+#### 2.3.2 Edit `application-prod.yml`
 
 - Configure the data source
 
@@ -94,7 +94,7 @@ Download the YAML files from [here](https://github.com/BSN-Spartan/Data-Center-S
   ```yml
   task:
     # Whether to start a timed task to submit a transaction/time parse
-    enabled: false
+    enabled: true
     # Parse event
     eventAnalytics: "0/2 * * * * ?"
     # Submit Gas Credit top-up transaction

@@ -20,5 +20,5 @@ public class MetaDataTxReqVO {
     private String nttCount;
     private String metaTxSign;
     private String password;
-    private Long rechargeMetaId;
+    private String rechargeMetaId;
 }

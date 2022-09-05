@@ -12,10 +12,12 @@ import java.security.SecureRandom;
 
 
 public class AesUtil {
+    private AesUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
     private static final String KEY_ALGORITHM = "AES";
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
-
 
     public static String decrypt(String encryptStr, String secretKey) throws Exception {
 
@@ -26,7 +28,6 @@ public class AesUtil {
         byte[] result = cipher.doFinal(Base64.decodeBase64(encryptStr));
         return new String(result, "utf-8");
     }
-
 
     public static String encrypt(String sSrc, String secretKey) throws Exception {
 
@@ -53,21 +54,4 @@ public class AesUtil {
 
         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
     }
-
-
-    public static void main(String[] args) throws Exception {
-//        String sSrc = "11111";
-//        String kkk = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoiNCIsImVtYWlsIjoic2hpeXVldGFuZ0ByZWRkYXRldGVjaC5jb20iLCJudHRBZGRyZXNzIjoiMHgxMDgzRjY4NDMyNWMxNEYzRDlmNjU4ZjAwNTU5YUFmNzIyMzczNTU1In0.rA6_XJe912jGzBxvJZNHFK334vQjCx-1g8KVfrnAwFg";
-//        String encryptStr = encrypt(sSrc,kkk);
-//
-//        System.out.println(encryptStr);
-//        System.out.println(decrypt(encryptStr,kkk));
-
-        String sSrc = "0x94e3e21f6e7221becb289fffc7b1d0aa66a7dbd77f035be6a1e96737990852e8";
-        String encryptStr = encrypt(sSrc, "key");
-
-        System.out.println(encryptStr);
-        System.out.println(decrypt(encryptStr, "key"));
-    }
-
 }

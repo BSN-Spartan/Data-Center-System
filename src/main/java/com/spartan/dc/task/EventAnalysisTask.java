@@ -10,6 +10,7 @@ import com.spartan.dc.core.util.enums.*;
 import com.spartan.dc.dao.write.*;
 import com.spartan.dc.model.*;
 import com.spartan.dc.service.WalletService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Event Analysis
+ *
  * @author linzijun
  * @version V1.0
  * @date 2022/8/15 17:02
@@ -35,6 +39,9 @@ import java.util.Date;
 public class EventAnalysisTask {
 
     private final static Logger LOG = LoggerFactory.getLogger(EventAnalysisTask.class);
+
+    private static String NTT_WALLET_ADDRESS = null;
+    private static String DC_CODE = null;
 
     @Resource
     private DcGasRechargeRecordMapper dcGasRechargeRecordMapper;
@@ -55,9 +62,6 @@ public class EventAnalysisTask {
     private EventBlockMapper eventBlockMapper;
 
     @Resource
-    private ChainPriceMapper chainPriceMapper;
-
-    @Resource
     private NttTxSumMapper nttTxSumMapper;
 
     @Autowired
@@ -73,9 +77,7 @@ public class EventAnalysisTask {
             return;
         }
 
-        SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
-        if (sysDataCenter == null) {
-            LOG.info("Task event analysis fail: {}", "the basic information of data center is not configured");
+        if (!checkDataCenterInfo()) {
             return;
         }
 
@@ -85,7 +87,7 @@ public class EventAnalysisTask {
         }
 
         // Get Event Block
-        BigInteger eventBlock = new BigInteger(EventBlockConf.eventBlock+"");
+        BigInteger eventBlock = new BigInteger(EventBlockConf.eventBlock.toString());
         BigInteger blockNumber = spartanSdkClient.baseService.getBlockNumber();
         LOG.info("Task event analysis Current Block: {}", eventBlock + " --- " + blockNumber);
 
@@ -99,21 +101,27 @@ public class EventAnalysisTask {
         try {
             blockEvents = spartanSdkClient.blockEventService.getBlockEvent(eventBlock);
             LOG.info("Event Analysis Result: {}", JSON.toJSONString(blockEvents));
+            parseBlock(blockEvents);
         } catch (Exception e) {
             LOG.info("Event Analysis Error");
             throw new RuntimeException(e.getMessage());
         }
 
+        // Increment Event Block
+        EventBlockConf.eventBlock.incrementAndGet();
+        eventBlockMapper.increment();
+
+        LOG.info("Task event analysis End");
+    }
+
+    private void parseBlock(ArrayList<BaseEventBean> blockEvents) {
         if (!CollectionUtils.isEmpty(blockEvents)) {
             blockEvents.forEach(baseEventBean -> {
-
                 if (baseEventBean instanceof ECRechgEventBean) {
 
                     // Gas Recharge
-
                     ECRechgEventBean ecRechgEventBean = (ECRechgEventBean) baseEventBean;
-
-                    if (!isCurrentDc(ecRechgEventBean.getTransactionInfoBean().getFrom(), ecRechgEventBean.getTransactionInfoBean().getTo(), sysDataCenter)) {
+                    if (!isCurrentDc(ecRechgEventBean.getTransactionInfoBean().getFrom(), ecRechgEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)) {
                         return;
                     }
 
@@ -139,15 +147,14 @@ public class EventAnalysisTask {
                     dcGasRechargeRecord.setState(RechargeSubmitStateEnum.SUBMITTED_SUCCESSFULLY.getCode());
                     dcGasRechargeRecord.setMd5Sign(md5Sign);
                     dcGasRechargeRecordMapper.updateByPrimaryKeySelective(dcGasRechargeRecord);
+                    LOG.info("ecRechgEvent update:{}", md5Sign);
 
                 } else if (baseEventBean instanceof MetaECRechgEventBean) {
 
                     // Meta Gas Recharge
-
                     MetaECRechgEventBean metaECRechgEventBean = (MetaECRechgEventBean) baseEventBean;
-
-                    if (!isCurrentDc(metaECRechgEventBean.getTransactionInfoBean().getFrom(), metaECRechgEventBean.getTransactionInfoBean().getTo(), sysDataCenter)
-                            && !sysDataCenter.getNttAccountAddress().equalsIgnoreCase(metaECRechgEventBean.getDcAcc())) {
+                    if (!isCurrentDc(metaECRechgEventBean.getTransactionInfoBean().getFrom(), metaECRechgEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)
+                            && !NTT_WALLET_ADDRESS.equalsIgnoreCase(metaECRechgEventBean.getDcAcc())) {
                         return;
                     }
 
@@ -176,15 +183,14 @@ public class EventAnalysisTask {
                     dcGasRechargeRecord.setNonce(metaECRechgEventBean.getNonce().longValue());
                     dcGasRechargeRecord.setMd5Sign(md5Sign);
                     dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
+                    LOG.info("metaECRechgEvent insert:{}", md5Sign);
 
                 } else if (baseEventBean instanceof TransferEventBean) {
 
                     // Ntt Tx
-
                     TransferEventBean transferEventBean = (TransferEventBean) baseEventBean;
-
-                    if (!isCurrentDc(transferEventBean.getFrom(), transferEventBean.getTo(), sysDataCenter)
-                            && !isCurrentDc(transferEventBean.getTransactionInfoBean().getFrom(), transferEventBean.getTo(), sysDataCenter)) {
+                    if (!isCurrentDc(transferEventBean.getFrom(), transferEventBean.getTo(), NTT_WALLET_ADDRESS)
+                            && !isCurrentDc(transferEventBean.getTransactionInfoBean().getFrom(), transferEventBean.getTo(), NTT_WALLET_ADDRESS)) {
                         return;
                     }
 
@@ -214,19 +220,17 @@ public class EventAnalysisTask {
                     nttTxRecord.setTxTime(new Date(Long.valueOf(transferEventBean.getTimestamp())));
                     nttTxRecord.setMd5Sign(md5Sign);
                     nttTxRecordMapper.insertSelective(nttTxRecord);
-
+                    LOG.info("transferEvent insert:{},txType:{}", md5Sign, txType);
                     // save ntt tx sum
-                    boolean flowIn = transferEventBean.getTo().equalsIgnoreCase(sysDataCenter.getNttAccountAddress());
+                    boolean flowIn = transferEventBean.getTo().equalsIgnoreCase(NTT_WALLET_ADDRESS);
                     saveNttTxSum(flowIn, amount);
 
                 } else if (baseEventBean instanceof MintTransferEventBean) {
 
                     // Mint Ntt Tx
-
                     MintTransferEventBean mintTransferEventBean = (MintTransferEventBean) baseEventBean;
-
-                    if (!isCurrentDc(mintTransferEventBean.getFrom(), mintTransferEventBean.getTo(), sysDataCenter)
-                            && !isCurrentDc(mintTransferEventBean.getTransactionInfoBean().getFrom(), mintTransferEventBean.getTransactionInfoBean().getTo(), sysDataCenter)) {
+                    if (!isCurrentDc(mintTransferEventBean.getFrom(), mintTransferEventBean.getTo(), NTT_WALLET_ADDRESS)
+                            && !isCurrentDc(mintTransferEventBean.getTransactionInfoBean().getFrom(), mintTransferEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)) {
                         return;
                     }
 
@@ -256,18 +260,16 @@ public class EventAnalysisTask {
                     nttTxRecord.setTxTime(new Date(Long.valueOf(mintTransferEventBean.getTimestamp())));
                     nttTxRecord.setMd5Sign(md5Sign);
                     nttTxRecordMapper.insertSelective(nttTxRecord);
-
+                    LOG.info("mintTransferEvent insert:{},txType:{}", md5Sign, txType);
                     // save ntt tx sum
-                    boolean flowIn = mintTransferEventBean.getTo().equalsIgnoreCase(sysDataCenter.getNttAccountAddress());
+                    boolean flowIn = mintTransferEventBean.getTo().equalsIgnoreCase(NTT_WALLET_ADDRESS);
                     saveNttTxSum(flowIn, amount);
 
                 } else if (baseEventBean instanceof EnterNetEventBean) {
 
                     // Node Net Work
-
-                    EnterNetEventBean enterNetEventBean = (EnterNetEventBean)baseEventBean;
-
-                    if (!enterNetEventBean.getDcID().equalsIgnoreCase(sysDataCenter.getDcCode())) {
+                    EnterNetEventBean enterNetEventBean = (EnterNetEventBean) baseEventBean;
+                    if (!enterNetEventBean.getDcID().equalsIgnoreCase(DC_CODE)) {
                         return;
                     }
 
@@ -279,14 +281,13 @@ public class EventAnalysisTask {
                     dcNode.setState(NodeStateEnum.IN_THE_INSPECTION.getCode());
                     dcNode.setNttCount(enterNetEventBean.getRewardNTT());
                     dcNodeMapper.updateByPrimaryKeySelective(dcNode);
+                    LOG.info("enterNetEvent update ID:{}", dcNode.getNodeId());
 
                 } else if (baseEventBean instanceof UpdateNodeStatusEventBean) {
 
                     // Node net notice
-
-                    UpdateNodeStatusEventBean updateNodeStatusEventBean = (UpdateNodeStatusEventBean)baseEventBean;
-
-                    if (!updateNodeStatusEventBean.getDcID().equalsIgnoreCase(sysDataCenter.getDcCode())) {
+                    UpdateNodeStatusEventBean updateNodeStatusEventBean = (UpdateNodeStatusEventBean) baseEventBean;
+                    if (!updateNodeStatusEventBean.getDcID().equalsIgnoreCase(DC_CODE)) {
                         return;
                     }
 
@@ -308,41 +309,37 @@ public class EventAnalysisTask {
                     dcNode.setNttCount(updateNodeStatusEventBean.getRewardNTT());
 
                     dcNodeMapper.updateByPrimaryKeySelective(dcNode);
+                    LOG.info("updateNodeStatusEvent update ID:{}", dcNode.getNodeId());
 
-                } else if (baseEventBean instanceof SetExchRadioEventBean) {
 
-                    // Chain Gas Price
-
-//                    SetExchRadioEventBean setExchRadioEventBean = (SetExchRadioEventBean)baseEventBean;
-//
-//                    ChainPrice chainPrice = new ChainPrice();
-//                    chainPrice.setChainId(setExchRadioEventBean.getChainID().longValue());
-//                    chainPrice.setGas(setExchRadioEventBean.getNttAmt());
-//                    chainPrice.setCreateTime(new Date());
-//
-//                    chainPriceMapper.insertSelective(chainPrice);
                 }
-
             });
         }
+    }
 
-        // Increment Event Block
-        EventBlockConf.eventBlock.incrementAndGet();
-        eventBlockMapper.increment();
-
-        LOG.info("Task event analysis End");
+    private boolean checkDataCenterInfo() {
+        if (StringUtils.isBlank(NTT_WALLET_ADDRESS) || StringUtils.isBlank(DC_CODE)) {
+            SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
+            if (sysDataCenter == null) {
+                LOG.info("Task event analysis fail: {}", "the basic information of data center is not configured");
+                return false;
+            }
+            NTT_WALLET_ADDRESS = sysDataCenter.getNttAccountAddress();
+            DC_CODE = sysDataCenter.getDcCode();
+        }
+        return true;
     }
 
     /**
      * If the current event does not belong to the current data center, the event ends
+     *
      * @param from
      * @param to
-     * @param sysDataCenter
+     * @param nttWallet
      * @return
      */
-    public Boolean isCurrentDc(String from, String to, SysDataCenter sysDataCenter) {
-        if (!from.equalsIgnoreCase(sysDataCenter.getNttAccountAddress())
-                && !to.equalsIgnoreCase(sysDataCenter.getNttAccountAddress())) {
+    public Boolean isCurrentDc(String from, String to, String nttWallet) {
+        if (!from.equalsIgnoreCase(nttWallet) && !to.equalsIgnoreCase(nttWallet)) {
             return false;
         }
         return true;
@@ -356,7 +353,7 @@ public class EventAnalysisTask {
      */
     public void saveNttTxSum(boolean flowIn, BigDecimal amount) {
         NttTxSum nttTxSum = nttTxSumMapper.getOne();
-        if (nttTxSum == null) {
+        if (Objects.isNull(nttTxSum)) {
             LOG.info("ntt tx sum is null");
             return;
         }
@@ -367,5 +364,4 @@ public class EventAnalysisTask {
         }
         nttTxSumMapper.updateByPrimaryKeySelective(nttTxSum);
     }
-
 }

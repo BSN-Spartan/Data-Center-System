@@ -15,10 +15,10 @@ public class MetaDataTxRespVO {
     private String receiver;
     private String engAmt;
     private Integer chainID;
-    private BigInteger nonce;
+    private String nonce;
     private String deadline;
     private String domainSeparator;
     private String metaTransferTypeHash;
-    private BigInteger mateTxId;
+    private String mateTxId;
 
 }
