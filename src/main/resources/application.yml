@@ -14,7 +14,7 @@ mysql_conf:
 server:
   servlet:
     session:
-      timeout: 1800 #uint: second
+      timeout: 1800 # session timeout: uint:second
 
 
 system:
