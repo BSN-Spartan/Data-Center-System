@@ -223,7 +223,7 @@ public class EventAnalysisTask {
                     LOG.info("transferEvent insert:{},txType:{}", md5Sign, txType);
                     // save ntt tx sum
                     boolean flowIn = transferEventBean.getTo().equalsIgnoreCase(NTT_WALLET_ADDRESS);
-                    saveNttTxSum(flowIn, amount);
+                    saveNttTxSum(flowIn, amount, txType);
 
                 } else if (baseEventBean instanceof MintTransferEventBean) {
 
@@ -263,7 +263,7 @@ public class EventAnalysisTask {
                     LOG.info("mintTransferEvent insert:{},txType:{}", md5Sign, txType);
                     // save ntt tx sum
                     boolean flowIn = mintTransferEventBean.getTo().equalsIgnoreCase(NTT_WALLET_ADDRESS);
-                    saveNttTxSum(flowIn, amount);
+                    saveNttTxSum(flowIn, amount, txType);
 
                 } else if (baseEventBean instanceof EnterNetEventBean) {
 
@@ -293,6 +293,7 @@ public class EventAnalysisTask {
 
                     DcNode dcNode = dcNodeMapper.getOneByNodeID(updateNodeStatusEventBean.getNodeID());
                     if (dcNode == null) {
+                        LOG.info("Could not find {} in the database, failed to update the status, Block Height:{}", updateNodeStatusEventBean.getNodeID(), updateNodeStatusEventBean.getBlockNumber());
                         return;
                     }
 
@@ -351,12 +352,20 @@ public class EventAnalysisTask {
      * @param flowIn
      * @param amount
      */
-    public void saveNttTxSum(boolean flowIn, BigDecimal amount) {
+    public void saveNttTxSum(boolean flowIn, BigDecimal amount, Short txType) {
         NttTxSum nttTxSum = nttTxSumMapper.getOne();
         if (Objects.isNull(nttTxSum)) {
-            LOG.info("ntt tx sum is null");
+            LOG.error("ntt tx sum is null");
             return;
         }
+
+        // priority processing refund for failed gas credit recharge
+        if (NttTxEnum.GAS_RECHARGE_FAIL_REFUND.getCode().equals(txType)) {
+            nttTxSum.setFlowOut(nttTxSum.getFlowOut().subtract(amount));
+            nttTxSumMapper.updateByPrimaryKeySelective(nttTxSum);
+            return;
+        }
+
         if (flowIn) {
             nttTxSum.setFlowIn(nttTxSum.getFlowIn().add(amount));
         } else {
