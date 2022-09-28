@@ -87,6 +87,7 @@ Download the configuration files, including [application.yml](https://github.com
     defaultPassword: xxx
   ```
   Example:
+  
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/6.%20application.jpg?raw=true)
 #### 2.3.2 Editing `application-prod.yml`
 
@@ -111,6 +112,7 @@ Download the configuration files, including [application.yml](https://github.com
     read_password: db_password
   ```
   Example:
+  
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
 - Configure the node information
 
@@ -128,6 +130,7 @@ Download the configuration files, including [application.yml](https://github.com
     blockHeight: block_height
   ```
   Example:
+  
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/8.%20prod2.jpg?raw=true)
 
 
