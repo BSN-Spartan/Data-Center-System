@@ -1,30 +1,31 @@
 server:
+  # Specify the port that runs the Data Center System
   port: 8085
 mysql:
   # Specity the IP address, port number and the name of your database
-  write_url: jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
-  # Enter the username
-  write_username: [db_username]
+  write_url: jdbc:mysql://database-IP:port/db_name?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
+  # Enter the login name of the database
+  write_username: db_username
   # Enter the password
-  write_password: [db_password]
+  write_password: db_password
   # Specity the IP address, port number and the name of your database
-  read_url: jdbc:mysql://[database-IP]:[port]/[db_name]?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
-  # Enter the username
-  read_username: [db_username]
+  read_url: jdbc:mysql://database-IP:port/db_name?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
+  # Enter the login name of the database
+  read_username: db_username
   # Enter the password
-  read_password: [db_password]
+  read_password: db_password
 
 chain:
-  # Node's JSON-RPC interface of the default chain
-  nodeRpcAddress: "http://[node-IP]:[node-rpc-port]"
-  # Default chain's netWork ID, do not change this parameter
+  # Default Node's JSON-RPC interface of Spartan-I Chain
+  nodeRpcAddress: "http://node-IP:node-rpc-port"
+  # Default chain's network ID, do not change this parameter
   chainId: 9090
   # Query the transaction pool's waiting time: millisecond, recommended 1.5 seconds
   txPoolSleep: 1500
-  # Path of the Keystore file
-  walletFilePath: "[your-directory]/wallet"
-  # After the system started, the event parsing can be started from this block height. This number can be determined based on the latest block height before the system started.
-  blockHeight: [10000]
+  # Change the path of the Keystore file to a designated directory
+  walletFilePath: "your-directory/wallet"
+  # This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. The system can then parse events from all blocks after this block height. For example: blockHeight: 270441
+  blockHeight: block_height
 
 task:
   # Whether to start a timed task to submit a transaction/time parse

@@ -21,9 +21,9 @@ system:
   name: BSN Spartan Data Center System
   icon: /static/images/system/favicon.ico
   logo: /static/images/system/spartan.png
-  adminName:
-  adminEmail:
-  defaultPassword:
+  adminName: xxx
+  adminEmail: xxx@xxx.com
+  defaultPassword: xxx
 
 thread-pool:
   cfg:
