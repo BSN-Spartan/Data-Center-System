@@ -30,7 +30,6 @@ create table dc_payment_order
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8 comment  'Gas payment order table';
 
-
 create table dc_payment_refund
 (
     refund_id       bigint          not null auto_increment,
@@ -49,7 +48,6 @@ create table dc_payment_refund
     primary key (refund_id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8 comment  'GAS refund table';
-
 
 create table dc_payment_type
 (
@@ -72,7 +70,6 @@ create table dc_payment_type
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8 comment  'Payment method table';
 
-
 create table dc_system_conf
 (
     conf_id     bigint        not null auto_increment,
@@ -83,8 +80,6 @@ create table dc_system_conf
     primary key (conf_id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8 comment  'Configuration information table';
-
-
 
 create table chain_sale_price
 (
@@ -104,8 +99,6 @@ create table chain_sale_price
     primary key (sale_price_id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8 comment  'Price information table';
-
-
 
 create table dc_chain_access
 (
@@ -249,3 +242,19 @@ VALUES ('user_join_email_', 'BSN Spartan Data Center Notification: Nodes Informa
         'Welcome to BSN Spartan Network! <br/>\r\nYou can access to BSN Spartan Network via these nodes:<br/><br/>\r\n\r\nSpartan-I(Powered by NC Ethereum)<br/>\r\nAccess Key:${accessKey_}<br/>\r\nAccess Url Example:${accessDemo_}<br/>\r\nJson RPC Access URL:${ethRpc_}<br/>\r\nWebSocket Access URL:${ethWs_}<br/><br/>\r\n\r\nSpartan-II(Powered by NC Cosmos)\r\nAccess Key:${accessKey_}<br/>\r\nJson RPC:<br/>EVM module:${cosmosEvmRpc_}<br/>\r\n         Native module:${cosmosRpc_}<br/>\r\nWebSocket:<br/>EVM module:${cosmosEvmWs_}<br/>\r\n          Native module:${cosmosWs_}<br/>\r\ngRPC:${cosmosGrpc_}<br/><br/>\r\n\r\n\r\nSpartan-III(Powered by NC PolygonEdge)\r\nAccess Key:${accessKey_}<br/>\r\nJson RPC Access URL:${poloygonRpc_}<br/>\r\nWebSocket Access URL:${polygonWs_}<br/><br/>',
         2, now(), now(), 1);
 INSERT INTO `sys_message_template` (`msg_code`, `msg_title`, `msg_content`, `msg_type`, `update_time`, `create_time`,
+                                    `state`)
+VALUES ('order_submit_offline_', 'BSN Spartan Data Center Notification: Order Submitted',
+        'We are pleased to inform you that we have received your order, please complete the payment as soon as possible.<br>Your order information is as follows:<br>Order Number:${trade_no_}<br>Wallet:${account_address_}<br>Gas Credit Amount:${gas_count_}<br>Order Total:US$ ${pay_amount_}<br>Payment Information:<br>Bank Name: ${bank_name_}<br>Bank Account No.: ${bank_account_no_}<br>Bank Address: ${bank_address_}<br>Swift Code: ${swift_code_}<br><span style="font-style: oblique;font-weight:bolder;">Note: Please enter the order number in Payment Details, so that we can top up Gas Credit for you.</span>',
+        2, now(), now(), 1);
+INSERT INTO `sys_message_template` (`msg_code`, `msg_title`, `msg_content`, `msg_type`, `update_time`, `create_time`,
+                                    `state`)
+VALUES ('order_submit_success_', 'BSN Spartan Data Center Notification: Order Submitted',
+        'We are pleased to inform you that we have received your order,please complete the payment as soon as possible.<br/>Your order information is as follows:<br/>Order Number: ${trade_no_}<br/>Wallet: ${account_address_}<br/>Gas Credit Amount: ${gas_count_}<br/>Order Total: US$ ${pay_amount_}<br/>Payment Link: <a href=\"${pay_link_}\">${pay_link_}</a>',
+        2, now(), now(), 1);
+INSERT INTO `sys_message_template` (`msg_code`, `msg_title`, `msg_content`, `msg_type`, `update_time`, `create_time`,
+                                    `state`)
+VALUES ('payment_success_', 'BSN Spartan Data Center Notification: Payment Success',
+        'We are pleased to inform you that we have received your order payment and we will recharge your Gas Credit as soon as possible, we will send the Gas Credit recharge result to your email.<br/>Your order information is as follows:<br/>Order Number: ${trade_no_}<br/>Wallet: ${account_address_}<br/>Gas Credit Amount: ${gas_count_}<br/>Order Total: US$ ${pay_amount_}<br/>Payment Date: ${pay_time_}<br/>Transaction Hash: ${tx_hash_}（Note: The transaction hash is only genereated by the Coinbase payment, pay by Stripe does not generate the transaction hash）',
+        2, '2022-11-07 10:03:06', now(), 1);
+
+INSERT INTO `sys_message_template` (`msg_code`, `msg_title`, `msg_content`, `msg_type`, `update_time`, `create_time`, `state`) VALUES ('keyStorePassword', 'Data center keystore password is required', 'Data Center Code: ${dc_code_}, the Keystore password is missing, please set it on time or the Gas Credit top-up will be affected!', '2', '2022-11-16 06:54:28', '2022-11-16 06:54:28', '1');
