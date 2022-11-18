@@ -296,13 +296,13 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
         List<DcSystemConfRespVO> dcSystemConfRespVOS = dcSystemConfMapper.querySystemConf(null);
         DcSystemConfRespVO dcSystemConfRespVO = new DcSystemConfRespVO();
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
-        if (!StringUtils.isNotBlank(sysDataCenter.getLogo())){
+        if (!Objects.isNull(sysDataCenter) && StringUtils.isNotBlank(sysDataCenter.getLogo())){
             dcSystemConfRespVO.setConfCode(SystemConfCodeEnum.LOGO.getCode());
-            dcSystemConfRespVO.setConfValue(iconBase64);
+            dcSystemConfRespVO.setConfValue(sysDataCenter.getLogo());
             dcSystemConfRespVOS.add(dcSystemConfRespVO);
         }else {
             dcSystemConfRespVO.setConfCode(SystemConfCodeEnum.LOGO.getCode());
-            dcSystemConfRespVO.setConfValue(sysDataCenter.getLogo());
+            dcSystemConfRespVO.setConfValue(iconBase64);
             dcSystemConfRespVOS.add(dcSystemConfRespVO);
         }
         return dcSystemConfRespVOS;
