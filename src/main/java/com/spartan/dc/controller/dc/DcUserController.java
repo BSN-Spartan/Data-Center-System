@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("sys/user/")
+@ApiIgnore
 public class DcUserController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(DcUserController.class);

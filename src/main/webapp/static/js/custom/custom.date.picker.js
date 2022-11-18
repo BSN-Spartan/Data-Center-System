@@ -136,3 +136,58 @@ function startEndDateTimePicker(startSelector, endSelector) {
         $(endSelector).datetimepicker('setStartDate', endTimeStart);
     });
 }
+/**
+ * Initialize the time by ID
+ * @param clas
+ */
+function initDatepickerAndClearById(id) {
+    $("#" + id).datepicker({
+        language: "zh-CN",
+        autoclose: true,
+        startView: 0,
+        format: "yyyy-mm-dd",
+        clearBtn: true,
+        todayBtn: false
+    });
+}
+
+
+// Used for adding management fee, the end date must be greater than the start date and the current date
+function startEndNewDatePicker(startSelector, endSelector) {
+    $(startSelector).datepicker({
+        language: "zh-CN",
+        autoclose: true,
+        startView: 0,
+        format: "yyyy-mm-dd",
+        clearBtn: true,
+        todayBtn: false
+    }).on('changeDate', function (ev) {
+        var $startDate = $( startSelector );
+        var $endDate = $(endSelector);
+        var endDate = $endDate.datepicker( 'getDate' );
+        var startDate = $startDate.datepicker( 'getDate' );
+        if(endDate < startDate){
+            $endDate.datepicker('setDate',null);
+        }
+        $endDate.datepicker( "option", "minDate",startDate);
+    });
+    $(endSelector).datepicker({
+        language: "zh-CN",
+        autoclose: true,
+        startView: 0,
+        format: "yyyy-mm-dd",
+        clearBtn: true,
+        todayBtn: false
+    });
+    $(startSelector).datepicker().on('changeDate', function (e) {
+        // Get the selected start time
+        var endTimeStart = $(startSelector).val();
+        // Set the end time
+        if(new Date(endTimeStart)>new Date()){
+            $(endSelector).datepicker('setStartDate', endTimeStart);
+        }else{
+            $(endSelector).datepicker('setStartDate', new Date());
+        }
+    });
+}
+

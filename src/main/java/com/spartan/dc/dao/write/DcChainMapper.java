@@ -1,11 +1,15 @@
 package com.spartan.dc.dao.write;
 
+import com.spartan.dc.core.vo.resp.ChainAccessRespVO;
+import com.spartan.dc.core.vo.resp.DcChainRespVO;
 import com.spartan.dc.model.DcChain;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
 public interface DcChainMapper {
+
     int deleteByPrimaryKey(Long chainId);
 
     int insert(DcChain record);
@@ -18,9 +22,19 @@ public interface DcChainMapper {
 
     int updateByPrimaryKey(DcChain record);
 
-    List<Map<String, Object>> queryChainList(Map<String, Object> condition);
+    List<DcChainRespVO> queryChain();
 
     List<DcChain> getOpbChainList();
 
     List<DcChain> getAll();
+
+    List<Map<String, Object>> queryChainList(Map<String, Object> condition);
+
+	DcChain getChainByChainId(Long chainId);
+
+	void resetNodeConfig();
+
+    Map<String, String> getGatewayUrl();
+
+    List<ChainAccessRespVO.NodeConfig> getNodeConfigs();
 }

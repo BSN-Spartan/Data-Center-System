@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysMessageTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.SysMessageTemplate">
+    <id column="template_id" jdbcType="BIGINT" property="templateId" />
+    <result column="msg_code" jdbcType="VARCHAR" property="msgCode" />
+    <result column="msg_title" jdbcType="VARCHAR" property="msgTitle" />
+    <result column="msg_content" jdbcType="VARCHAR" property="msgContent" />
+    <result column="msg_type" jdbcType="SMALLINT" property="msgType" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    template_id, msg_code, msg_title, msg_content, msg_type, update_time, create_time, 
+    state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_message_template
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_message_template
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.SysMessageTemplate">
+    insert into sys_message_template (template_id, msg_code, msg_title, 
+      msg_content, msg_type, update_time, 
+      create_time, state)
+    values (#{templateId,jdbcType=BIGINT}, #{msgCode,jdbcType=VARCHAR}, #{msgTitle,jdbcType=VARCHAR}, 
+      #{msgContent,jdbcType=VARCHAR}, #{msgType,jdbcType=SMALLINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.SysMessageTemplate">
+    insert into sys_message_template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="msgCode != null">
+        msg_code,
+      </if>
+      <if test="msgTitle != null">
+        msg_title,
+      </if>
+      <if test="msgContent != null">
+        msg_content,
+      </if>
+      <if test="msgType != null">
+        msg_type,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="msgCode != null">
+        #{msgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTitle != null">
+        #{msgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="msgContent != null">
+        #{msgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null">
+        #{msgType,jdbcType=SMALLINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.SysMessageTemplate">
+    update sys_message_template
+    <set>
+      <if test="msgCode != null">
+        msg_code = #{msgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTitle != null">
+        msg_title = #{msgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="msgContent != null">
+        msg_content = #{msgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null">
+        msg_type = #{msgType,jdbcType=SMALLINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.SysMessageTemplate">
+    update sys_message_template
+    set msg_code = #{msgCode,jdbcType=VARCHAR},
+      msg_title = #{msgTitle,jdbcType=VARCHAR},
+      msg_content = #{msgContent,jdbcType=VARCHAR},
+      msg_type = #{msgType,jdbcType=SMALLINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=SMALLINT}
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </update>
+</mapper>

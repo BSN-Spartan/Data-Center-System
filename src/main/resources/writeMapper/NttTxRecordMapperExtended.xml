@@ -75,7 +75,7 @@
 
     <select id="getNTTRecentAward" resultType="com.spartan.dc.model.vo.resp.NttRewardRespVO">
         select CONCAT(ntt_count) nttCount,
-               DATE_FORMAT(tx_time, '%Y-%m-%d %H:%i:%s') txTime
+               DATE_FORMAT(tx_time, '%Y-%m-%d %T') txTime
         from ntt_tx_record
         where type = 0 or type = 1
         order by create_time desc limit 1

@@ -4,12 +4,15 @@ import com.spartan.dc.config.interceptor.RequiredPermission;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
+import com.spartan.dc.core.vo.resp.DcChainRespVO;
 import com.spartan.dc.model.DcChain;
 import com.spartan.dc.service.DcChainService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("sys/chain/")
+@ApiIgnore
 public class DcChainController {
 
     private final static Logger logger = LoggerFactory.getLogger(DcChainController.class);
@@ -54,5 +58,7 @@ public class DcChainController {
 //
 //        return ResultInfoUtil.successResult(dcChainList);
 //    }
+
+
 
 }

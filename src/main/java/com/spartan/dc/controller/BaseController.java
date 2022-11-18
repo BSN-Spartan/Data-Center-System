@@ -11,6 +11,7 @@ import com.spartan.dc.service.WalletService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.web3j.crypto.Credentials;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +21,7 @@ import static com.spartan.dc.core.util.common.CacheManager.PASSWORD_CACHE_KEY;
  * @Author : rjx
  * @Date : 2022/7/28 16:54
  **/
+@ApiIgnore
 public class BaseController {
 
     @Autowired

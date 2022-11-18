@@ -1,6 +1,7 @@
 package com.spartan.dc.task;
 
 import com.reddate.spartan.SpartanSdkClient;
+import com.reddate.spartan.dto.spartan.ChainInfo;
 import com.spartan.dc.dao.write.ChainPriceMapper;
 import com.spartan.dc.dao.write.DcChainMapper;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Get Chain Gas Price
+ * Check the Gas Credit top-up ratio
  * @author linzijun
  * @version V1.0
  * @date 2022/8/30 19:12
@@ -53,39 +54,54 @@ public class ChainGasPriceTask {
 
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
         if (sysDataCenter == null) {
-            LOG.info("Task Chain Gas Price fail: {}", "the basic information of data center is not configured");
+            LOG.info("Task: Exception when querying the Gas Credit top-up ratio: {}", "the basic information of the data center has not been configured yet");
             return;
         }
 
         if (!walletService.checkWalletExists()) {
-            LOG.info("Task Chain Gas Price fail: {}", "the keystore information is not configured");
+            LOG.info("Task: Exception when querying the Gas Credit top-up ratio: {}", "the key store information has not been configured yet");
             return;
         }
 
         List<DcChain> dcChains = dcChainMapper.getAll();
         for (DcChain dcChain : dcChains) {
-
-            BigDecimal price = spartanSdkClient.gasCreditRechargeService.getExchRatio(new BigInteger(dcChain.getChainId().toString()));
-            if (price == null || BigDecimal.ZERO.compareTo(price) == 1) {
-                continue;
-            }
-
-            ChainPrice chainPrice = chainPriceMapper.getOneByChainId(dcChain.getChainId());
-
-            if (chainPrice == null) {
-                chainPrice = new ChainPrice();
-                chainPrice.setCreateTime(new Date());
-                chainPrice.setGas(BigDecimal.ONE);
-                chainPrice.setNttCount(price);
-                chainPrice.setChainId(dcChain.getChainId());
-                chainPriceMapper.insertSelective(chainPrice);
-                continue;
-            }
-
-            chainPrice.setNttCount(price);
-            chainPriceMapper.updateByPrimaryKeySelective(chainPrice);
+            getExchRatio(dcChain.getChainId());
+            getChainInfo(dcChain.getChainId());
         }
 
+    }
+
+    private void getExchRatio(Long chainId) throws Exception {
+        BigDecimal price = spartanSdkClient.gasCreditRechargeService.getExchRatio(new BigInteger(chainId.toString()));
+        if (price == null || BigDecimal.ZERO.compareTo(price) == 1) {
+            return;
+        }
+        saveChainPrice(chainId, price);
+    }
+
+    private void getChainInfo(Long chainId) throws Exception {
+        ChainInfo chainInfo = spartanSdkClient.gasCreditRechargeService.getChainInfo(new BigInteger(chainId.toString()));
+        if (chainInfo == null || chainInfo.getNttAmt() == null || BigDecimal.ZERO.compareTo(chainInfo.getNttAmt()) == 1) {
+            return;
+        }
+        saveChainPrice(chainId, chainInfo.getNttAmt());
+    }
+
+    private void saveChainPrice(Long chainId, BigDecimal price) {
+        ChainPrice chainPrice = chainPriceMapper.getOneByChainId(chainId);
+
+        if (chainPrice == null) {
+            chainPrice = new ChainPrice();
+            chainPrice.setCreateTime(new Date());
+            chainPrice.setGas(BigDecimal.ONE);
+            chainPrice.setNttCount(price);
+            chainPrice.setChainId(chainId);
+            chainPriceMapper.insertSelective(chainPrice);
+            return;
+        }
+
+        chainPrice.setNttCount(price);
+        chainPriceMapper.updateByPrimaryKeySelective(chainPrice);
     }
 
 }

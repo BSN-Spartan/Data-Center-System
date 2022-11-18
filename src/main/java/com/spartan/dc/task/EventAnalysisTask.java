@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.reddate.spartan.SpartanSdkClient;
 import com.reddate.spartan.dto.spartan.*;
 import com.spartan.dc.core.conf.EventBlockConf;
+import com.spartan.dc.core.enums.NodeStateEnum;
+import com.spartan.dc.core.enums.NttTxEnum;
+import com.spartan.dc.core.enums.RechargeStateEnum;
+import com.spartan.dc.core.enums.RechargeSubmitStateEnum;
 import com.spartan.dc.core.util.common.Md5Utils;
-import com.spartan.dc.core.util.enums.*;
 import com.spartan.dc.dao.write.*;
 import com.spartan.dc.model.*;
 import com.spartan.dc.service.WalletService;
@@ -25,7 +28,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Event Analysis
@@ -67,13 +69,16 @@ public class EventAnalysisTask {
     @Autowired
     private WalletService walletService;
 
+    @Resource
+    private ChainPriceMapper chainPriceMapper;
+
     @Scheduled(cron = "${task.eventAnalytics}")
     private void configureTasks() throws Exception {
 
-        LOG.info("Task event analysis Start");
+        LOG.info("Task: event analysis start");
 
         if (EventBlockConf.eventBlock == null) {
-            LOG.info("Task event analysis fail: {}", "local event block is null");
+            LOG.info("Task: Exception when parsing the event: {}", "the local block height is null");
             return;
         }
 
@@ -82,17 +87,17 @@ public class EventAnalysisTask {
         }
 
         if (!walletService.checkWalletExists()) {
-            LOG.info("Task event analysis fail: {}", "the keystore information is not configured");
+            LOG.info("Task: Exception when parsing the event: {}", "the key store information has not been configured yet");
             return;
         }
 
         // Get Event Block
         BigInteger eventBlock = new BigInteger(EventBlockConf.eventBlock.toString());
         BigInteger blockNumber = spartanSdkClient.baseService.getBlockNumber();
-        LOG.info("Task event analysis Current Block: {}", eventBlock + " --- " + blockNumber);
+        LOG.info("Task: Parsing the block of the current block height by the event: {}", eventBlock + " --- " + blockNumber);
 
         if (eventBlock.compareTo(blockNumber) == 1) {
-            LOG.info("Block High Overflow");
+            LOG.info("Task: Current block height overflow");
             return;
         }
 
@@ -100,10 +105,10 @@ public class EventAnalysisTask {
         ArrayList<BaseEventBean> blockEvents;
         try {
             blockEvents = spartanSdkClient.blockEventService.getBlockEvent(eventBlock);
-            LOG.info("Event Analysis Result: {}", JSON.toJSONString(blockEvents));
+            LOG.info("Task: Event parsing result: {}", JSON.toJSONString(blockEvents));
             parseBlock(blockEvents);
         } catch (Exception e) {
-            LOG.info("Event Analysis Error");
+            LOG.info("Task: Event parsing exception");
             throw new RuntimeException(e.getMessage());
         }
 
@@ -111,7 +116,7 @@ public class EventAnalysisTask {
         EventBlockConf.eventBlock.incrementAndGet();
         eventBlockMapper.increment();
 
-        LOG.info("Task event analysis End");
+        LOG.info("Task: End of event parsing");
     }
 
     private void parseBlock(ArrayList<BaseEventBean> blockEvents) {
@@ -119,25 +124,25 @@ public class EventAnalysisTask {
             blockEvents.forEach(baseEventBean -> {
                 if (baseEventBean instanceof ECRechgEventBean) {
 
-                    // Gas Recharge
+                    // Gas Credit top-up
                     ECRechgEventBean ecRechgEventBean = (ECRechgEventBean) baseEventBean;
                     if (!isCurrentDc(ecRechgEventBean.getTransactionInfoBean().getFrom(), ecRechgEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)) {
                         return;
                     }
 
-                    // EventBean MD5
+                    // Encrypt the event result with MD5 algorithm
                     String md5Sign = Md5Utils.getMD5String(JSONObject.toJSONString(ecRechgEventBean));
 
-                    // get dcGasRechargeRecord By md5Sign
+                    // Get the top-up record according to MD5Sign
                     DcGasRechargeRecord dcGasRechargeRecord = dcGasRechargeRecordMapper.getOneByMd5Sign(md5Sign);
                     if (dcGasRechargeRecord != null) {
-                        LOG.info("Gas Recharge data already exist: {}", md5Sign);
+                        LOG.info("Task: Gas Credit top-up data already exists: {}", md5Sign);
                         return;
                     }
 
                     dcGasRechargeRecord = dcGasRechargeRecordMapper.getOneByTxHash(ecRechgEventBean.getTransactionInfoBean().getHash());
                     if (dcGasRechargeRecord == null) {
-                        LOG.info("Gas Recharge tx hash already exist");
+                        LOG.info("Task: Gas Credit top-up hash already exists");
                         return;
                     }
 
@@ -147,24 +152,24 @@ public class EventAnalysisTask {
                     dcGasRechargeRecord.setState(RechargeSubmitStateEnum.SUBMITTED_SUCCESSFULLY.getCode());
                     dcGasRechargeRecord.setMd5Sign(md5Sign);
                     dcGasRechargeRecordMapper.updateByPrimaryKeySelective(dcGasRechargeRecord);
-                    LOG.info("ecRechgEvent update:{}", md5Sign);
+                    LOG.info("Task: Modify the top-up record based on the Gas Credit top-up event: {}", md5Sign);
 
                 } else if (baseEventBean instanceof MetaECRechgEventBean) {
 
-                    // Meta Gas Recharge
+                    // Emergency Gas Credit top-up
                     MetaECRechgEventBean metaECRechgEventBean = (MetaECRechgEventBean) baseEventBean;
                     if (!isCurrentDc(metaECRechgEventBean.getTransactionInfoBean().getFrom(), metaECRechgEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)
                             && !NTT_WALLET_ADDRESS.equalsIgnoreCase(metaECRechgEventBean.getDcAcc())) {
                         return;
                     }
 
-                    // EventBean MD5
+                    // Encrypt the event result with MD5 algorithm
                     String md5Sign = Md5Utils.getMD5String(JSONObject.toJSONString(metaECRechgEventBean));
 
-                    // get dcGasRechargeRecord By md5Sign
+                    // Get the top-up record according to MD5Sign
                     DcGasRechargeRecord dcGasRechargeRecord = dcGasRechargeRecordMapper.getOneByMd5Sign(md5Sign);
                     if (dcGasRechargeRecord != null) {
-                        LOG.info("Meta Gas Recharge data already exist: {}", md5Sign);
+                        LOG.info("Task: The data of Emergency Gas Credit top-up already exists: {}", md5Sign);
                         return;
                     }
 
@@ -183,27 +188,27 @@ public class EventAnalysisTask {
                     dcGasRechargeRecord.setNonce(metaECRechgEventBean.getNonce().longValue());
                     dcGasRechargeRecord.setMd5Sign(md5Sign);
                     dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
-                    LOG.info("metaECRechgEvent insert:{}", md5Sign);
+                    LOG.info("Task: Add top-up record based on the Emergency Gas Credit top-up event: {}", md5Sign);
 
                 } else if (baseEventBean instanceof TransferEventBean) {
 
-                    // Ntt Tx
+                    // NTT transaction
                     TransferEventBean transferEventBean = (TransferEventBean) baseEventBean;
                     if (!isCurrentDc(transferEventBean.getFrom(), transferEventBean.getTo(), NTT_WALLET_ADDRESS)
-                            && !isCurrentDc(transferEventBean.getTransactionInfoBean().getFrom(), transferEventBean.getTo(), NTT_WALLET_ADDRESS)) {
+                            && !isCurrentDc(transferEventBean.getTransactionInfoBean().getFrom(), transferEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)) {
                         return;
                     }
 
                     Short txType = transferEventBean.getTransType().shortValueExact();
                     BigDecimal amount = transferEventBean.getAmount();
 
-                    // EventBean MD5
+                    // Encrypt the event result with MD5 algorithm
                     String md5Sign = Md5Utils.getMD5String(JSONObject.toJSONString(transferEventBean));
 
-                    // get nttTxRecord By md5Sign
+                    // Get NTT transaction record based on MD5Sign
                     NttTxRecord nttTxRecord = nttTxRecordMapper.getOneByMd5SignAndTxType(md5Sign, txType);
                     if (nttTxRecord != null) {
-                        LOG.info("Ntt Tx data already exist: {}", md5Sign);
+                        LOG.info("Task: NTT transaction record data already exists: {}", md5Sign);
                         return;
                     }
 
@@ -220,14 +225,14 @@ public class EventAnalysisTask {
                     nttTxRecord.setTxTime(new Date(Long.valueOf(transferEventBean.getTimestamp())));
                     nttTxRecord.setMd5Sign(md5Sign);
                     nttTxRecordMapper.insertSelective(nttTxRecord);
-                    LOG.info("transferEvent insert:{},txType:{}", md5Sign, txType);
-                    // save ntt tx sum
+                    LOG.info("Task: Add NTT transaction record based on the NTT transaction event: {}, Transaction type: {}", md5Sign, txType);
+                    // Save NTT transaction cost statistics
                     boolean flowIn = transferEventBean.getTo().equalsIgnoreCase(NTT_WALLET_ADDRESS);
                     saveNttTxSum(flowIn, amount, txType);
 
                 } else if (baseEventBean instanceof MintTransferEventBean) {
 
-                    // Mint Ntt Tx
+                    // Transaction of NTT generation
                     MintTransferEventBean mintTransferEventBean = (MintTransferEventBean) baseEventBean;
                     if (!isCurrentDc(mintTransferEventBean.getFrom(), mintTransferEventBean.getTo(), NTT_WALLET_ADDRESS)
                             && !isCurrentDc(mintTransferEventBean.getTransactionInfoBean().getFrom(), mintTransferEventBean.getTransactionInfoBean().getTo(), NTT_WALLET_ADDRESS)) {
@@ -237,13 +242,13 @@ public class EventAnalysisTask {
                     Short txType = mintTransferEventBean.getTransType().shortValueExact();
                     BigDecimal amount = mintTransferEventBean.getAmount();
 
-                    // EventBean MD5
+                    // Encrypt the event result with MD5 algorithm
                     String md5Sign = Md5Utils.getMD5String(JSONObject.toJSONString(mintTransferEventBean));
 
-                    // get nttTxRecord By md5Sign
+                    // Get NTT transaction record based on MD5Sign
                     NttTxRecord nttTxRecord = nttTxRecordMapper.getOneByMd5SignAndTxType(md5Sign, txType);
                     if (nttTxRecord != null) {
-                        LOG.info("Mint Ntt Tx data already exist: {}", md5Sign);
+                        LOG.info("Task: The transaction data of NTT generation already exists: {}", md5Sign);
                         return;
                     }
 
@@ -260,14 +265,14 @@ public class EventAnalysisTask {
                     nttTxRecord.setTxTime(new Date(Long.valueOf(mintTransferEventBean.getTimestamp())));
                     nttTxRecord.setMd5Sign(md5Sign);
                     nttTxRecordMapper.insertSelective(nttTxRecord);
-                    LOG.info("mintTransferEvent insert:{},txType:{}", md5Sign, txType);
-                    // save ntt tx sum
+                    LOG.info("Task: Add NTT transaction record based on the transaction event of NTT generation: {}, Transaction type: {}", md5Sign, txType);
+                    // Save NTT transaction cost statistics
                     boolean flowIn = mintTransferEventBean.getTo().equalsIgnoreCase(NTT_WALLET_ADDRESS);
                     saveNttTxSum(flowIn, amount, txType);
 
                 } else if (baseEventBean instanceof EnterNetEventBean) {
 
-                    // Node Net Work
+                    // Node registration
                     EnterNetEventBean enterNetEventBean = (EnterNetEventBean) baseEventBean;
                     if (!enterNetEventBean.getDcID().equalsIgnoreCase(DC_CODE)) {
                         return;
@@ -275,17 +280,18 @@ public class EventAnalysisTask {
 
                     DcNode dcNode = dcNodeMapper.getOneByNodeID(enterNetEventBean.getNodeID());
                     if (dcNode == null) {
+                        LOG.info("Task: Unable to find the node ID in the database, the current block height is: {}", enterNetEventBean.getNodeID());
                         return;
                     }
 
                     dcNode.setState(NodeStateEnum.IN_THE_INSPECTION.getCode());
                     dcNode.setNttCount(enterNetEventBean.getRewardNTT());
                     dcNodeMapper.updateByPrimaryKeySelective(dcNode);
-                    LOG.info("enterNetEvent update ID:{}", dcNode.getNodeId());
+                    LOG.info("Task: Modify the node status according to the node ID of the node registration event:{}", dcNode.getNodeId());
 
                 } else if (baseEventBean instanceof UpdateNodeStatusEventBean) {
 
-                    // Node net notice
+                    // Node registration notification
                     UpdateNodeStatusEventBean updateNodeStatusEventBean = (UpdateNodeStatusEventBean) baseEventBean;
                     if (!updateNodeStatusEventBean.getDcID().equalsIgnoreCase(DC_CODE)) {
                         return;
@@ -293,7 +299,7 @@ public class EventAnalysisTask {
 
                     DcNode dcNode = dcNodeMapper.getOneByNodeID(updateNodeStatusEventBean.getNodeID());
                     if (dcNode == null) {
-                        LOG.info("Could not find {} in the database, failed to update the status, Block Height:{}", updateNodeStatusEventBean.getNodeID(), updateNodeStatusEventBean.getBlockNumber());
+                        LOG.info("Task: Unable to find the node ID in the database, the current block height is: {}", updateNodeStatusEventBean.getNodeID(), updateNodeStatusEventBean.getBlockNumber());
                         return;
                     }
 
@@ -310,8 +316,30 @@ public class EventAnalysisTask {
                     dcNode.setNttCount(updateNodeStatusEventBean.getRewardNTT());
 
                     dcNodeMapper.updateByPrimaryKeySelective(dcNode);
-                    LOG.info("updateNodeStatusEvent update ID:{}", dcNode.getNodeId());
+                    LOG.info("Task: Modify node status according to the node ID of node registration notification event: {}", dcNode.getNodeId());
+                } else if (baseEventBean instanceof ChainInfoEventBean) {
 
+                    // chain info
+                    ChainInfoEventBean chainInfoEventBean = (ChainInfoEventBean) baseEventBean;
+
+                    if (chainInfoEventBean == null || BigDecimal.ZERO.compareTo(chainInfoEventBean.getNttAmt()) == 1) {
+                        return;
+                    }
+
+                    ChainPrice chainPrice = chainPriceMapper.getOneByChainId(chainInfoEventBean.getChainID().longValue());
+
+                    if (chainPrice == null) {
+                        chainPrice = new ChainPrice();
+                        chainPrice.setCreateTime(new Date());
+                        chainPrice.setGas(BigDecimal.ONE);
+                        chainPrice.setNttCount(chainInfoEventBean.getNttAmt());
+                        chainPrice.setChainId(chainInfoEventBean.getChainID().longValue());
+                        chainPriceMapper.insertSelective(chainPrice);
+                        return;
+                    }
+
+                    chainPrice.setNttCount(chainInfoEventBean.getNttAmt());
+                    chainPriceMapper.updateByPrimaryKeySelective(chainPrice);
 
                 }
             });
@@ -322,7 +350,7 @@ public class EventAnalysisTask {
         if (StringUtils.isBlank(NTT_WALLET_ADDRESS) || StringUtils.isBlank(DC_CODE)) {
             SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
             if (sysDataCenter == null) {
-                LOG.info("Task event analysis fail: {}", "the basic information of data center is not configured");
+                LOG.info("Task: Event parsing exception: {}", "basic information of data center has not been configured yet");
                 return false;
             }
             NTT_WALLET_ADDRESS = sysDataCenter.getNttAccountAddress();
@@ -332,7 +360,7 @@ public class EventAnalysisTask {
     }
 
     /**
-     * If the current event does not belong to the current data center, the event ends
+     * If the current event does not belong to the current data center, end the event
      *
      * @param from
      * @param to
@@ -347,7 +375,7 @@ public class EventAnalysisTask {
     }
 
     /**
-     * save ntt tx sum
+     * Save NTT transaction cost statistics
      *
      * @param flowIn
      * @param amount
@@ -359,7 +387,7 @@ public class EventAnalysisTask {
             return;
         }
 
-        // priority processing refund for failed gas credit recharge
+        // Process the refund of failed Gas Credit top-up in priority
         if (NttTxEnum.GAS_RECHARGE_FAIL_REFUND.getCode().equals(txType)) {
             nttTxSum.setFlowOut(nttTxSum.getFlowOut().subtract(amount));
             nttTxSumMapper.updateByPrimaryKeySelective(nttTxSum);

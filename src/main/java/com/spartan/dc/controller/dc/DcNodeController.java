@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.web3j.crypto.Credentials;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("node/")
+@ApiIgnore
 public class DcNodeController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(DcNodeController.class);
@@ -62,9 +64,9 @@ public class DcNodeController extends BaseController {
         Credentials credentials = getCredentials(dcNode.getPassword());
         boolean result = nodeService.addNode(dcNode,credentials);
         if (result) {
-            return ResultInfoUtil.successResult("addNode success");
+            return ResultInfoUtil.successResult("AddNode success");
         } else {
-            return ResultInfoUtil.errorResult("addNode failed");
+            return ResultInfoUtil.errorResult("AddNode failed");
         }
     }
 

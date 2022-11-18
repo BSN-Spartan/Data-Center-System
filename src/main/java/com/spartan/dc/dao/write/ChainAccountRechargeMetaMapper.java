@@ -5,6 +5,7 @@ import com.spartan.dc.model.ChainAccountRechargeMeta;
 import java.math.BigInteger;
 
 public interface ChainAccountRechargeMetaMapper {
+
     int deleteByPrimaryKey(Long rechargeMetaId);
 
     int insert(ChainAccountRechargeMeta record);

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.ChainSalePriceMapper">
+    <select id="selectCurrentSalePrice" parameterType="Long" resultType="com.spartan.dc.model.ChainSalePrice">
+        select
+        <include refid="Base_Column_List"/>
+        from chain_sale_price
+        where state = 2
+        and chain_id = #{chainId,jdbcType=BIGINT}
+        and start_time <![CDATA[ <= ]]> DATE_FORMAT(NOW(), '%y-%m-%d')
+        order by create_time desc
+        limit 1
+    </select>
+
+    <select id="queryPriceList" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        p.sale_price_id salePriceId,
+        c.chain_id chainId,
+        c.chain_name chainName,
+        CONCAT(p.gas,'') gas,
+        CONCAT(p.sale_price,'') salePrice,
+        DATE_FORMAT(p.create_time, '%Y-%m-%d %T') createTime,
+        DATE_FORMAT(p.start_time, '%Y-%m-%d') startDate,
+        DATE_FORMAT(p.end_time, '%Y-%m-%d') endDate,
+        p.state state,
+        u.contacts_name contactsName
+        from chain_sale_price p
+        left join dc_chain c on c.chain_id = p.chain_id
+        left join dc_user u on u.user_id = p.create_user_id
+        <where>
+            <if test="chainId != null">
+                p.chain_id = #{chainId}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND p.create_time <![CDATA[ >= ]]> CONCAT(#{startTime},' 00:00:00')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND p.create_time <![CDATA[ <= ]]> CONCAT(#{endTime},' 23:59:59')
+            </if>
+            <if test="state != null">
+                AND p.state = #{state}
+            </if>
+        </where>
+        order by p.state,p.create_time desc
+    </select>
+
+    <select id="selectSalePriceByChainId" resultType="com.spartan.dc.model.ChainSalePrice">
+        select
+        <include refid="Base_Column_List"/>
+        from chain_sale_price
+        where chain_id = #{chainId,jdbcType=BIGINT}
+        and state = #{state}
+        order by create_time desc
+        limit 1
+    </select>
+
+
+    <select id="getSalePriceById" resultType="java.util.Map">
+        select
+        p.sale_price_id salePriceId,
+        c.chain_id chainId,
+        c.chain_name chainName,
+        CONCAT(p.gas,'') gas,
+        CONCAT(p.sale_price,'') salePrice,
+        DATE_FORMAT(p.create_time, '%Y-%m-%d %T') createTime,
+        DATE_FORMAT(p.start_time, '%Y-%m-%d') startDate,
+        DATE_FORMAT(p.end_time, '%Y-%m-%d') endDate,
+        p.state state,
+        DATE_FORMAT(p.check_time, '%Y-%m-%d %T') checkTime,
+        p.check_remark checkRemark,
+        u.contacts_name createUserName,
+        u1.contacts_name checkUserName
+        from chain_sale_price p
+        left join dc_chain c on c.chain_id = p.chain_id
+        left join dc_user u on u.user_id = p.create_user_id
+        left join dc_user u1 on u1.user_id = p.check_user_id
+        where p.sale_price_id = #{salePriceId}
+    </select>
+
+
+
+</mapper>

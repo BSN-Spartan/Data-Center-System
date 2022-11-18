@@ -3,6 +3,7 @@ package com.spartan.dc.dao.write;
 import com.spartan.dc.model.ChainPrice;
 
 public interface ChainPriceMapper {
+
     int deleteByPrimaryKey(Long chainPriceId);
 
     int insert(ChainPrice record);

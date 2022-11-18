@@ -10,7 +10,7 @@ import com.reddate.spartan.util.http.RestTemplateUtil;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.dto.dc.DataCenter;
 import com.spartan.dc.core.exception.GlobalException;
-import com.spartan.dc.core.util.enums.ChainTypeEnum;
+import com.spartan.dc.core.enums.ChainTypeEnum;
 import com.spartan.dc.dao.write.DcGasRechargeRecordMapper;
 import com.spartan.dc.dao.write.DcNodeMapper;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
@@ -106,7 +106,7 @@ public class DashboardServiceImpl extends BaseService implements DashboardServic
                     return null;
                 }
                 if (Objects.nonNull(respJsonRpcBean.getError())) {
-                    logger.error("getBlockNumber error:chainId-->{},rpcURl-->{}", reqVO.getChainId(), reqVO.getRpcAddr());
+                    logger.error("Get blockNumber error:chainId-->{},rpcURl-->{}", reqVO.getChainId(), reqVO.getRpcAddr());
                     return null;
                 }
                 return Numeric.decodeQuantity(respJsonRpcBean.getResult().toString()).toString();
@@ -120,7 +120,7 @@ public class DashboardServiceImpl extends BaseService implements DashboardServic
                 }
             }
         } catch (RestClientException e) {
-            logger.error("getBlockNumber restError:chainId-->{},rpcURl-->{}", reqVO.getChainId(), reqVO.getRpcAddr(), e);
+            logger.error("Get blockNumber restError:chainId-->{},rpcURl-->{}", reqVO.getChainId(), reqVO.getRpcAddr(), e);
         }
         return null;
     }

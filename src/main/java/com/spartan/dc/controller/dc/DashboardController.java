@@ -13,6 +13,7 @@ import com.spartan.dc.service.NttTxSumService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Map;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import java.util.Objects;
  **/
 @RestController
 @RequestMapping("dashboard/")
+@ApiIgnore
 public class DashboardController {
 
     @Autowired

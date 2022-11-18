@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface DcGasRechargeRecordMapper {
+
     int deleteByPrimaryKey(Long rechargeRecordId);
 
     int insert(DcGasRechargeRecord record);
@@ -33,19 +34,11 @@ public interface DcGasRechargeRecordMapper {
 
     int updateRechargeStateById(GasRechargeRecordDTO  reqVO);
 
-    /**
-     * Query charge list.
-     * @param condition
-     * @return
-     */
     List<Map<String, Object>> queryChargeList(Map<String, Object> condition);
 
-    /**
-     * Insert recharge record and return id.
-     * @param record
-     * @return
-     */
     int insertRechargeRecord(DcGasRechargeRecord record);
 
     DcGasRechargeRecord getOneByMd5Sign(String md5Sign);
+
+    DcGasRechargeRecord selectByOrderId(Long orderId);
 }

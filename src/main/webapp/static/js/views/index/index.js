@@ -7,6 +7,8 @@ $(document).ready(function () {
     handleSubmitKeystore();
 
     checkWalletExists();
+
+    handleSubmitKeystorePassword();
 });
 
 
@@ -206,11 +208,89 @@ function checkWalletExists() {
         "contentType": "application/json",
         "success": function (data) {
             if (data.code == 1) {
+                checkKeystorePassword();
                 $("#keystore_info").hide();
                 $("#keystore_info_already_exists").show();
             } else {
                 $("#keystore_info").show();
                 $("#keystore_info_already_exists").hide();
+                $("#submit_keyStore_password").hide();
+            }
+        }
+    });
+};
+
+function checkKeystorePassword(){
+    $.ajax({
+        "type": "post",
+        "url": "/recharge/checkPasswordExpired",
+        "dataType": "json",
+        "contentType": "application/json",
+        "success": function (data) {
+            if (data.code == 1) {
+                $("#submit_keyStore_password").hide();
+            } else {
+                $("#submit_keyStore_password").show();
+            }
+        }
+    });
+}
+
+var handleSubmitKeystorePassword = function () {
+    $('#submit_keyStore_password').validate({
+        errorElement: 'span',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        rules: {
+            keystorePassword: {
+                required: true
+            },
+            confirmKeystorePassword: {
+                required: true,
+                equalTo: '#keystorePassword'
+            }
+        },
+        messages: {
+            keystorePassword: {
+                required: "please enter password not empty"
+            },
+            confirmKeystorePassword: {
+                required: "please confirm password not empty",
+                equalTo: 'The two passwords are not the same'
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        success: function (label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+        errorPlacement: function (error, element) {
+            element.parent('div').append(error);
+        },
+        submitHandler: function () {
+            submitKeyStorePasswordForm();
+        }
+    });
+};
+
+function submitKeyStorePasswordForm() {
+    let keystorePassword = new Object();
+    keystorePassword.keystorePassword = $("#confirmKeystorePassword").val();
+    $.ajax({
+        "type": "post",
+        "url": "/wallet/updateKeystorePassword",
+        "datatype": "json",
+        "contentType": "application/json",
+        "data": JSON.stringify(keystorePassword),
+        "success": function (data) {
+            if (data.code == 1) {
+                alert_success("", data.msg, function () {
+                    $("#submit_keyStore_password").hide();
+                });
+            } else {
+                alert_error("", data.msg);
             }
         }
     });

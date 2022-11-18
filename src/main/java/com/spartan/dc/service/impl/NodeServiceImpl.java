@@ -7,7 +7,8 @@ import com.spartan.dc.core.conf.NodeAddressRuleConf;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.exception.GlobalException;
 import com.spartan.dc.core.util.common.AesUtil;
-import com.spartan.dc.core.util.enums.ApplyNodeStateEnum;
+import com.spartan.dc.core.enums.ApplyNodeStateEnum;
+import com.spartan.dc.core.enums.ChainTypeEnum;
 import com.spartan.dc.dao.write.DcNodeMapper;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.model.DcNode;
@@ -71,6 +72,10 @@ public class NodeServiceImpl extends BaseService implements NodeService {
         boolean isMatch = Pattern.matches(regular, vo.getNodeAddress());
         if (!isMatch) {
             throw new GlobalException("Node address does not match the validation rule");
+        }
+        // Spartan-II,node pub_key
+        if (vo.getChainId() == ChainTypeEnum.COSMOS.getCode()) {
+            vo.setNodeAddress(vo.getNodeAddress().replace("\\", ""));
         }
 
         // check data center

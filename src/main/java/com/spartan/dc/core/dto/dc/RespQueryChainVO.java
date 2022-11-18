@@ -3,28 +3,19 @@ package com.spartan.dc.core.dto.dc;
 
 public class RespQueryChainVO {
 
-
     private Long chainId;
-
 
     private String chainType;
 
-
     private String chainName;
-
-
 
     private String algorithmType;
 
-
     private String website;
-
 
     private String browserUrl;
 
-
     private String githubUrl;
-
 
     private String version;
 

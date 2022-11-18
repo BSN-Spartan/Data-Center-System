@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface DcNodeMapper {
+
     int deleteByPrimaryKey(Long nodeId);
 
     int insert(DcNode record);
@@ -18,19 +19,9 @@ public interface DcNodeMapper {
 
     int updateByPrimaryKey(DcNode record);
 
-    /**
-     * Query node list.
-     * @param condition
-     * @return
-     */
     List<Map<String, Object>> queryNodeList(Map<String, Object> condition);
 
-    /**
-     *
-     * @return
-     */
     List<DcNode> getStayNodeUpChainList();
-
 
     DcNode getOneByNodeID(String nodeID);
 

@@ -58,7 +58,7 @@
         r.chain_address chainAddress,
         CONCAT(r.gas,'') gas,
         CONCAT(r.ntt,'') ntt,
-        DATE_FORMAT(r.recharge_time, '%Y-%m-%d %H:%i:%s') rechargeTime,
+        DATE_FORMAT(r.recharge_time, '%Y-%m-%d %T') rechargeTime,
         r.recharge_state rechargeState,
         r.recharge_code rechargeCode,
         r.tx_hash txHash,
@@ -93,6 +93,9 @@
             </if>
             <if test="chainId != null">
                 chain_id,
+            </if>
+            <if test="orderId != null">
+                order_id,
             </if>
             <if test="chainAddress != null">
                 chain_address,
@@ -137,6 +140,9 @@
             </if>
             <if test="chainId != null">
                 #{chainId,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=BIGINT},
             </if>
             <if test="chainAddress != null">
                 #{chainAddress,jdbcType=VARCHAR},
@@ -196,5 +202,12 @@
         where
             md5_sign = #{md5Sign}
         limit 1
+    </select>
+
+    <select id="selectByOrderId" parameterType="Long" resultType="com.spartan.dc.model.DcGasRechargeRecord">
+        select
+        <include refid="Base_Column_List" />
+        from dc_gas_recharge_record
+        where order_id = #{orderId,jdbcType=BIGINT}
     </select>
 </mapper>

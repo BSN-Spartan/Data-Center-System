@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcPaymentOrderMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcPaymentOrder">
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="chain_id" jdbcType="BIGINT" property="chainId" />
+    <result column="sale_price_id" jdbcType="BIGINT" property="salePriceId" />
+    <result column="payment_type_id" jdbcType="BIGINT" property="paymentTypeId" />
+    <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="other_trade_no" jdbcType="VARCHAR" property="otherTradeNo" />
+    <result column="payment_intent" jdbcType="VARCHAR" property="paymentIntent" />
+    <result column="account_address" jdbcType="VARCHAR" property="accountAddress" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="ex_rates" jdbcType="VARCHAR" property="exRates" />
+    <result column="gas_count" jdbcType="DECIMAL" property="gasCount" />
+    <result column="pay_account" jdbcType="VARCHAR" property="payAccount" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="pay_state" jdbcType="SMALLINT" property="payState" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="tx_hash" jdbcType="VARCHAR" property="txHash" />
+    <result column="tx_time" jdbcType="TIMESTAMP" property="txTime" />
+    <result column="gas_tx_hash" jdbcType="VARCHAR" property="gasTxHash" />
+    <result column="gas_tx_time" jdbcType="TIMESTAMP" property="gasTxTime" />
+    <result column="gas_recharge_state" jdbcType="SMALLINT" property="gasRechargeState" />
+    <result column="is_refund" jdbcType="SMALLINT" property="isRefund" />
+    <result column="refund_amount" jdbcType="DECIMAL" property="refundAmount" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, chain_id, sale_price_id, payment_type_id, trade_no, other_trade_no, payment_intent,
+    account_address, email, currency, ex_rates, gas_count, pay_account, pay_amount, pay_state,
+    pay_time, tx_hash, tx_time, gas_tx_hash, gas_tx_time, gas_recharge_state, is_refund,
+    refund_amount, remarks, update_time, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dc_payment_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dc_payment_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.DcPaymentOrder">
+    insert into dc_payment_order (order_id, chain_id, sale_price_id,
+                                  payment_type_id, trade_no, other_trade_no,
+                                  payment_intent, account_address, email,
+                                  currency, ex_rates, gas_count,
+                                  pay_account, pay_amount, pay_state,
+                                  pay_time, tx_hash, tx_time,
+                                  gas_tx_hash, gas_tx_time, gas_recharge_state,
+                                  is_refund, refund_amount, remarks,
+                                  update_time, create_time)
+    values (#{orderId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{salePriceId,jdbcType=BIGINT},
+            #{paymentTypeId,jdbcType=BIGINT}, #{tradeNo,jdbcType=VARCHAR}, #{otherTradeNo,jdbcType=VARCHAR},
+            #{paymentIntent,jdbcType=VARCHAR}, #{accountAddress,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+            #{currency,jdbcType=VARCHAR}, #{exRates,jdbcType=VARCHAR}, #{gasCount,jdbcType=DECIMAL},
+            #{payAccount,jdbcType=VARCHAR}, #{payAmount,jdbcType=DECIMAL}, #{payState,jdbcType=SMALLINT},
+            #{payTime,jdbcType=TIMESTAMP}, #{txHash,jdbcType=VARCHAR}, #{txTime,jdbcType=TIMESTAMP},
+            #{gasTxHash,jdbcType=VARCHAR}, #{gasTxTime,jdbcType=TIMESTAMP}, #{gasRechargeState,jdbcType=SMALLINT},
+            #{isRefund,jdbcType=SMALLINT}, #{refundAmount,jdbcType=DECIMAL}, #{remarks,jdbcType=VARCHAR},
+            #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcPaymentOrder">
+    insert into dc_payment_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="chainId != null">
+        chain_id,
+      </if>
+      <if test="salePriceId != null">
+        sale_price_id,
+      </if>
+      <if test="paymentTypeId != null">
+        payment_type_id,
+      </if>
+      <if test="tradeNo != null">
+        trade_no,
+      </if>
+      <if test="otherTradeNo != null">
+        other_trade_no,
+      </if>
+      <if test="paymentIntent != null">
+        payment_intent,
+      </if>
+      <if test="accountAddress != null">
+        account_address,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="exRates != null">
+        ex_rates,
+      </if>
+      <if test="gasCount != null">
+        gas_count,
+      </if>
+      <if test="payAccount != null">
+        pay_account,
+      </if>
+      <if test="payAmount != null">
+        pay_amount,
+      </if>
+      <if test="payState != null">
+        pay_state,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="txHash != null">
+        tx_hash,
+      </if>
+      <if test="txTime != null">
+        tx_time,
+      </if>
+      <if test="gasTxHash != null">
+        gas_tx_hash,
+      </if>
+      <if test="gasTxTime != null">
+        gas_tx_time,
+      </if>
+      <if test="gasRechargeState != null">
+        gas_recharge_state,
+      </if>
+      <if test="isRefund != null">
+        is_refund,
+      </if>
+      <if test="refundAmount != null">
+        refund_amount,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="chainId != null">
+        #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="salePriceId != null">
+        #{salePriceId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentTypeId != null">
+        #{paymentTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="tradeNo != null">
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="otherTradeNo != null">
+        #{otherTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentIntent != null">
+        #{paymentIntent,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAddress != null">
+        #{accountAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="exRates != null">
+        #{exRates,jdbcType=VARCHAR},
+      </if>
+      <if test="gasCount != null">
+        #{gasCount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAccount != null">
+        #{payAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="payAmount != null">
+        #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payState != null">
+        #{payState,jdbcType=SMALLINT},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="txHash != null">
+        #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="txTime != null">
+        #{txTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gasTxHash != null">
+        #{gasTxHash,jdbcType=VARCHAR},
+      </if>
+      <if test="gasTxTime != null">
+        #{gasTxTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gasRechargeState != null">
+        #{gasRechargeState,jdbcType=SMALLINT},
+      </if>
+      <if test="isRefund != null">
+        #{isRefund,jdbcType=SMALLINT},
+      </if>
+      <if test="refundAmount != null">
+        #{refundAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.DcPaymentOrder">
+    update dc_payment_order
+    <set>
+      <if test="chainId != null">
+        chain_id = #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="salePriceId != null">
+        sale_price_id = #{salePriceId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentTypeId != null">
+        payment_type_id = #{paymentTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="tradeNo != null">
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="otherTradeNo != null">
+        other_trade_no = #{otherTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentIntent != null">
+        payment_intent = #{paymentIntent,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAddress != null">
+        account_address = #{accountAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="exRates != null">
+        ex_rates = #{exRates,jdbcType=VARCHAR},
+      </if>
+      <if test="gasCount != null">
+        gas_count = #{gasCount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAccount != null">
+        pay_account = #{payAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="payAmount != null">
+        pay_amount = #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payState != null">
+        pay_state = #{payState,jdbcType=SMALLINT},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="txHash != null">
+        tx_hash = #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="txTime != null">
+        tx_time = #{txTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gasTxHash != null">
+        gas_tx_hash = #{gasTxHash,jdbcType=VARCHAR},
+      </if>
+      <if test="gasTxTime != null">
+        gas_tx_time = #{gasTxTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gasRechargeState != null">
+        gas_recharge_state = #{gasRechargeState,jdbcType=SMALLINT},
+      </if>
+      <if test="isRefund != null">
+        is_refund = #{isRefund,jdbcType=SMALLINT},
+      </if>
+      <if test="refundAmount != null">
+        refund_amount = #{refundAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcPaymentOrder">
+    update dc_payment_order
+    set chain_id = #{chainId,jdbcType=BIGINT},
+        sale_price_id = #{salePriceId,jdbcType=BIGINT},
+        payment_type_id = #{paymentTypeId,jdbcType=BIGINT},
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+        other_trade_no = #{otherTradeNo,jdbcType=VARCHAR},
+        payment_intent = #{paymentIntent,jdbcType=VARCHAR},
+        account_address = #{accountAddress,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        currency = #{currency,jdbcType=VARCHAR},
+        ex_rates = #{exRates,jdbcType=VARCHAR},
+        gas_count = #{gasCount,jdbcType=DECIMAL},
+        pay_account = #{payAccount,jdbcType=VARCHAR},
+        pay_amount = #{payAmount,jdbcType=DECIMAL},
+        pay_state = #{payState,jdbcType=SMALLINT},
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+        tx_hash = #{txHash,jdbcType=VARCHAR},
+        tx_time = #{txTime,jdbcType=TIMESTAMP},
+        gas_tx_hash = #{gasTxHash,jdbcType=VARCHAR},
+        gas_tx_time = #{gasTxTime,jdbcType=TIMESTAMP},
+        gas_recharge_state = #{gasRechargeState,jdbcType=SMALLINT},
+        is_refund = #{isRefund,jdbcType=SMALLINT},
+        refund_amount = #{refundAmount,jdbcType=DECIMAL},
+        remarks = #{remarks,jdbcType=VARCHAR},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+</mapper>

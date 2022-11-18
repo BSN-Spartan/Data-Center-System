@@ -5388,7 +5388,8 @@ textarea.form-control {
 
 .activity-item .date {
     font-size: 16px;
-    color: #0c0c0c
+    font-weight: 600;
+    color: #0c0c0c;
 }
 
 .activity-link {
@@ -5531,4 +5532,7 @@ textarea.form-control {
     color: #ff4141;
     font-size: 14px;
     margin-right: 5px;
+}
+hr {
+    margin-top: 0;
 }

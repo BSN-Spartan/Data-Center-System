@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcPaymentTypeMapper">
+
+  <select id="selectAllPaymentType" resultType="com.spartan.dc.model.DcPaymentType">
+    select
+    <include refid="Base_Column_List" />
+    from dc_payment_type
+    where enable_status = 0
+  </select>
+
+  <select id="selectPaymentByCode" parameterType="String" resultType="com.spartan.dc.model.DcPaymentType">
+    select
+    <include refid="Base_Column_List" />
+    from dc_payment_type
+    where channel_code = #{channelCode,jdbcType=VARCHAR}
+    order by create_time desc
+    limit 1
+  </select>
+  <select id="queryPayCenter" resultType="com.spartan.dc.model.DcPaymentType">
+    select
+    <include refid="Base_Column_List" />
+    from dc_payment_type
+  </select>
+
+
+  <update id="updatePayCenter">
+    <foreach collection="dcPaymentTypeReqList" item="item" index="index" open="" close="" separator=";">
+      update dc_payment_type
+      <set>
+        <if test="item.payType != null and item.payType != '' ">
+          pay_type = #{item.payType,jdbcType=SMALLINT},
+        </if>
+        <if test="item.payChannelName != null and item.payChannelName != '' ">
+          pay_channel_name = #{item.payChannelName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.channelCode != null and item.channelCode != '' ">
+          channel_code = #{item.channelCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.privateKey != null and item.privateKey != '' ">
+          private_key = #{item.privateKey,jdbcType=VARCHAR},
+        </if>
+        <if test="item.endpointSecret != null and item.endpointSecret != '' ">
+          endpoint_secret = #{item.endpointSecret,jdbcType=VARCHAR},
+        </if>
+        <if test="item.apiKey != null">
+          api_key = #{item.apiKey,jdbcType=VARCHAR},
+        </if>
+        <if test="item.apiVersion != null">
+          api_version = #{item.apiVersion,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bankName != null">
+          bank_name = #{item.bankName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bankAccount != null">
+          bank_account = #{item.bankAccount,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bankAddress != null">
+          bank_address = #{item.bankAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="item.swiftCode != null">
+          swift_code = #{item.swiftCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.enableStatus != null">
+          enable_status = #{item.enableStatus,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updateTime != null">
+          update_time = #{item.updateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where payment_type_id = #{item.paymentTypeId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+    <update id="technicalSupport">
+      <foreach collection="dcPaymentTypeReqVOS" item="item" index="index">
+        update dc_system_conf set conf_value=#{item.confValue,jdbcType=VARCHAR},update_time=now()
+        where conf_code =#{item.confCode,jdbcType=VARCHAR};
+      </foreach>
+    </update>
+
+  <update id="updatePayEnableStatus">
+    <foreach collection="payEnableStatusList" item="item" index="index">
+      update dc_payment_type set enable_status=#{item.enableStatus,jdbcType=TIMESTAMP},update_time=now()
+      where payment_type_id =#{item.paymentTypeId,jdbcType=BIGINT};
+    </foreach>
+  </update>
+
+</mapper>

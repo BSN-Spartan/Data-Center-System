@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta name="moduleId" content="charge_module_"/>
+    <meta name="menuId" content="price_menu_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="/static/css/system/datatables.bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/system/responsive.bootstrap.min.css">
+
+    <link rel="stylesheet" href="/static/css/system/bootstrap-datepicker.min.css">
+    <style>
+        .pwd{
+            text-security:disc;
+            -webkit-text-security:disc;
+        }
+        .exists {
+            font-size: 12px;
+            color: #ff3838;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+
+            <div class="col-sm-12 div_select">
+                <form class="form-horizontal">
+                    <div class="col-sm-12 div_title">Query</div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="chainId" class="col-sm-4 control-label">Chain Name:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="chainId">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="state" class="col-sm-4 control-label">Status:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="state">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="date-range" class="col-sm-4 control-label">Created Time:</label>
+                            <div class="col-sm-8">
+                                <div class="input-daterange input-group" id="date-range">
+                                    <input type="text" class="form-control"
+                                           style="text-align: left;background-color: inherit;color: #000000;"
+                                           readonly autocomplete="off" name="startTime" id="startTime"
+                                           autocomplete="off">
+                                    <span class="input-group-addon bg-info text-white">-</span>
+                                    <input type="text" class="form-control"
+                                           style="text-align: left;background-color: inherit;color: #000000;"
+                                           readonly autocomplete="off" name="endTime" id="endTime" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group text-center">
+                            <button type="button" class="btn btn-info btn-xs waves-effect waves-light search_">Query
+                            </button>
+                            <button type="reset" class="btn btn-info btn-xs waves-effect waves-light reset_">Reset</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="col-sm-12 div_list">
+                <div class="col-sm-12 div_title">Price Information List</div>
+                <button type="button" class="btn btn-info btn-xs waves-effect waves-light add_price_but_">Add
+                </button>
+                <table id="chain_price_list" class="table table-striped table-bordered display"></table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- recharge -->
+<div class="modal fade" id="recharge_modal" tabindex="-1" role="dialog" aria-labelledby="recharge_modal"
+     style="display: none; padding-left: 17px;top: 50px;">
+
+    <div class="modal-dialog" role="document" style="width:41%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="deploy_detail_label_">New Price Information</h4>
+
+                <form class="form-horizontal" id="recharge_detail_content_">
+                    <div class="modal-body col-sm-12"
+                         style="max-height: 500px;overflow-y: auto;margin-bottom: 15px;margin-top: 15px">
+
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="rechargeChainType" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Chain Name:
+                            </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="rechargeChainType" name="rechargeChainType"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="chainSalePrice" class="col-sm-4 control-label"><span
+                                    class="xin">*</span> Gas Credit Ratio:
+                            </label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type='text' class="form-control" oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
+                                            id="chainSalePrice" name="chainSalePrice" placeholder="The amount of Gas Credit that is worth 1 USD">
+                                    <span class="input-group-addon" id="rechargeUnit">Gas Credit</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-sm-12" id="chainPriceDiv" style="display: none">
+                            <label for="chainPrice" class="col-sm-4 control-label">
+                            </label>
+                            <div class="col-sm-8"><span id="chainPrice"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="priceStartDate" class="col-sm-4 control-label"> <span
+                                    class="xin">*</span>Effective Date:
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"  placeholder="Please select the effective date" id="priceStartDate"
+                                       name="priceStartDate">
+                            </div>
+                        </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_" id="submit">
+                                    Submit
+                                </button>
+                                <button type="button"
+                                        class="btn btn-default waves-effect waves-light btn-xs confirm_but_ i18n"
+                                        data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+
+<!-- Data Tables -->
+<script src="/static/js/system/jquery.datatables.min.js"></script>
+<script src="/static/js/system/datatables.bootstrap.min.js"></script>
+<script src="/static/js/system/datatables.responsive.min.js"></script>
+<script src="/static/js/custom/custom_datatables_common_conf.js"></script>
+<script src="/static/js/system/responsive.bootstrap.min.js"></script>
+
+<!-- Datepicker -->
+<script src="/static/js/system/bootstrap-datepicker.min.js"></script>
+
+<script src="/static/js/custom/custom.date.picker.js"></script>
+<script src="/static/js/custom/custom.date.js"></script>
+<script src="/static/js/custom/custom.data.js"></script>
+
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+
+<script src="/static/js/custom/jquery.base64.js"></script>
+<script src="/static/js/views/common/system_common.js"></script>
+<script src="/static/js/views/price/list.js"></script>
+<script src="/static/js/views/chain_common.js"></script>
+</body>
+</html>

@@ -21,7 +21,7 @@ $(document).ready(function () {
         // check keystore password
         COMMON_HANDLE.checkPasswordExpired();
 
-        CHAIN_HANDLE.initChainInfo("rechargeChainType", null);
+        CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", 1);
 
         $("#recharge_modal").modal("show");
     });
@@ -60,7 +60,7 @@ $(document).ready(function () {
 let recharge = function (chainId, chainAddress) {
     $("#recharge_modal").modal("show");
 
-    CHAIN_HANDLE.initChainInfo("rechargeChainType", chainId);
+    CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", chainId);
 
     $("#rechargeUnit").html(CHAIN_HANDLE.getChainRechargeUnit(chainId));
 
@@ -110,7 +110,7 @@ let initFrameList = function () {
             {
                 data: "rechargeCode",
                 render: COMMON_HANDLE.copyData,
-                title: "Recharge Code",
+                title: "Top-up ID",
                 bSearchable: false,
                 bSortable: false
             },
@@ -163,7 +163,7 @@ let initRechargeStateType = function (data, type, row) {
 let initTableBut = function (data, type, row) {
     let chainId = row.chainId;
     let chainAddress = row.chainAddress;
-    let butStr = '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" >Top-Up</button>';
+    let butStr = '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" >Top Up</button>';
     return butStr;
 };
 
@@ -208,7 +208,7 @@ let handleSubmit = function () {
                 required: "Please enter the chain"
             },
             recharge_frameType: {
-                required: "Please select a chain"
+                required: "Chain Name"
             },
             chainAccountAddress: {
                 required: "Please enter the Wallet"

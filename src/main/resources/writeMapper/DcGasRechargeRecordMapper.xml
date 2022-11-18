@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcGasRechargeRecord">
     <id column="recharge_record_id" jdbcType="BIGINT" property="rechargeRecordId" />
     <result column="chain_id" jdbcType="BIGINT" property="chainId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="chain_address" jdbcType="VARCHAR" property="chainAddress" />
     <result column="gas" jdbcType="DECIMAL" property="gas" />
     <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
@@ -18,7 +19,7 @@
     <result column="md5_sign" jdbcType="VARCHAR" property="md5Sign" />
   </resultMap>
   <sql id="Base_Column_List">
-    recharge_record_id, chain_id, chain_address, gas, recharge_time, state, tx_hash,
+    recharge_record_id, chain_id, order_id, chain_address, gas, recharge_time, state, tx_hash,
     update_time, recharge_code, ntt, recharge_result, recharge_state, nonce, md5_sign
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -32,12 +33,12 @@
     where recharge_record_id = #{rechargeRecordId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.spartan.dc.model.DcGasRechargeRecord">
-    insert into dc_gas_recharge_record (recharge_record_id, chain_id, chain_address,
+    insert into dc_gas_recharge_record (recharge_record_id, chain_id, order_id, chain_address,
                                         gas, recharge_time, state,
                                         tx_hash, update_time, recharge_code,
                                         ntt, recharge_result, recharge_state,
                                         nonce, md5_sign)
-    values (#{rechargeRecordId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{chainAddress,jdbcType=VARCHAR},
+    values (#{rechargeRecordId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{chainAddress,jdbcType=VARCHAR},
             #{gas,jdbcType=DECIMAL}, #{rechargeTime,jdbcType=TIMESTAMP}, #{state,jdbcType=SMALLINT},
             #{txHash,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{rechargeCode,jdbcType=VARCHAR},
             #{ntt,jdbcType=DECIMAL}, #{rechargeResult,jdbcType=VARCHAR}, #{rechargeState,jdbcType=SMALLINT},
@@ -51,6 +52,9 @@
       </if>
       <if test="chainId != null">
         chain_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
       </if>
       <if test="chainAddress != null">
         chain_address,
@@ -96,6 +100,9 @@
       <if test="chainId != null">
         #{chainId,jdbcType=BIGINT},
       </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="chainAddress != null">
         #{chainAddress,jdbcType=VARCHAR},
       </if>
@@ -140,6 +147,9 @@
       <if test="chainId != null">
         chain_id = #{chainId,jdbcType=BIGINT},
       </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="chainAddress != null">
         chain_address = #{chainAddress,jdbcType=VARCHAR},
       </if>
@@ -182,6 +192,7 @@
   <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcGasRechargeRecord">
     update dc_gas_recharge_record
     set chain_id = #{chainId,jdbcType=BIGINT},
+        order_id = #{orderId,jdbcType=BIGINT},
         chain_address = #{chainAddress,jdbcType=VARCHAR},
         gas = #{gas,jdbcType=DECIMAL},
         recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},

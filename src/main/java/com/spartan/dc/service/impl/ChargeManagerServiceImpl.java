@@ -3,20 +3,24 @@ package com.spartan.dc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.exception.GlobalException;
+import com.spartan.dc.core.util.bech32.Bech32Utils;
 import com.spartan.dc.core.util.common.AddressUtils;
-import com.spartan.dc.core.util.enums.ChainTypeEnum;
+import com.spartan.dc.core.enums.ChainTypeEnum;
 import com.spartan.dc.dao.write.ChainAccountRechargeMetaMapper;
 import com.spartan.dc.dao.write.ChainPriceMapper;
 import com.spartan.dc.dao.write.DcGasRechargeRecordMapper;
-import com.spartan.dc.core.util.enums.RechargeStateEnum;
-import com.spartan.dc.core.util.enums.RechargeSubmitStateEnum;
+import com.spartan.dc.core.enums.RechargeStateEnum;
+import com.spartan.dc.core.enums.RechargeSubmitStateEnum;
+import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.model.ChainAccountRechargeMeta;
 import com.spartan.dc.model.ChainPrice;
 import com.spartan.dc.model.DcGasRechargeRecord;
+import com.spartan.dc.model.SysDataCenter;
 import com.spartan.dc.model.vo.req.MetaDataTxReqVO;
 import com.spartan.dc.model.vo.resp.MetaDataTxRespVO;
 import com.spartan.dc.model.vo.req.RechargeReqVO;
 import com.spartan.dc.service.ChargeManagerService;
+import org.apache.commons.lang.StringUtils;
 import org.fisco.bcos.web3j.crypto.WalletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,21 +28,18 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.spartan.dc.core.util.common.CacheManager.PASSWORD_CACHE_KEY;
 
 /**
  * @author wxq
@@ -70,6 +71,8 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
     private ChainAccountRechargeMetaMapper rechargeMetaMapper;
     @Autowired
     private ChainPriceMapper chainPriceMapper;
+    @Resource
+    private SysDataCenterMapper sysDataCenterMapper;
 
 
     @Override
@@ -90,13 +93,35 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
 
         checkDataCenterInfo(reqVO.getPassword(), credentials);
 
-        // check address
-        if (reqVO.getChainId() == ChainTypeEnum.COSMOS.getCode() && reqVO.getChainAddress().startsWith(COSMOS_ADDRESS_PREFIX)) {
-            AddressUtils.validAddress(reqVO.getChainAddress());
-        } else {
-            if (!WalletUtils.isValidAddress(reqVO.getChainAddress())) {
-                throw new GlobalException("address is illegal");
+        String chargeChainAddress = reqVO.getChainAddress();
+
+        if (Objects.equals(ChainTypeEnum.COSMOS.getCode().longValue(), reqVO.getChainId())) {
+            if (reqVO.getChainAddress().startsWith("0x")) {
+                // Ox transition iaa
+                chargeChainAddress = Bech32Utils.hexToBech32(COSMOS_ADDRESS_PREFIX, chargeChainAddress.substring(2));
             }
+        }
+
+        // check address
+        if (reqVO.getChainId() == ChainTypeEnum.COSMOS.getCode() && chargeChainAddress.startsWith(COSMOS_ADDRESS_PREFIX)) {
+            AddressUtils.validAddress(chargeChainAddress);
+        } else {
+            if (!WalletUtils.isValidAddress(chargeChainAddress)) {
+                throw new GlobalException("Address is illegal");
+            }
+        }
+
+        SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
+        if (sysDataCenter == null) {
+            throw new GlobalException("the basic information of the data center has not been configured yet");
+        }
+        try {
+            String accOwner = spartanSdkClient.gasCreditRechargeService.getAccOwner(chargeChainAddress, BigInteger.valueOf(reqVO.getChainId()));
+            if (StringUtils.isNotBlank(accOwner) && !sysDataCenter.getDcCode().equalsIgnoreCase(accOwner)) {
+                throw new GlobalException("The wallet address has been bound by another data center");
+            }
+        } catch (Exception e) {
+            throw new GlobalException(e.getMessage());
         }
 
         DcGasRechargeRecord dcGasRechargeRecord = new DcGasRechargeRecord();

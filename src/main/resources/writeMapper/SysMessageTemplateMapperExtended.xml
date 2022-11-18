@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysMessageTemplateMapper">
+  <select id="listByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM
+      sys_message_template
+      WHERE msg_code = #{msgCode,jdbcType=VARCHAR} and state = 1
+  </select>
+</mapper>

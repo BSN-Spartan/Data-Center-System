@@ -2,11 +2,14 @@ var icons = [];
 icons.push({code: 'dashboard_', icon: '<i class="menu-icon fa fa-home"></i>'});
 icons.push({code: 'ntt_module_', icon: '<i class="menu-icon fa fa-money"></i>'});
 icons.push({code: 'node_module_', icon: '<i class="menu-icon fa fa-building"></i>'});
+icons.push({code: 'chain_access_module_', icon: '<i class="menu-icon fa fa-share-alt"></i>'});
 icons.push({code: 'charge_module_', icon: '<i class="menu-icon fa fa-chain-broken"></i>'});
 icons.push({code: 'reward_module_', icon: '<i class="menu-icon fa fa-file-text"></i>'});
 icons.push({code: 'user_module_', icon: '<i class="menu-icon fa fa-user"></i>'});
 icons.push({code: 'support_menu_', icon: '<i class="menu-icon fa fa-support"></i>'});
+icons.push({code: 'financial_module_', icon: '<i class="menu-icon fa fa-credit-card-alt"></i>'});
 icons.push({code: 'index_', icon: '<i class="menu-icon fa fa-cogs"></i>'});
+icons.push({code: 'portal_config_', icon: '<i class="menu-icon fa fa-pencil-square-o"></i>'});
 
 var resourceList = [
     {
@@ -36,13 +39,60 @@ var resourceList = [
         "priority": 3,
         "rsucType": 1
     },
+
+    {
+        "rsucId": 13,
+        "parentId": 0,
+        "rsucCode": "chain_access_module_",
+        "rsucName": "Chain Access Management",
+        "rsucUrl": "javascript:;",
+        "priority": 4,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 70,
+        "parentId": 13,
+        "rsucCode": "chain_access_config_",
+        "rsucName": "Access Configuration",
+        "rsucUrl": "/chainAccess",
+        "priority": 2,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 75,
+        "parentId": 13,
+        "rsucCode": "user_access_info_",
+        "rsucName": "Access Key Management",
+        "rsucUrl": "/userAccess",
+        "priority": 2,
+        "rsucType": 1
+    },
+
     {
         "rsucId": 15,
         "parentId": 0,
         "rsucCode": "charge_module_",
         "rsucName": "Gas Credit Management",
-        "rsucUrl": "/recharge",
+        "rsucUrl": "javascript:;",
         "priority": 4,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 40,
+        "parentId": 15,
+        "rsucCode": "charge_menu_",
+        "rsucName": "Gas Credit Management",
+        "rsucUrl": "/recharge",
+        "priority": 1,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 41,
+        "parentId": 15,
+        "rsucCode": "price_menu_",
+        "rsucName": "Price Settings",
+        "rsucUrl": "/price",
+        "priority": 2,
         "rsucType": 1
     },
     {
@@ -73,24 +123,86 @@ var resourceList = [
         "rsucType": 1
     },
     {
+        "rsucId": 64,
+        "parentId": 0,
+        "rsucCode": "portal_config_",
+        "rsucName": "Portal Management",
+        "rsucUrl": "javascript:;",
+        "priority": 6,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 65,
+        "parentId": 64,
+        "rsucCode": "base_info_config_",
+        "rsucName": "Basic Information",
+        "rsucUrl": "/baseInfo",
+        "priority": 1,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 67,
+        "parentId": 64,
+        "rsucCode": "technical_support_config_",
+        "rsucName": "Technical Support ",
+        "rsucUrl": "/technicalSupport",
+        "priority": 3,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 67,
+        "parentId": 64,
+        "rsucCode": "payment_type_config_",
+        "rsucName": "Payment Method",
+        "rsucUrl": "/paymentType",
+        "priority": 3,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 61,
+        "parentId": 0,
+        "rsucCode": "financial_module_",
+        "rsucName": "Financial Management",
+        "rsucUrl": "javascript:;",
+        "priority": 5,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 62,
+        "parentId": 61,
+        "rsucCode": "order_menu_",
+        "rsucName": "Order Management",
+        "rsucUrl": "/financial",
+        "priority": 1,
+        "rsucType": 1
+    },
+    {
+        "rsucId": 63,
+        "parentId": 61,
+        "rsucCode": "refund_menu_",
+        "rsucName": "Refund Management",
+        "rsucUrl": "/refund",
+        "priority": 1,
+        "rsucType": 1
+    },
+    {
         "rsucId": 25,
         "parentId": 0,
         "rsucCode": "user_module_",
         "rsucName": "User Management",
         "rsucUrl": "/user",
-        "priority": 6,
+        "priority": 8,
         "rsucType": 1
     },
     {
         "rsucId": 60,
         "parentId": 0,
         "rsucCode": "support_menu_",
-        "rsucName": "Technical Support",
+        "rsucName": "BSN Technical Support",
         "rsucUrl": "/support",
-        "priority": 1,
+        "priority": 9,
         "rsucType": 1
     }
-
 ];
 
 var storage = window.sessionStorage;
@@ -264,7 +376,7 @@ var initMainMenu_ = function () {
         '<div class="pull-right">' +
         '<a href="https://bsn.foundation" class="ico-item" target=\'_blank\' style="font-size: 16px"> Foundation Website </a>' +
         '<a href="https://github.com/BSN-Spartan/Data-Center-System" class="ico-item" target=\'_blank\' style="font-size: 16px"><img src="/static/images/system/icon_github.png" style="width: 25px;height: 25px;">&nbsp;GitHub</a>' +
-        '<a href="https://bsn.foundation/main/quick-start" class="ico-item" target=\'_blank\' style="font-size: 16px"><img src="/static/images/system/icon_start.png" style="width: 25px;height: 25px">&nbsp;Quick Start</a>' +
+        '<a href="https://bsn.foundation/static/quick-start/2gettingStarted/2-1-1.html" class="ico-item" target=\'_blank\' style="font-size: 16px"><img src="/static/images/system/icon_start.png" style="width: 25px;height: 25px">&nbsp;Quick Start</a>' +
         '<a href="javascript:;" class="ico-item" onclick="updatedInstructions()"  style="font-size: 16px"><img src="/static/images/system/icon_version.png" style="width: 25px;height: 25px">&nbsp;Version</a>' +
         '<a href="javascript:;" class="ico-item fa fa-lock" onclick="modifyPass()" title="Change Password"></a>' +
         '<a href="javascript:;" class="ico-item fa fa-power-off logout_" onclick="logOut()" title="Logout"></a>' +

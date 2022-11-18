@@ -7,7 +7,7 @@
                ntt_account_address                     nttAccountAddress,
                token,
                dc_code dcCode,
-               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') createTime
+               DATE_FORMAT(create_time, '%Y-%m-%d %T') createTime
         from sys_data_center limit 1
     </select>
 
@@ -16,6 +16,16 @@
         select
         <include refid="Base_Column_List" />
         from sys_data_center
+        limit 1
+    </select>
+
+
+    <select id="getDcByEmail" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        sys_data_center
+        WHERE contacts_email = #{contactsEmail,jdbcType=VARCHAR}
         limit 1
     </select>
 

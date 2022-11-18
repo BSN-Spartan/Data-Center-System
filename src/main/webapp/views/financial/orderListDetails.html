@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="financial_module_"/>
+    <meta name="menuId" content="order_menu_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+        .div_title {
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Basic Information</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Order No.：</label>
+                            <div class="col-sm-8 content_" id="tradeNo" style="word-break: break-word;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Wallet Address：</label>
+                            <div class="col-sm-8 content_" id="accountAddress" style="word-break: break-word;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Payment Amount：</label>
+                            <div class="col-sm-8 content_" id="payAmount">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Gas Credit Amount：</label>
+                            <div class="col-sm-8 content_" id="gasCount">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 div_title">Payment Information</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="i18n col-sm-4 control-label">Third Party Transaction No.：</label>
+                            <div class="col-sm-8 content_" id="otherTradeNo" style="word-break: break-word;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Payment Method：</label>
+                            <div class="col-sm-8 content_" id="payType">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Payment Time：</label>
+                            <div class="col-sm-8 content_" id="payTime">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Payment Status：</label>
+                            <div class="col-sm-8 content_" id="payState">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 div_title">Gas Credit Top Up Information</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="i18n col-sm-4 control-label">Top Up Status：</label>
+                            <div class="col-sm-8 content_" id="gasRechargeState">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Top Up Time：</label>
+                            <div class="col-sm-8 content_" id="gasTxTime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Transaction Hash：</label>
+                            <div class="col-sm-8 content_" id="gasTxHash" style="word-break: break-word;">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 div_title">Refund Information</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="i18n col-sm-4 control-label">Refund Order No.：</label>
+                            <div class="col-sm-8 content_" id="dprTradeNo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Third Party Refund No.：</label>
+                            <div class="col-sm-8 content_" id="dprOtherTradeNo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Operator：</label>
+                            <div class="col-sm-8 content_" id="operator">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Operation Time：</label>
+                            <div class="col-sm-8 content_" id="operationTime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Refund Time：</label>
+                            <div class="col-sm-8 content_" id="refundTime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Refund Status：</label>
+                            <div class="col-sm-8 content_" id="refundState">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Remark：</label>
+                            <div class="col-sm-8 content_" id="remarks">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <a type="button" href="javascript:history.go(-1);"
+                                   class="btn btn-info waves-effect waves-light btn-xs confirm_but_"
+                                   style="margin-right:20px;padding: 5px 46px;color: #ffffff;margin-top: -30px;"><span>Back</span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+
+<!-- Data Tables -->
+<script src="/static/js/system/jquery.datatables.min.js"></script>
+<script src="/static/js/system/datatables.bootstrap.min.js"></script>
+<script src="/static/js/system/datatables.responsive.min.js"></script>
+<script src="/static/js/custom/custom_datatables_common_conf.js"></script>
+<script src="/static/js/system/responsive.bootstrap.min.js"></script>
+
+<!-- Datepicker -->
+<script src="/static/js/system/bootstrap-datepicker.min.js"></script>
+
+<script src="/static/js/custom/custom.date.picker.js"></script>
+<script src="/static/js/custom/custom.date.js"></script>
+<script src="/static/js/custom/custom.data.js"></script>
+
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+
+<script src="/static/js/custom/jquery.base64.js"></script>
+<script src="/static/js/views/common/system_common.js"></script>
+<script src="/static/js/views/financial/order_list_details.js"></script>
+<script src="/static/js/views/chain_common.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="portal_config_"/>
+    <meta name="menuId" content="technical_support_config_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+        .div_title {
+            margin-left: 0;
+        }
+
+        .support_images {
+            width: 30px;
+            display: inline;
+            margin-right: 10px;
+        }
+
+        .technical_div {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Technical Support & Community</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="telegram" class="col-sm-2 control-label">
+                                <img src="/static/images/system/tsf.png" class="support_images" alt="">
+                                Telegram:
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="telegram" id="telegram"
+                                       placeholder="https://t.me/bsnsupport">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="whatsapp" class="col-sm-2 control-label">
+                                <img src="/static/images/system/tsw.png" class="support_images" alt="">
+                                Whatsapp:
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="whatsapp" id="whatsapp"
+                                       placeholder="https://chat.whatsapp.com/H9wENt0lw4dFTVopaILFxh">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="reddit" class="col-sm-2 control-label">
+                                <img src="/static/images/system/tsr.png" class="support_images" alt="">
+                                Reddit:
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="reddit" id="reddit"
+                                       placeholder="https://www.reddit.com/r/BSNSpartanSupport/">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="discord" class="col-sm-2 control-label">
+                                <img src="/static/images/system/tsd.png" class="support_images" alt="">
+                                Discord:
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="discord" id="discord"
+                                       placeholder="https://discord.gg/HEpnKTUyAX">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="twitter" class="col-sm-2 control-label">
+                                <img src="/static/images/system/tst.png" class="support_images" alt="">
+                                Twitter:
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="twitter" id="twitter"
+                                       placeholder="https://twitter.com/bsnbase">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 div_title">Contact Us</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">Contact Address:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="address" id="address" placeholder="Contact Us 36/F, PCCW Tower, Taikoo Place, 979 King’s Road, Quarry Bay, HK">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">Contact Email:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Email: BSN_Spartan@reddatetech.com.hk">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 technical_div">
+                        <div class="form-group">
+                            <label for="phone" class="col-sm-2 control-label">Contract Number:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="+852 3978-1407  (UTC+8:00) 9:00 am to 5:00 pm (Mon–Fri)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 technical_div" id="submit_div">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/views/setting/technicalSupport.js"></script>
+
+</body>
+</html>

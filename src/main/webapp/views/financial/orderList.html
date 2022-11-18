@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="financial_module_"/>
+    <meta name="menuId" content="order_menu_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="/static/css/system/datatables.bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/system/responsive.bootstrap.min.css">
+
+    <link rel="stylesheet" href="/static/css/system/bootstrap-datepicker.min.css">
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+
+            <div class="col-sm-12 div_select">
+                <form class="form-horizontal">
+                    <div class="col-sm-12 div_title">Query</div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="tradeNo" class="col-sm-4 control-label">Order No.:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="tradeNo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="otherTradeNo" class="col-sm-4 control-label">Third Party Transaction No.:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="otherTradeNo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="accountAddress" class="col-sm-4 control-label">Wallet Address:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="accountAddress">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="date-range" class="col-sm-4 control-label">Created Time:</label>
+                            <div class="col-sm-8">
+                                <div class="input-daterange input-group" id="date-range">
+                                    <input type="text" class="form-control"
+                                           style="text-align: left;background-color: inherit;color: #000000;"
+                                           readonly autocomplete="off" name="createStartTime" id="createStartTime"
+                                           autocomplete="off">
+                                    <span class="input-group-addon bg-info text-white">-</span>
+                                    <input type="text" class="form-control"
+                                           style="text-align: left;background-color: inherit;color: #000000;"
+                                           readonly autocomplete="off" name="createEndTime" id="createEndTime"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group2">
+                            <label for="date-range_u" class="col-sm-4 control-label">Payment Time:</label>
+                            <div class="col-sm-8">
+                                <div class="input-daterange input-group" id="date-range_u">
+                                    <input type="text" class="form-control"
+                                           style="text-align: left;background-color: inherit;color: #000000;"
+                                           readonly autocomplete="off" name="payStartTime" id="payStartTime"
+                                           autocomplete="off">
+                                    <span class="input-group-addon bg-info text-white">-</span>
+                                    <input type="text" class="form-control"
+                                           style="text-align: left;background-color: inherit;color: #000000;"
+                                           readonly autocomplete="off" name="payEndTime" id="payEndTime"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="payState" class="col-sm-4 control-label">Payment Status:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="payState" SIZE="">
+                                    <OPTION VALUE="">All
+                                    <OPTION VALUE="0">Payment In Progress
+                                    <OPTION VALUE="1">Payment Successful
+                                    <OPTION VALUE="2">Payment Failed
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="gasRechargeState" class="col-sm-4 control-label">Gas Credit Top-up Status:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="gasRechargeState" SIZE="">
+                                    <OPTION VALUE="">All
+                                    <OPTION VALUE="0">In Progress
+                                    <OPTION VALUE="1">Top Up Successful
+                                    <OPTION VALUE="2">Top Up Failed
+                                    <OPTION VALUE="3">Pending
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="isRefund" class="col-sm-4 control-label">Refund Status:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="isRefund" SIZE="">
+                                    <OPTION VALUE="">All
+                                    <OPTION VALUE="0">No Refund
+                                    <OPTION VALUE="1">Refund
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group text-center">
+                            <button type="button" class="btn btn-info btn-xs waves-effect waves-light search_">Query
+                            </button>
+                            <button type="reset" class="btn btn-info btn-xs waves-effect waves-light reset_">Reset
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="col-sm-12 div_list">
+                <div class="col-sm-12 div_title">Order List</div>
+                <button type="button" class="btn btn-info btn-xs waves-effect waves-light exportOrders_">Export
+                </button>
+                <table id="gas_recharge_list" class="table table-striped table-bordered display"></table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="offlinerefund_modal" tabindex="-1" role="dialog" aria-labelledby="offlinerefund_modal"
+     style="display: none; padding-left: 17px;top: 50px;">
+
+    <div class="modal-dialog" role="document" style="width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Offline Refund Record</h4>
+
+                <form class="form-horizontal" id="offline_form">
+                    <div class="modal-body">
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="offlinetradeno" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Third Party Refund No.:
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="offlinetradeno" name="offlinetradeno">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="offlinetextarea" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Remarks:
+                            </label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control" maxlength="200" id="offlinetextarea"
+                                          name="offlinetextarea"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_" id="submit">
+                                        Submit
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-default waves-effect waves-light btn-xs confirm_but_ i18n"
+                                            data-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="registration_modal" tabindex="-1" role="dialog" aria-labelledby="registration_modal"
+     style="display: none; padding-left: 17px;top: 50px;">
+
+    <div class="modal-dialog" role="document" style="width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Remittance registration</h4>
+
+                <form class="form-horizontal" id="registration_modal_from">
+                    <div class="modal-body">
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="registrationOtherTradeNo" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Third Party Transaction No.:
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="registrationOtherTradeNo" name="registrationOtherTradeNo">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="textareaRemarks" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Comment:
+                            </label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control" maxlength="200" id="textareaRemarks"
+                                          name="textareaRemarks"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_" id="submit">
+                                        Submit
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-default waves-effect waves-light btn-xs confirm_but_ i18n"
+                                            data-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="onlinerefund_modal" tabindex="-1" role="dialog" aria-labelledby="onlinerefund_modal"
+     style="display: none; padding-left: 17px;top: 50px;">
+
+    <div class="modal-dialog" role="document" style="width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Online Refund Record</h4>
+
+                <form class="form-horizontal" id="online_from">
+                    <div class="modal-body">
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="onlinetextarea" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Remarks:
+                            </label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control" maxlength="200" id="onlinetextarea"
+                                          name="onlinetextarea"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_" id="submit">
+                                        Submit
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-default waves-effect waves-light btn-xs confirm_but_ i18n"
+                                            data-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+
+<!-- Data Tables -->
+<script src="/static/js/system/jquery.datatables.min.js"></script>
+<script src="/static/js/system/datatables.bootstrap.min.js"></script>
+<script src="/static/js/system/datatables.responsive.min.js"></script>
+<script src="/static/js/custom/custom_datatables_common_conf.js"></script>
+<script src="/static/js/system/responsive.bootstrap.min.js"></script>
+
+<!-- Datepicker -->
+<script src="/static/js/system/bootstrap-datepicker.min.js"></script>
+
+<script src="/static/js/custom/custom.date.picker.js"></script>
+<script src="/static/js/custom/custom.date.js"></script>
+<script src="/static/js/custom/custom.data.js"></script>
+
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+
+<script src="/static/js/custom/jquery.base64.js"></script>
+<script src="/static/js/views/common/system_common.js"></script>
+<script src="/static/js/views/financial/order_list.js"></script>
+<script src="/static/js/views/chain_common.js"></script>
+<script src="/static/js/custom/custom.excel.js"></script>
+</body>
+
+</html>

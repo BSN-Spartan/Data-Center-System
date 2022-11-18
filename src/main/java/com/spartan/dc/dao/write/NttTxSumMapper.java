@@ -4,6 +4,7 @@ import com.spartan.dc.model.NttTxSum;
 import com.spartan.dc.model.vo.resp.NttTxSumRespVO;
 
 public interface NttTxSumMapper {
+
     int deleteByPrimaryKey(Long nttTxSumId);
 
     int insert(NttTxSum record);
@@ -16,13 +17,7 @@ public interface NttTxSumMapper {
 
     int updateByPrimaryKey(NttTxSum record);
 
-    /**
-     *
-     *
-     * @return
-     */
     NttTxSumRespVO getNTTDealsSummary();
-
 
     NttTxSum getOne();
 }

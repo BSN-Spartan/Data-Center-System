@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheManager {
     private static Logger logger = LoggerFactory.getLogger("CacheManager");
     private static final long GUAVA_CACHE_SIZE = 10;
-    private static final long GUAVA_CACHE_DAY = 1;
+    private static final long GUAVA_CACHE_DAY = -1;
     public static final String PASSWORD_CACHE_KEY = "keystore";
     static LoadingCache<String, String> loadingCache;
 

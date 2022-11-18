@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcPaymentRefundMapper">
+    <select id="selectByOtherTradeNo" parameterType="String" resultType="com.spartan.dc.model.DcPaymentRefund">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_payment_refund
+        where other_trade_no = #{otherTradeNo,jdbcType=VARCHAR}
+    </select>
+</mapper>

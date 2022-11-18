@@ -26,4 +26,49 @@
         dc_chain order by chain_id
     </select>
 
-</mapper>
+    <select id="queryChain" resultType="com.spartan.dc.core.vo.resp.DcChainRespVO">
+        select chain_id       chainId,
+               chain_type     chainType,
+               chain_name     chainName
+        from dc_chain
+        where gateway_type = 1
+    </select>
+
+	<select id="getChainByChainId" resultType="com.spartan.dc.model.DcChain">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_chain
+        where  chain_id = #{chainId,jdbcType=BIGINT}
+    </select>
+
+
+	<update id="resetNodeConfig">
+        update
+            dc_chain
+        set
+            chain_code = '', gateway_type = 0, gateway_url = '', json_rpc = 0, websocket = 0, grpc = 0
+    </update>
+
+    <select id="getGatewayUrl" resultType="java.util.Map">
+        select
+            ifnull(gateway_url, '') gatewayUrl,
+            ifnull(ws_gateway_url, '') wsGatewayUrl,
+            ifnull(grpc_gateway_url, '') grpcGatewayUrl
+        from
+            dc_chain
+        limit 1
+    </select>
+
+    <select id="getNodeConfigs" resultType="com.spartan.dc.core.vo.resp.ChainAccessRespVO$NodeConfig">
+        select
+            chain_id chainId,
+            chain_type chainType,
+            chain_name chainName,
+            gateway_type gatewayType,
+            chain_code chainCode,
+            json_rpc jsonRpc,
+            websocket webSocket,
+            grpc grpc
+        from
+            dc_chain
+    </select></mapper>

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface DcUserMapper {
+
     int deleteByPrimaryKey(Long userId);
 
     int insert(DcUser record);

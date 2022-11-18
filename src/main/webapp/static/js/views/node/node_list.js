@@ -6,7 +6,7 @@ let search;
 $(document).ready(function () {
 
     CHAIN_HANDLE.initChainInfo("chainId", null);
-    CHAIN_HANDLE.initChainInfo("netApplicationChainType", null);
+    CHAIN_HANDLE.initChainInfoNotAll("netApplicationChainType", null);
 
     $("#state").html(COMMON_HANDLE.getNodeStateSelect());
 

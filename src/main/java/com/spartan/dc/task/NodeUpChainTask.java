@@ -3,7 +3,7 @@ package com.spartan.dc.task;
 import com.alibaba.fastjson.JSONObject;
 import com.reddate.spartan.SpartanSdkClient;
 import com.reddate.spartan.dto.wuhanchain.ReqJsonWithOfflineHashBean;
-import com.spartan.dc.core.util.enums.*;
+import com.spartan.dc.core.enums.NodeStateEnum;
 import com.spartan.dc.dao.write.DcNodeMapper;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.model.DcNode;
@@ -23,6 +23,7 @@ import java.util.List;
 import static com.reddate.spartan.service.BaseService.nonceManagerUtils;
 
 /**
+ *  Node registration
  * @author linzijun
  * @version V1.0
  * @date 2022/8/18 19:07
@@ -50,17 +51,17 @@ public class NodeUpChainTask {
 
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
         if (sysDataCenter == null) {
-            LOG.info("Task Node Up Chain fail: {}", "the basic information of data center is not configured");
+            LOG.info("Task: Exception of node registration: {}", "the basic information of the data center has not been configured yet");
             return;
         }
 
         if (!walletService.checkWalletExists()) {
-            LOG.info("Task Node Up Chain fail: {}", "the keystore information is not configured");
+            LOG.info("Task: Exception of node registration: {}", "the key store information has not been configured yet");
             return;
         }
 
         List<DcNode> dcNodes = dcNodeMapper.getStayNodeUpChainList();
-        LOG.info("Task Node Up Chain dcNodes: {}", JSONObject.toJSONString(dcNodes));
+        LOG.info("Task: Node registration: {}", JSONObject.toJSONString(dcNodes));
         if (dcNodes == null || dcNodes.size() == 0) {
             return;
         }
@@ -70,7 +71,7 @@ public class NodeUpChainTask {
             try {
                 dcNode.setTxHash(enterNetByDC(sysDataCenter.getNttAccountAddress(), sysDataCenter.getDcCode(), dcNode.getNodeCode(), sysDataCenter.getNttAccountAddress(), dcNode.getChainId().intValue(),dcNode.getNodeAddress(),dcNode.getApplySign()));
             } catch (Exception e) {
-                LOG.error("Task Node Up Chain Fail: {}", e.getMessage());
+                LOG.error("Task: Exception of node registration: {}", e.getMessage());
                 dcNode.setReason(e.getMessage());
                 dcNode.setTxTime(new Date());
                 dcNode.setState(NodeStateEnum.NETWORK_FAIL.getCode());
@@ -86,9 +87,6 @@ public class NodeUpChainTask {
             dcNodeMapper.updateByPrimaryKeySelective(dcNode);
 
         }
-
-
-
     }
 
     public String enterNetByDC(String sender, String dcId, String nodeId, String dcNttAddr, int chainId, String nodeAddr, String nodeSign) throws Exception {

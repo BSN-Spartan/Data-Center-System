@@ -6,12 +6,21 @@
     <result column="chain_type" jdbcType="VARCHAR" property="chainType" />
     <result column="chain_name" jdbcType="VARCHAR" property="chainName" />
     <result column="recharge_unit" jdbcType="VARCHAR" property="rechargeUnit" />
+    <result column="chain_code" jdbcType="VARCHAR" property="chainCode" />
+    <result column="gateway_type" jdbcType="SMALLINT" property="gatewayType" />
+    <result column="gateway_url" jdbcType="VARCHAR" property="gatewayUrl" />
+    <result column="ws_gateway_url" jdbcType="VARCHAR" property="wsGatewayUrl" />
+    <result column="grpc_gateway_url" jdbcType="VARCHAR" property="grpcGatewayUrl" />
+    <result column="json_rpc" jdbcType="SMALLINT" property="jsonRpc" />
+    <result column="websocket" jdbcType="SMALLINT" property="websocket" />
+    <result column="grpc" jdbcType="SMALLINT" property="grpc" />
   </resultMap>
   <sql id="Base_Column_List">
-    chain_id, chain_type, chain_name, recharge_unit
+    chain_id, chain_type, chain_name, recharge_unit, chain_code, gateway_type, gateway_url,
+    ws_gateway_url, grpc_gateway_url, json_rpc, websocket, grpc
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from dc_chain
     where chain_id = #{chainId,jdbcType=BIGINT}
@@ -21,10 +30,16 @@
     where chain_id = #{chainId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.spartan.dc.model.DcChain">
-    insert into dc_chain (chain_id, chain_type, chain_name, 
-      recharge_unit)
-    values (#{chainId,jdbcType=BIGINT}, #{chainType,jdbcType=VARCHAR}, #{chainName,jdbcType=VARCHAR}, 
-      #{rechargeUnit,jdbcType=VARCHAR})
+    insert into dc_chain (chain_id, chain_type, chain_name,
+                          recharge_unit, chain_code, gateway_type,
+                          gateway_url, ws_gateway_url, grpc_gateway_url,
+                          json_rpc, websocket, grpc
+    )
+    values (#{chainId,jdbcType=BIGINT}, #{chainType,jdbcType=VARCHAR}, #{chainName,jdbcType=VARCHAR},
+            #{rechargeUnit,jdbcType=VARCHAR}, #{chainCode,jdbcType=VARCHAR}, #{gatewayType,jdbcType=SMALLINT},
+            #{gatewayUrl,jdbcType=VARCHAR}, #{wsGatewayUrl,jdbcType=VARCHAR}, #{grpcGatewayUrl,jdbcType=VARCHAR},
+            #{jsonRpc,jdbcType=SMALLINT}, #{websocket,jdbcType=SMALLINT}, #{grpc,jdbcType=SMALLINT}
+           )
   </insert>
   <insert id="insertSelective" parameterType="com.spartan.dc.model.DcChain">
     insert into dc_chain
@@ -41,6 +56,30 @@
       <if test="rechargeUnit != null">
         recharge_unit,
       </if>
+      <if test="chainCode != null">
+        chain_code,
+      </if>
+      <if test="gatewayType != null">
+        gateway_type,
+      </if>
+      <if test="gatewayUrl != null">
+        gateway_url,
+      </if>
+      <if test="wsGatewayUrl != null">
+        ws_gateway_url,
+      </if>
+      <if test="grpcGatewayUrl != null">
+        grpc_gateway_url,
+      </if>
+      <if test="jsonRpc != null">
+        json_rpc,
+      </if>
+      <if test="websocket != null">
+        websocket,
+      </if>
+      <if test="grpc != null">
+        grpc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="chainId != null">
@@ -54,6 +93,30 @@
       </if>
       <if test="rechargeUnit != null">
         #{rechargeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="chainCode != null">
+        #{chainCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayType != null">
+        #{gatewayType,jdbcType=SMALLINT},
+      </if>
+      <if test="gatewayUrl != null">
+        #{gatewayUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wsGatewayUrl != null">
+        #{wsGatewayUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="grpcGatewayUrl != null">
+        #{grpcGatewayUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonRpc != null">
+        #{jsonRpc,jdbcType=SMALLINT},
+      </if>
+      <if test="websocket != null">
+        #{websocket,jdbcType=SMALLINT},
+      </if>
+      <if test="grpc != null">
+        #{grpc,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -69,14 +132,46 @@
       <if test="rechargeUnit != null">
         recharge_unit = #{rechargeUnit,jdbcType=VARCHAR},
       </if>
+      <if test="chainCode != null">
+        chain_code = #{chainCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayType != null">
+        gateway_type = #{gatewayType,jdbcType=SMALLINT},
+      </if>
+      <if test="gatewayUrl != null">
+        gateway_url = #{gatewayUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wsGatewayUrl != null">
+        ws_gateway_url = #{wsGatewayUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="grpcGatewayUrl != null">
+        grpc_gateway_url = #{grpcGatewayUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonRpc != null">
+        json_rpc = #{jsonRpc,jdbcType=SMALLINT},
+      </if>
+      <if test="websocket != null">
+        websocket = #{websocket,jdbcType=SMALLINT},
+      </if>
+      <if test="grpc != null">
+        grpc = #{grpc,jdbcType=SMALLINT},
+      </if>
     </set>
     where chain_id = #{chainId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcChain">
     update dc_chain
     set chain_type = #{chainType,jdbcType=VARCHAR},
-      chain_name = #{chainName,jdbcType=VARCHAR},
-      recharge_unit = #{rechargeUnit,jdbcType=VARCHAR}
+        chain_name = #{chainName,jdbcType=VARCHAR},
+        recharge_unit = #{rechargeUnit,jdbcType=VARCHAR},
+        chain_code = #{chainCode,jdbcType=VARCHAR},
+        gateway_type = #{gatewayType,jdbcType=SMALLINT},
+        gateway_url = #{gatewayUrl,jdbcType=VARCHAR},
+        ws_gateway_url = #{wsGatewayUrl,jdbcType=VARCHAR},
+        grpc_gateway_url = #{grpcGatewayUrl,jdbcType=VARCHAR},
+        json_rpc = #{jsonRpc,jdbcType=SMALLINT},
+        websocket = #{websocket,jdbcType=SMALLINT},
+        grpc = #{grpc,jdbcType=SMALLINT}
     where chain_id = #{chainId,jdbcType=BIGINT}
   </update>
 </mapper>

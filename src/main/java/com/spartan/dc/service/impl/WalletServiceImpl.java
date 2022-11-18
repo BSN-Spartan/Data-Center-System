@@ -3,8 +3,10 @@ package com.spartan.dc.service.impl;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reddate.spartan.net.SpartanGovern;
 import com.spartan.dc.core.dto.dc.DataCenter;
 import com.spartan.dc.core.exception.GlobalException;
+import com.spartan.dc.core.util.common.CacheManager;
 import com.spartan.dc.core.util.common.FileUtil;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.service.WalletService;
@@ -21,6 +23,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.List;
 import java.util.Objects;
+
+import static com.spartan.dc.core.util.common.CacheManager.PASSWORD_CACHE_KEY;
 
 /**
  * @author wxq
@@ -75,6 +79,7 @@ public class WalletServiceImpl implements WalletService {
         if (Objects.nonNull(FileUtil.getFileByPath(walletFile))) {
             FileUtil.deleteFile(walletFile);
         }
+        CacheManager.put(PASSWORD_CACHE_KEY, password);
         return generateWalletFile(password, credentials, new File(walletFilePath));
     }
 
@@ -111,6 +116,8 @@ public class WalletServiceImpl implements WalletService {
 
         File destination = new File(destinationDirectory, fileName);
         OBJECT_MAPPER.writeValue(destination, walletFile);
+
+        SpartanGovern.setNonceManagerAddress(credentials.getAddress());
 
         return fileName;
     }

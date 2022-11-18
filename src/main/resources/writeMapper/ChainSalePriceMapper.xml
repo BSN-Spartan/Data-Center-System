@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.ChainSalePriceMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.ChainSalePrice">
+    <id column="sale_price_id" jdbcType="BIGINT" property="salePriceId" />
+    <result column="chain_price_id" jdbcType="BIGINT" property="chainPriceId" />
+    <result column="chain_id" jdbcType="BIGINT" property="chainId" />
+    <result column="gas" jdbcType="DECIMAL" property="gas" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="check_user_id" jdbcType="BIGINT" property="checkUserId" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="check_remark" jdbcType="VARCHAR" property="checkRemark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sale_price_id, chain_price_id, chain_id, gas, sale_price, state, start_time, end_time, 
+    create_user_id, create_time, check_user_id, check_time, check_remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from chain_sale_price
+    where sale_price_id = #{salePriceId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from chain_sale_price
+    where sale_price_id = #{salePriceId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.ChainSalePrice">
+    insert into chain_sale_price (sale_price_id, chain_price_id, chain_id, 
+      gas, sale_price, state, 
+      start_time, end_time, create_user_id, 
+      create_time, check_user_id, check_time, 
+      check_remark)
+    values (#{salePriceId,jdbcType=BIGINT}, #{chainPriceId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, 
+      #{gas,jdbcType=DECIMAL}, #{salePrice,jdbcType=DECIMAL}, #{state,jdbcType=SMALLINT}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{checkUserId,jdbcType=BIGINT}, #{checkTime,jdbcType=TIMESTAMP}, 
+      #{checkRemark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.ChainSalePrice">
+    insert into chain_sale_price
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="salePriceId != null">
+        sale_price_id,
+      </if>
+      <if test="chainPriceId != null">
+        chain_price_id,
+      </if>
+      <if test="chainId != null">
+        chain_id,
+      </if>
+      <if test="gas != null">
+        gas,
+      </if>
+      <if test="salePrice != null">
+        sale_price,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="checkUserId != null">
+        check_user_id,
+      </if>
+      <if test="checkTime != null">
+        check_time,
+      </if>
+      <if test="checkRemark != null">
+        check_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="salePriceId != null">
+        #{salePriceId,jdbcType=BIGINT},
+      </if>
+      <if test="chainPriceId != null">
+        #{chainPriceId,jdbcType=BIGINT},
+      </if>
+      <if test="chainId != null">
+        #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="gas != null">
+        #{gas,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null">
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkUserId != null">
+        #{checkUserId,jdbcType=BIGINT},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkRemark != null">
+        #{checkRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.ChainSalePrice">
+    update chain_sale_price
+    <set>
+      <if test="chainPriceId != null">
+        chain_price_id = #{chainPriceId,jdbcType=BIGINT},
+      </if>
+      <if test="chainId != null">
+        chain_id = #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="gas != null">
+        gas = #{gas,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null">
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkUserId != null">
+        check_user_id = #{checkUserId,jdbcType=BIGINT},
+      </if>
+      <if test="checkTime != null">
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkRemark != null">
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sale_price_id = #{salePriceId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.ChainSalePrice">
+    update chain_sale_price
+    set chain_price_id = #{chainPriceId,jdbcType=BIGINT},
+      chain_id = #{chainId,jdbcType=BIGINT},
+      gas = #{gas,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      state = #{state,jdbcType=SMALLINT},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      check_user_id = #{checkUserId,jdbcType=BIGINT},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
+      check_remark = #{checkRemark,jdbcType=VARCHAR}
+    where sale_price_id = #{salePriceId,jdbcType=BIGINT}
+  </update>
+</mapper>

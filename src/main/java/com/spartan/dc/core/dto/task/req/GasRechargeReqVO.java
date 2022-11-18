@@ -7,15 +7,11 @@ import java.math.BigInteger;
 
 public class GasRechargeReqVO implements Serializable {
 
-
     private String sender;
-
 
     private String receiver;
 
-
     private BigInteger engAmt;
-
 
     private Integer chainID;
 

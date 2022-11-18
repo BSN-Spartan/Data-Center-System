@@ -22,9 +22,43 @@ var CHAIN_HANDLE = {
             CHAIN_HANDLE.initSelect(chainId, selectId);
         }
     },
+    initChainInfoNotAll: function (selectId, chainId) {
+        if (CHAIN_HANDLE.CHAIN_INFO == null) {
+            $.ajax({
+                "type": "get",
+                "url": "/sys/chain/listOpbChain?ranparam=" + (new Date()).valueOf(),
+                "dataType": "json",
+                "success": function (data) {
+                    if (data.code == 1) {
+                        CHAIN_HANDLE.CHAIN_INFO = data.data;
+
+                        CHAIN_HANDLE.initSelectNotAll(chainId, selectId);
+                    }
+                }
+            });
+        } else {
+            CHAIN_HANDLE.initSelectNotAll(chainId, selectId);
+        }
+    },
+
     initSelect: function (chainId, selectId) {
 
         var op = '<option value="">All</option>';
+
+        var chain = CHAIN_HANDLE.CHAIN_INFO
+        for (var i = 0; i < chain.length; i++) {
+            var s = '';
+            if (chainId == chain[i].chainId) {
+                s = ' selected ';
+            }
+            op += '<option value="' + chain[i].chainId + '" ' + s + '>' + chain[i].chainName + '</option>';
+        }
+        $("#" + selectId).html(op);
+    },
+
+    initSelectNotAll: function (chainId, selectId) {
+
+        var op = '';
 
         var chain = CHAIN_HANDLE.CHAIN_INFO
         for (var i = 0; i < chain.length; i++) {

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysMailRecordMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.SysMailRecord">
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
+    <result column="template_id" jdbcType="BIGINT" property="templateId" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="cc_people" jdbcType="VARCHAR" property="ccPeople" />
+    <result column="mail_title" jdbcType="VARCHAR" property="mailTitle" />
+    <result column="mail_content" jdbcType="VARCHAR" property="mailContent" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    record_id, template_id, sender, receiver, cc_people, mail_title, mail_content, state, 
+    send_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_mail_record
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_mail_record
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.SysMailRecord">
+    insert into sys_mail_record (record_id, template_id, sender, 
+      receiver, cc_people, mail_title, 
+      mail_content, state, send_time
+      )
+    values (#{recordId,jdbcType=BIGINT}, #{templateId,jdbcType=BIGINT}, #{sender,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=VARCHAR}, #{ccPeople,jdbcType=VARCHAR}, #{mailTitle,jdbcType=VARCHAR}, 
+      #{mailContent,jdbcType=VARCHAR}, #{state,jdbcType=SMALLINT}, #{sendTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.SysMailRecord" useGeneratedKeys="true"
+          keyProperty="recordId">
+    insert into sys_mail_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="sender != null">
+        sender,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="ccPeople != null">
+        cc_people,
+      </if>
+      <if test="mailTitle != null">
+        mail_title,
+      </if>
+      <if test="mailContent != null">
+        mail_content,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="templateId != null">
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="sender != null">
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="ccPeople != null">
+        #{ccPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="mailTitle != null">
+        #{mailTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mailContent != null">
+        #{mailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.SysMailRecord">
+    update sys_mail_record
+    <set>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="sender != null">
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="ccPeople != null">
+        cc_people = #{ccPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="mailTitle != null">
+        mail_title = #{mailTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mailContent != null">
+        mail_content = #{mailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.SysMailRecord">
+    update sys_mail_record
+    set template_id = #{templateId,jdbcType=BIGINT},
+      sender = #{sender,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      cc_people = #{ccPeople,jdbcType=VARCHAR},
+      mail_title = #{mailTitle,jdbcType=VARCHAR},
+      mail_content = #{mailContent,jdbcType=VARCHAR},
+      state = #{state,jdbcType=SMALLINT},
+      send_time = #{sendTime,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+</mapper>

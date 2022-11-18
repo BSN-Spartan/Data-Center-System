@@ -23,9 +23,9 @@ chain:
   # Query the transaction pool's waiting time: millisecond, recommended 1.5 seconds
   txPoolSleep: 1500
   # Change the path of the Keystore file to a designated directory
-  walletFilePath: "your-directory/wallet"
+  walletFilePath: "[your-directory]/wallet"
   # This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. The system can then parse events from all blocks after this block height. For example: blockHeight: 270441
-  blockHeight: block_height
+  blockHeight: [block_height]
 
 task:
   # Whether to start a timed task to submit a transaction/time parse
@@ -50,3 +50,18 @@ metaTx:
   domainSeparator: "0x9d5e39915081369daa50abc8dc23f93c9c174abc4fc01efd13e3660e5d080276"
   # Do not change this configuration
   metaTransferTypeHash: "0xbf13ac0a2964a57037372fadd1f7b4fa6785ffdc315c85dfe8d1f9b1b01a7a51"
+
+# Send email sender name (system name)
+sys-name: BSN-Spartan
+captchaTimeOut: 5
+
+# stripe configuration information
+stripe:
+  currency: USD
+  cueDate: 3
+# coinbase configuration information
+coinbase:
+  server-addr: https://api.commerce.coinbase.com/
+  api:
+    createCharge: charges
+    queryCharge: charges/

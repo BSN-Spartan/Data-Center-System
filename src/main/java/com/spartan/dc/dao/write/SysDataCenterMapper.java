@@ -2,8 +2,10 @@ package com.spartan.dc.dao.write;
 
 import com.spartan.dc.core.dto.dc.DataCenter;
 import com.spartan.dc.model.SysDataCenter;
+import org.apache.ibatis.annotations.Param;
 
 public interface SysDataCenterMapper {
+
     int deleteByPrimaryKey(Long dcId);
 
     int insert(SysDataCenter record);
@@ -19,5 +21,8 @@ public interface SysDataCenterMapper {
     DataCenter getDataCenter();
 
     SysDataCenter getSysDataCenter();
+
+    SysDataCenter getDcByEmail(@Param("contactsEmail") String contactsEmail);
+
 
 }

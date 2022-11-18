@@ -13,29 +13,68 @@ var COMMON_HANDLE = {
         {"type": 3, "name": "Polygon"}
     ],
     CHAIN_STATE: [
-        {"type": 1, "name": "Normal operation"},
+        {"type": 1, "name": "Normal Operation"},
         {"type": 2, "name": "Offline"}
     ],
     TX_TYPE: [
         {"type": 0, "name": "Recharge"},
-        {"type": 1, "name": "Recharge succeeded"},
-        {"type": 2, "name": "Recharge failed"}
+        {"type": 1, "name": "Recharge Succeeded"},
+        {"type": 2, "name": "Recharge Failed"}
     ], NTT_TX_TYPE: [
         {"type": 0, "name": "Node Establishment Incentive Program"},
         {"type": 1, "name": "Data Center Monthly Incentive Program"},
         {"type": 3, "name": "Top up Gas Credit"},
-        {"type": 4, "name": "Top up NTT"},
-        {"type": 7, "name": "Refund for Gas Credit top-up failed"},
+        {"type": 4, "name": "Top Up NTT"},
+        {"type": 7, "name": "Refund for Gas Credit top up failed"},
         {"type": 8, "name": "NTT Collection"},
         {"type": 9, "name": "NTT Present"},
-        {"type": 10, "name": "Emergency Gas Credit top-up commission charge"}
+        {"type": 10, "name": "Emergency Gas Credit top up commission charge"}
+    ],
+    PAY_STATE:[
+        {"type": 0, "name": "Payment In Progress"},
+        {"type": 1, "name": "Payment Successful"},
+        {"type": 2, "name": "Payment Failed"}
+    ],
+    IS_REFUND:[
+        {"type": 0, "name": "Not Refunded"},
+        {"type": 1, "name": "Refund"}
+    ],
+    REFUND_STATE:[
+        {"type": 0, "name": "In Progress"},
+        {"type": 1, "name": "Refund Successful"},
+        {"type": 2, "name": "Refund Failed"}
+    ],
+    PAY_TYPE:[
+        {"type": 1, "name": "Fiat Currency"},
+        {"type": 2, "name": "Stablecoins"},
+        {"type": 3, "name": "Remittance"}
+    ],
+    GAS_RECHARGE_STATE:[
+        {"type": 0, "name": "In Progress"},
+        {"type": 1, "name": "Top Up Successful"},
+        {"type": 2, "name": "Top Up Failed"},
+        {"type": 3, "name": "Pending"}
     ],
     NODE_STATE: [
         {"type": 0, "name": "Pending Registration"},
         {"type": 1, "name": "Registration In Progress"},
         {"type": 2, "name": "Registration Testing"},
-        {"type": 3, "name": "Registration failed"},
-        {"type": 4, "name": "Registration complete"}
+        {"type": 3, "name": "Registration Failed"},
+        {"type": 4, "name": "Registration Complete"}
+    ],
+    SALE_PRICE_STATE: [
+        {"type": 1, "name": "Pending Review"},
+        {"type": 2, "name": "Approved"},
+        {"type": 3, "name": "Not Approved"}
+    ],
+    USER_ACCESS_TYPE:[
+        {"type": 1, "name": "Json RPC"},
+        {"type": 2, "name": "WebSocket"},
+        {"type": 3, "name": "GRPC"}
+    ],
+    USER_ACCESS_STATE:[
+        {"type": 0, "name": "Nonsupport"},
+        {"type": 1, "name": "Support"}
     ],
     getRechargeStateSelect: function () {
         return COMMON_HANDLE.getSelect(COMMON_HANDLE.RECHARGE_STATE);
@@ -58,6 +97,21 @@ var COMMON_HANDLE = {
     getNodeStateName: function (type) {
         return COMMON_HANDLE.getName(type, COMMON_HANDLE.NODE_STATE);
     },
+    getPayStateName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.PAY_STATE);
+    },
+    getIsRefundName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.IS_REFUND);
+    },
+    getPayTypeName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.PAY_TYPE);
+    },
+    getRefundStateName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.REFUND_STATE);
+    },
+    getGasRechargeStateName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.GAS_RECHARGE_STATE);
+    },
     getNodeStateSelect: function (type) {
         return COMMON_HANDLE.getSelect(COMMON_HANDLE.NODE_STATE);
     },
@@ -74,6 +128,27 @@ var COMMON_HANDLE = {
     getNttTxTypeName: function (type) {
         return COMMON_HANDLE.getName(type, COMMON_HANDLE.NTT_TX_TYPE);
     },
+    getSalePriceStateSelect: function () {
+        return COMMON_HANDLE.getSelect(COMMON_HANDLE.SALE_PRICE_STATE);
+    },
+    getSalePriceStateName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.SALE_PRICE_STATE);
+    },
+
+    getUserAccessTypeSelect: function () {
+        return COMMON_HANDLE.getSelect(COMMON_HANDLE.USER_ACCESS_TYPE);
+    },
+    getUserAccessTypeName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.USER_ACCESS_TYPE);
+    },
+
+    getUserAccessStateSelect: function () {
+        return COMMON_HANDLE.getSelect(COMMON_HANDLE.USER_ACCESS_TYPE);
+    },
+    getUserAccessStateName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.USER_ACCESS_TYPE);
+    },
+
     getSelect: function (list) {
         var op = '<option value="">All</option>';
         for (var i = 0; i < list.length; i++) {
@@ -180,6 +255,9 @@ var COMMON_HANDLE = {
         copyTxt.select();
         document.execCommand("Copy");
         alert_success_auto_close("", "Copy Success", 1000)
+    },
+    exportExcel: function (url) {
+        window.location.href = url;
     }
 };
 

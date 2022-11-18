@@ -41,7 +41,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     @ResponseBody
     public ResultInfo validatedBindException(BindException e) {
-        BindingResult bindingResult = e.getBindingResult();
         List<ObjectError> fieldError = e.getAllErrors();
         StringBuilder sb = new StringBuilder();
         sb.append("[ ");

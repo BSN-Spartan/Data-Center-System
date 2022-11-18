@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcSystemConfMapper">
+
+    <select id="querySystemConf" resultType="com.spartan.dc.core.vo.resp.DcSystemConfRespVO">
+        select
+        <include refid="Base_Column_List" />
+        from dc_system_conf
+        where type != 4
+        <if test="type != null">
+            and type=#{type,jdbcType=SMALLINT}
+        </if>
+    </select>
+
+    <select id="querySystemValue" resultType="java.lang.String">
+        select
+            conf_value
+        from dc_system_conf
+        where type=#{type,jdbcType=SMALLINT} and conf_code=#{confCode,jdbcType=VARCHAR}
+    </select>
+
+
+
+    <update id="updateDcSystemConf" parameterType="java.util.List">
+        <foreach collection="dcSystemConfReqVO" item="item" index="index">
+            update dc_system_conf set conf_value=#{item.confValue,jdbcType=VARCHAR},update_time=now()
+            where conf_code =#{item.confCode,jdbcType=BIGINT};
+
+        </foreach>
+    </update>
+
+    <select id="querySystemConfByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from dc_system_conf
+        where conf_code=#{confCode,jdbcType=VARCHAR}
+        limit 1
+    </select>
+
+</mapper>

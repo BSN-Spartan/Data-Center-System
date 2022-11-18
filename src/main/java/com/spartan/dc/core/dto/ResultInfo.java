@@ -48,7 +48,9 @@ public class ResultInfo<T> {
         this.data = data;
     }
 
-    public ResultInfo() {
+    public ResultInfo(Integer code, String message) {
+        this.code = code;
+        this.msg = message;
     }
 
     public ResultInfo(int code, String msg, T data) {

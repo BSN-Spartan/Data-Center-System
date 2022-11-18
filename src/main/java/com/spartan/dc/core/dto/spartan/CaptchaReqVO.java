@@ -2,8 +2,6 @@ package com.spartan.dc.core.dto.spartan;
 
 public class CaptchaReqVO {
 
-
-
     private String reqCode;
 
     /**

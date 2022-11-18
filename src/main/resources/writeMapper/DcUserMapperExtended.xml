@@ -16,7 +16,7 @@
                contacts_name                           contactsName,
                contacts_phone                          contactsPhone,
                state,
-               DATE_FORMAT(create_time, '%m/%d/%Y %T') createDate
+               DATE_FORMAT(create_time, '%Y-%m-%d %T') createDate
         from dc_user
     </select>
 
