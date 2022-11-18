@@ -274,7 +274,6 @@ function refresh(row) {
         "contentType": "application/json",
         "data": JSON.stringify(queryPayResultReqVO),
         "success": function (data) {
-            console.log(data)
                 alert_success("", data.msg);
                 initFrameList();
         }
@@ -452,6 +451,7 @@ function submitOnline() {
         "success": function (data) {
             if (data.code == 1) {
                 alert_success("", data.message);
+                initFrameList();
             } else {
                 alert_error("", data.msg);
             }
@@ -486,6 +486,7 @@ function submitOffline() {
         "success": function (data) {
             if (data.code == 1) {
                 alert_success("", data.message);
+                initFrameList();
             } else {
                 alert_error("", data.msg);
             }

@@ -3,6 +3,7 @@ package com.spartan.dc.controller.portal;
 import com.spartan.dc.controller.BaseController;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
+import com.spartan.dc.core.enums.RefundStateEnum;
 import com.spartan.dc.core.util.user.UserLoginInfo;
 import com.spartan.dc.model.vo.req.*;
 import com.spartan.dc.model.vo.resp.*;
@@ -72,6 +73,9 @@ public class PaymentController extends BaseController {
             return ResultInfoUtil.errorResult("Please login");
         }
         RefundRespVO response = paymentService.refund(refundReqVO, userInfo.getUserId());
+        if(response.getStatus().equals(RefundStateEnum.ERROR.getCode())){
+            return ResultInfoUtil.errorResult(response.getMessage());
+        }
         return ResultInfoUtil.successResult(response);
     }
 

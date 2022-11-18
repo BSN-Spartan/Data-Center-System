@@ -188,7 +188,7 @@ public class StripePayStrategyImpl implements StrategyService {
             }
         } catch (StripeException e) {
             log.error("stripe Abnormal refund,Order No:{},Third party serial number:{}", refundReqVO.getTradeNo(), dcPaymentOrder.getOtherTradeNo(), e);
-            response.setMessage(e.getStripeError().getCode());
+            response.setMessage(e.getStripeError().getMessage());
         }
         return response;
     }
