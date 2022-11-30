@@ -85,7 +85,6 @@ public class OfflinePayStrategyImpl implements StrategyService {
                 .gasCount(paymentReqVO.getGasCount())
                 .payAmount(NumberUtil.round(paymentReqVO.getPayAmount().doubleValue() / 100, 2))
                 .payState(PayStateEnum.PENDING.getCode())
-                .payTime(new Date())
                 .gasRechargeState(RechargeStateEnum.NO_PROCESSING_REQUIRED.getCode())
                 .updateTime(new Date())
                 .createTime(new Date())
@@ -148,6 +147,11 @@ public class OfflinePayStrategyImpl implements StrategyService {
         return false;
     }
 
+    @Override
+    public boolean coinbaseCallback(String json) {
+        return false;
+    }
+
 
     /**
      * Send the offline order to the successful email
@@ -160,7 +164,7 @@ public class OfflinePayStrategyImpl implements StrategyService {
         Map<String, Object> replaceContentMap = new HashMap<>();
         replaceContentMap.put("trade_no_", dcPaymentOrder.getTradeNo());
         replaceContentMap.put("account_address_", dcPaymentOrder.getAccountAddress());
-        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount());
+        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount().longValue());
         replaceContentMap.put("pay_amount_", String.format("%.2f", dcPaymentOrder.getPayAmount()));
         replaceContentMap.put("bank_name_", dcPaymentType.getBankName());
         replaceContentMap.put("bank_account_no_", dcPaymentType.getBankAccount());

@@ -36,7 +36,7 @@ public class PaymentReqVO {
     private BigDecimal gasCount;
 
     @ApiModelProperty(value = "payAmount", required = true, example = "1000")
-    private Long payAmount;
+    private BigDecimal payAmount;
 
     @ApiModelProperty(value = "email", required = true, example = "xxx@163.com")
     @NotBlank(message = "Email cannot be empty")

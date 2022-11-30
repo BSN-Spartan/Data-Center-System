@@ -5,6 +5,8 @@ import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
 import com.spartan.dc.core.dto.portal.UserJoinReqVO;
 import com.spartan.dc.core.enums.MsgCodeEnum;
+import com.spartan.dc.core.util.message.ConstantsUtil;
+import com.spartan.dc.core.util.user.UserGlobals;
 import com.spartan.dc.service.UserJoinService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +48,13 @@ public class UserJoinController {
         if (StringUtils.isEmpty(userJoinReqVO.getCaptchaCode())) {
             return ResultInfoUtil.errorResult("Verification code cannot be empty");
         }
-//        Object code = session.getAttribute(MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
-//        if (code == null) {
-//            return ResultInfoUtil.errorResult("Verification code has expired");
-//        }
-//        if (!code.toString().equalsIgnoreCase(userJoinReqVO.getCaptchaCode())) {
-//            return ResultInfoUtil.errorResult("Verification code is incorrect");
-//        }
+        Object code = session.getAttribute(ConstantsUtil.USER_JOIN_CAPTCHA_+userJoinReqVO.getEmail());
+        if (code == null) {
+            return ResultInfoUtil.errorResult("Verification code has expired");
+        }
+        if (!code.toString().equalsIgnoreCase(userJoinReqVO.getCaptchaCode())) {
+            return ResultInfoUtil.errorResult("Verification code is incorrect");
+        }
 
         if (StringUtils.isEmpty(userJoinReqVO.getEmail())) {
             return ResultInfoUtil.errorResult("Email cannot be empty");
@@ -63,6 +65,7 @@ public class UserJoinController {
 
         boolean result = userJoinService.userJoinChain(userJoinReqVO);
         if (result) {
+            session.removeAttribute(ConstantsUtil.USER_JOIN_CAPTCHA_+userJoinReqVO.getEmail());
             return ResultInfoUtil.successResult("successful");
         } else {
             return ResultInfoUtil.errorResult("failed");

@@ -162,7 +162,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
                 + gcalendar.get(Calendar.YEAR)
                 + "  " + gcalendar.get(Calendar.HOUR_OF_DAY) + ":"
                 + gcalendar.get(Calendar.MINUTE) + ":"
-                + gcalendar.get(Calendar.SECOND);
+                + (gcalendar.get(Calendar.SECOND) == 0 ? "00" : gcalendar.get(Calendar.SECOND));
     }
 
 }

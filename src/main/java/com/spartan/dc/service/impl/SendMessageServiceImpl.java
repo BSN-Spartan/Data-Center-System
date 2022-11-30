@@ -104,9 +104,10 @@ public class SendMessageServiceImpl implements SendMessageService {
                     String msgContent = MessageTemplateUtil.initEmailContent(emailTemplate, messageTemplate.getMsgContent(), emailContactTemplate);
 
                     // replace message content
-                    String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.TITLE.getCode());
+                    String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.HEADLINE.getCode());
+                    String msgTitle = messageTemplate.getMsgTitle();
                     if(StringUtils.isNotBlank(dcCenterName)){
-                        msgContent = msgContent.replace("BSN Spartan Network",dcCenterName);
+                        msgTitle = msgTitle.replace("BSN Spartan Data Center",dcCenterName);
                     }
                     SysDataCenter sysDataCenter= sysDataCenterMapper.getSysDataCenter();
                     if (StringUtils.isNotBlank(sysDataCenter.getLogo())) {
@@ -124,7 +125,7 @@ public class SendMessageServiceImpl implements SendMessageService {
 
                     SysMailRecord mailRecord = SysMailRecord.builder()
                             .templateId(messageTemplate.getTemplateId())
-                            .mailTitle(messageTemplate.getMsgTitle())
+                            .mailTitle(msgTitle)
                             .mailContent(mailContent)
                             .sender(from)
                             .receiver(JSONArray.toJSONString(receivers))
@@ -138,7 +139,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                     // Sending
                     boolean sendState = false;
                     try {
-                        sendState = emailService.sendHtmlEmail(from, sendMessageReqVO.getReceivers().toArray(new String[0]), cc, messageTemplate.getMsgTitle(), msgContent, sendMessageReqVO.getFileBase64StrMap());
+                        sendState = emailService.sendHtmlEmail(from, sendMessageReqVO.getReceivers().toArray(new String[0]), cc, msgTitle, msgContent, sendMessageReqVO.getFileBase64StrMap());
                     } catch (Exception e) {
                         log.info("Failed to send the email:【{}】", JSONObject.toJSONString(sendMessageReqVO), e);
                     }
@@ -166,10 +167,10 @@ public class SendMessageServiceImpl implements SendMessageService {
             }
         }
 
-        String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.TITLE.getCode());
-        if (StringUtils.isNotBlank(dcCenterName)) {
-            emailContent = emailContent.replace("BSN Spartan Network", dcCenterName);
-        }
+//        String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.TITLE.getCode());
+//        if (StringUtils.isNotBlank(dcCenterName)) {
+//            emailContent = emailContent.replace("BSN Spartan Network", dcCenterName);
+//        }
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
         if (StringUtils.isNotBlank(sysDataCenter.getLogo())) {
             emailContent = emailContent.replace("${logo}", sysDataCenter.getLogo());
@@ -280,9 +281,9 @@ public class SendMessageServiceImpl implements SendMessageService {
         if (StringUtils.isNotBlank(Email)) {
             contactBody = contactBody + "-Email:&nbsp;<a href=\"${Email}\">${Email}</td></tr><tr><td>&nbsp;</td></tr>".replace("${Email}", Email);
         }
-        if (StringUtils.isNotBlank(dcCenterName)) {
-            emailContactTemplate = emailContactTemplate.replace("BSN Spartan Network", dcCenterName);
-        }
+//        if (StringUtils.isNotBlank(dcCenterName)) {
+//            emailContactTemplate = emailContactTemplate.replace("BSN Spartan Network", dcCenterName);
+//        }
 
         if (contactBody.length() == 0) {
             emailContactTemplate = getEmailContent(MsgCodeEnum.EMAIL_CONTACT_TEMPLATE_.getCode());

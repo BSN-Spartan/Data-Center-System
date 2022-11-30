@@ -9,6 +9,8 @@ public class DcPaymentOrderDetailsRespVO {
 
     private String tradeNo;
 
+    private String chainName;
+
     private String accountAddress;
 
     private BigDecimal payAmount;

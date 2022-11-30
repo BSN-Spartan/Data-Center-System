@@ -56,14 +56,16 @@
                     <div class="col-sm-12 div_title">Chain Access Configuration</div>
                     <div class="col-xs-12">
                         <hr>
+                        &nbsp; &nbsp; &nbsp;  Please set the gateway URL for user access. At the same time, you can set TPS, TPD to inform the gateway to limit user access. Please confirm the
+                        correctness of the gateway URL and the normal operation of the gateway.
                     </div>
                     <div class="col-sm-12" style="margin-top: 20px">
                         <div class="form-group">
                             <label for="gateway" class="col-sm-2 control-label"><span
                                     class="xin">*</span>Gateway URL:</label>
                             <div class="col-sm-4">
-                                <a href="https://github.com/BSN-Spartan/Data-Center-Gateway" style="position: absolute; right: 14px; top: -24px" target="_blank">Tutorial</a>
                                 <input type="text" class="form-control" name="gateway" id="gateway">
+                                <a href="https://github.com/BSN-Spartan/Data-Center-Gateway/#kong-gateway-request-format" target="_blank">Tutorial</a>
                             </div>
                         </div>
                     </div>
@@ -72,6 +74,7 @@
                             <label for="wsGateway" class="col-sm-2 control-label">WebSocket Gateway URL:</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="wsGateway" id="wsGateway">
+                                <a href=" https://github.com/BSN-Spartan/Data-Center-Gateway/#websocket-request" target="_blank">Tutorial</a>
                             </div>
                         </div>
                     </div>
@@ -80,6 +83,7 @@
                             <label for="grpcGateway" class="col-sm-2 control-label">gRPC Gateway URL:</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="grpcGateway" id="grpcGateway">
+                                <a href="https://github.com/BSN-Spartan/Data-Center-Gateway/#grpc-request" target="_blank">Tutorial</a>
                             </div>
                         </div>
                     </div>
@@ -88,7 +92,7 @@
                             <label for="tps" class="col-sm-2 control-label">TPS:</label>
                             <div class="col-sm-4">
                                 <input type='text'
-                                       oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>10) value=value.substring(0,10)"
+                                       oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
                                        class="form-control" id="tps" name="tps">
                             </div>
                         </div>
@@ -99,7 +103,7 @@
                             <label for="tpd" class="col-sm-2 control-label">TPD:</label>
                             <div class="col-sm-4">
                                 <input type='text'
-                                       oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>10) value=value.substring(0,10)"
+                                       oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
                                        class="form-control" id="tpd" name="tpd">
                             </div>
                         </div>
@@ -127,9 +131,13 @@
                     <div class="col-sm-12" style="margin-top: 20px">
                         <div class="form-group">
                             <label for="chainCode1" class="col-sm-2 control-label"><span
-                                    class="xin">*</span>Chain's Request ID:</label>
+                                    class="xin">*</span>Chain Type:</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="chainCode1" id="chainCode1">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    In Kong gateway, this is the unique ID mapped to different chains.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -170,9 +178,13 @@
                     <div class="col-sm-12" style="margin-top: 20px">
                         <div class="form-group">
                             <label for="chainCode2" class="col-sm-2 control-label"><span
-                                    class="xin">*</span>Chain's Request ID:</label>
+                                    class="xin">*</span>Chain Type:</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="chainCode2" id="chainCode2">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    In Kong gateway, this is the unique ID mapped to different chains.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -214,9 +226,13 @@
                     <div class="col-sm-12" style="margin-top: 20px">
                         <div class="form-group">
                             <label for="chainCode3" class="col-sm-2 control-label"><span
-                                    class="xin">*</span>Chain's Request ID:</label>
+                                    class="xin">*</span>Chain Type:</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="chainCode3" id="chainCode3">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    In Kong gateway, this is the unique ID mapped to different chains.
+                                </p>
                             </div>
                         </div>
                     </div>

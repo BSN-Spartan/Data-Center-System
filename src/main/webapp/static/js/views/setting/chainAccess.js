@@ -181,7 +181,11 @@ var handleSubmitResult = function () {
         },
 
         errorPlacement: function (error, element) {
-            element.parent('div').append(error);
+            if (element.attr('id') == 'gateway') {
+                element.parent('div').parent('div').append(error);
+            } else {
+                element.parent('div').append(error);
+            }
         },
 
         submitHandler: function (form) {
@@ -314,8 +318,8 @@ var submitFormResult = function () {
     data.wsGatewayUrl = wsGatewayUrl;
     data.grpcGateWayUrl = grpcGatewayUrl;
 
-    data.tps = tps?tps:-1;
-    data.tpd = tpd?tpd:-1;
+    data.tps = tps;
+    data.tpd = tpd;
 
     data.nodeConfigs = nodeConfigs;
 

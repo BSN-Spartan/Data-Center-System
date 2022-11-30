@@ -55,7 +55,7 @@ public class CaptchaController {
         // Verify the request ID
         log.info("Get the verification code of mailbox>>>>>>{}", JSONObject.toJSONString(captchaVo));
 
-        sendMessage(req,captchaVo.getEmail(), ConstantsUtil.USERT_JOIN_CAPTCHA_, MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
+        sendMessage(req,captchaVo.getEmail(), ConstantsUtil.USER_JOIN_CAPTCHA_, MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
 
 
         return ResultInfoUtil.successResult();
@@ -71,9 +71,9 @@ public class CaptchaController {
         String captchaType = captchaVo.getCaptchaType().toLowerCase();
 
         switch (captchaType) {
-            case ConstantsUtil.USERT_JOIN_CAPTCHA_:
+            case ConstantsUtil.USER_JOIN_CAPTCHA_:
 
-                sendMessage(req,captchaVo.getEmail(), ConstantsUtil.USERT_JOIN_CAPTCHA_, MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
+                sendMessage(req,captchaVo.getEmail(), ConstantsUtil.USER_JOIN_CAPTCHA_, MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
 
                 break;
             case ConstantsUtil.GAS_RECHARGE_CAPTCHA_:
@@ -95,7 +95,7 @@ public class CaptchaController {
         if (Objects.isNull(sysDataCenter)) {
             throw new GlobalException(ApiRespCodeEnum.DATA_CENTER_NO_EXISTS.getCode());
         }
-        sendMessage(req,email, ConstantsUtil.USERT_JOIN_CAPTCHA_, MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
+        sendMessage(req,email, ConstantsUtil.USER_JOIN_CAPTCHA_, MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode());
     }
 
 
@@ -111,8 +111,8 @@ public class CaptchaController {
 
         log.info("Get the verification code of mailbox>>>>>>{}>>>>>>{}", redisKey, code);
         HttpSession session = req.getSession();
-        session.setAttribute(emailMsgCode, code.toString());
-        System.out.println(session.getAttribute(MsgCodeEnum.USER_JOIN_CAPTCHA_.getCode()));
+        session.setAttribute(emailType+email, code.toString());
+        System.out.println(session.getAttribute(emailType+email));
 
         Map<String, Object> replaceContentMap = new HashMap<>();
         replaceContentMap.put("captcha_", code.toString());

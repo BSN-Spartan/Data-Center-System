@@ -53,4 +53,6 @@ public interface StrategyService {
      */
     boolean stripeCallback(String json, String reqSignature);
 
+    boolean coinbaseCallback(String json);
+
 }

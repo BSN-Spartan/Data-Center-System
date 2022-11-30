@@ -143,9 +143,13 @@ let initFrameList = function () {
         "fnDrawCallback": function () {
             initNumber(this.api());
         },
+
         "columns": [
             {data: null, "targets": 0, title: "No.", bSearchable: false, bSortable: false},
-            {data: "tradeNo", title: "Order No.", render: COMMON_HANDLE.copyData, bSearchable: false, bSortable: false},
+
+            {data: "tradeNo",
+                title: "Order No.",
+                render: COMMON_HANDLE.copyData, bSearchable: false, bSortable: false},
             {
                 data: "otherTradeNo",
                 title: "Third Party Transaction No.",
@@ -153,6 +157,7 @@ let initFrameList = function () {
                 bSearchable: false,
                 bSortable: false
             },
+            {data: "chainName", title: "Chain Name", bSearchable: false, bSortable: false},
             {
                 data: "accountAddress",
                 render: COMMON_HANDLE.copyData,
@@ -282,8 +287,8 @@ function refresh(row) {
 
 // search
 let search = function () {
-
     setDatatableSearchInfo($("#tradeNo").val(), "tradeNo");
+    setDatatableSearchInfo($("#chainId").val(), "chainId");
     setDatatableSearchInfo($("#otherTradeNo").val(), "otherTradeNo");
     setDatatableSearchInfo($("#accountAddress").val(), "accountAddress");
     setDatatableSearchInfo($("#createStartTime").val(), "createStartTime");
@@ -502,6 +507,7 @@ $(".exportOrders_").click(function () {
     let dcPaymentOrderReqVO = {};
     dcPaymentOrderReqVO.tradeNo = $("#tradeNo").val();
     dcPaymentOrderReqVO.otherTradeNo = $("#otherTradeNo").val();
+    dcPaymentOrderReqVO.chainId = $("#chainId").val();
     dcPaymentOrderReqVO.accountAddress = $("#accountAddress").val();
     dcPaymentOrderReqVO.createStartTime = $("#createStartTime").val();
     dcPaymentOrderReqVO.createEndTime = $("#createEndTime").val();

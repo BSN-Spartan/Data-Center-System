@@ -89,6 +89,10 @@ public class StripePayStrategyImpl implements StrategyService {
     public PaymentRespVO createOrder(PaymentReqVO paymentReqVO, DcChainAccess dcChainAccess) {
         log.info("Create payment order -- payment method：{}", PayChannelTypeEnum.PAY_STRIPE.getName());
 
+        if (paymentReqVO.getPayAmount().compareTo(new BigDecimal("99999999")) > 0) {
+            throw new GlobalException("Exceeded the payment limit ($999,999.99)");
+        }
+
         // Get payment information
         DcPaymentType dcPaymentType = dcPaymentTypeMapper.selectPaymentByCode(paymentReqVO.getChannelCode());
         if (Objects.isNull(dcPaymentType)) {
@@ -239,6 +243,11 @@ public class StripePayStrategyImpl implements StrategyService {
             default:
                 log.info("stripeCallback Unknown event type:{}", event.getType());
         }
+        return false;
+    }
+
+    @Override
+    public boolean coinbaseCallback(String json) {
         return false;
     }
 
@@ -506,7 +515,7 @@ public class StripePayStrategyImpl implements StrategyService {
             InvoiceItemCreateParams invoiceItemCreateParams = InvoiceItemCreateParams.builder()
                     .setCustomer(customerId)
                     .setCurrency(currency)
-                    .setAmount(paymentReqVO.getPayAmount())
+                    .setAmount(paymentReqVO.getPayAmount().longValue())
                     .setDescription(paymentReqVO.getRemarks())
                     .build();
 

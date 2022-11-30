@@ -18,10 +18,10 @@ import java.util.List;
 public class AddChainAccessReqVO implements Serializable {
 
     @ApiModelProperty(value = "tps", required = false)
-    private Integer tps;
+    private String tps;
 
     @ApiModelProperty(value = "tpd", required = false)
-    private Integer tpd;
+    private String tpd;
 
     @Length(max = 200, message = "Gateway address length exceeds the limit")
     @NotBlank(message = "Gateway address cannot be empty")

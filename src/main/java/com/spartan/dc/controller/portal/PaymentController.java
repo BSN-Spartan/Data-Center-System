@@ -53,8 +53,15 @@ public class PaymentController extends BaseController {
 
     @PostMapping("calc/gasPrice")
     @ApiOperation("Calculate gas price")
-    public ResultInfo<CalcGasPriceRespVO> calcNttPrice(@RequestBody @Validated CalcGasPriceReqVO calcGasPriceReqVO) {
+    public ResultInfo<CalcGasPriceRespVO> calcGasPrice(@RequestBody @Validated CalcGasPriceReqVO calcGasPriceReqVO) {
         CalcGasPriceRespVO calcGasPriceRespVO = paymentService.calcGasPrice(calcGasPriceReqVO);
+        return ResultInfoUtil.successResult(calcGasPriceRespVO);
+    }
+
+    @PostMapping("calc/gasCredit")
+    @ApiOperation("Calculate gas price")
+    public ResultInfo<CalcGasCreditRespVO> calcGasCredit(@RequestBody @Validated CalcGasCreditReqVO calcGasCreditReqVO) {
+        CalcGasCreditRespVO calcGasPriceRespVO = paymentService.calcGasCredit(calcGasCreditReqVO);
         return ResultInfoUtil.successResult(calcGasPriceRespVO);
     }
 
@@ -102,6 +109,14 @@ public class PaymentController extends BaseController {
             response = new ResponseEntity<>(HttpStatus.OK);
         }
         return response;
+    }
+
+    @PostMapping("coinbase/callback")
+    @ApiOperation("coinbase支付回调")
+    @ApiIgnore
+    public ResultInfo<Boolean> coinbaseCallback(@RequestBody String json) {
+        boolean callback = paymentService.coinbaseCallback(json);
+        return ResultInfoUtil.successResult(callback);
     }
 
 }

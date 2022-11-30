@@ -12,6 +12,8 @@ public class DcPaymentOrderExcelRespVO {
 
     private String accountAddress;
 
+    private String chainName;
+
     private BigDecimal payAmount;
 
     private BigDecimal gasCount;

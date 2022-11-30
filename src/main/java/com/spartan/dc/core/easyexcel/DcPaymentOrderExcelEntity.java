@@ -15,6 +15,9 @@ public class DcPaymentOrderExcelEntity {
     @Alias("Third Party Tx No")
     private String otherTradeNo;
 
+    @Alias("Chain Name")
+    private String chainName;
+
     @Alias("Wallet Address")
     private String accountAddress;
 

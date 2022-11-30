@@ -21,6 +21,8 @@ public interface PaymentService {
 
     CalcGasPriceRespVO calcGasPrice(CalcGasPriceReqVO calcGasPriceReqVO);
 
+    CalcGasCreditRespVO calcGasCredit(CalcGasCreditReqVO calcGasCreditReqVO);
+
     GasExchangeRateRespVO gasExchangeRate(GasExchangeRateReqVO gasExchangeRateReqVO);
 
     RefundRespVO refund(RefundReqVO refundReqVO, long currentUserId);
@@ -34,4 +36,6 @@ public interface PaymentService {
      * @param reqSignature
      */
     boolean stripeCallback(String json, String reqSignature);
+
+    boolean coinbaseCallback(String json);
 }

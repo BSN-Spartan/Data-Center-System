@@ -20,7 +20,7 @@ import com.spartan.dc.service.PaymentService;
 import com.spartan.dc.strategy.StrategyHandler;
 import com.spartan.dc.strategy.StrategyService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.WalletUtils;
 
@@ -71,10 +71,14 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentRespVO createOrder(PaymentReqVO paymentReqVO, HttpServletRequest request) {
 
         // Verify whether the verification code is correct
-        String captchaSession = request.getSession().getAttribute(ConstantsUtil.GAS_RECHARGE_CAPTCHA_).toString();
-        if (!paymentReqVO.getCaptchaCode().equalsIgnoreCase(captchaSession)) {
+        Object captchaSession = request.getSession().getAttribute(ConstantsUtil.GAS_RECHARGE_CAPTCHA_+paymentReqVO.getEmail());
+        if (captchaSession == null) {
+            throw new GlobalException("Verification code has expired");
+        }
+        if (!paymentReqVO.getCaptchaCode().equalsIgnoreCase(captchaSession.toString())) {
             throw new GlobalException("Verification code is incorrect");
         }
+        request.getSession().removeAttribute(ConstantsUtil.GAS_RECHARGE_CAPTCHA_+paymentReqVO.getEmail());
 
         String chargeChainAccountAddress = paymentReqVO.getChainAccountAddress();
 
@@ -131,12 +135,23 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         // Calculate the payment amount according to the number of gas
-        CalcGasPriceReqVO calcGasPriceReqVO = new CalcGasPriceReqVO();
+        /*CalcGasPriceReqVO calcGasPriceReqVO = new CalcGasPriceReqVO();
         calcGasPriceReqVO.setGasCount(paymentReqVO.getGasCount());
         calcGasPriceReqVO.setChainId(paymentReqVO.getChainId());
-        calcGasPriceReqVO.setChainAccountAddress(paymentReqVO.getChainAccountAddress());
         CalcGasPriceRespVO calcGasPriceRespVO = calcGasPrice(calcGasPriceReqVO);
-        paymentReqVO.setPayAmount(calcGasPriceRespVO.getPayAmount());
+        if (StringUtils.isNotBlank(calcGasPriceRespVO.getErrorMsg())) {
+            throw new GlobalException(calcGasPriceRespVO.getErrorMsg());
+        }*/
+        CalcGasCreditReqVO calcGasCreditReqVO = new CalcGasCreditReqVO();
+        calcGasCreditReqVO.setChainId(paymentReqVO.getChainId());
+        calcGasCreditReqVO.setPayAmount(paymentReqVO.getPayAmount());
+        CalcGasCreditRespVO calcGasCreditRespVO = calcGasCredit(calcGasCreditReqVO);
+        if (StringUtils.isNotBlank(calcGasCreditRespVO.getErrorMsg())) {
+            throw new GlobalException(calcGasCreditRespVO.getErrorMsg());
+        }
+
+        paymentReqVO.setPayAmount(new BigDecimal(calcGasCreditRespVO.getPayAmount()));
+        paymentReqVO.setGasCount(calcGasCreditRespVO.getGasCount());
 
         // Select the corresponding payment method according to the payment type
         StrategyService strategy = strategyHandler.getStrategy(paymentReqVO.getChannelCode());
@@ -188,17 +203,47 @@ public class PaymentServiceImpl implements PaymentService {
         // Gas quantity limit
         BigDecimal minGas = chainSalePrice.getGas().divide(chainSalePrice.getSalePrice()).multiply(new BigDecimal("100"));
         BigDecimal maxGas = chainSalePrice.getGas().divide(chainSalePrice.getSalePrice()).multiply(new BigDecimal("99999999"));
+        String errorMsg = "";
         if (gasCount.compareTo(minGas) < 0 || gasCount.compareTo(maxGas) > 0) {
-            throw new GlobalException("The amount of gas cannot be less than" + minGas + "and cannot be greater than" + maxGas);
+            errorMsg =  "The amount of gas cannot be less than " + minGas + " and cannot be greater than " + maxGas;
         }
 
         // Calculate gas price
         BigDecimal gasPrice = gasCount.divide(chainSalePrice.getGas().divide(chainSalePrice.getSalePrice()), 0);
 
         CalcGasPriceRespVO calcGasPriceRespVO = CalcGasPriceRespVO.builder()
-                .chainAccountAddress(calcGasPriceReqVO.getChainAccountAddress())
                 .gasCount(calcGasPriceReqVO.getGasCount())
                 .payAmount(gasPrice.longValue())
+                .errorMsg(errorMsg)
+                .build();
+
+        return calcGasPriceRespVO;
+    }
+
+    @Override
+    public CalcGasCreditRespVO calcGasCredit(CalcGasCreditReqVO calcGasCreditReqVO) {
+        // Get the current price
+        ChainSalePrice chainSalePrice = chainSalePriceMapper.selectCurrentSalePrice(calcGasCreditReqVO.getChainId());
+        if (Objects.isNull(chainSalePrice)) {
+            throw new GlobalException("No available gas price");
+        }
+
+        BigDecimal payAmount = calcGasCreditReqVO.getPayAmount();
+
+        // Gas quantity limit
+        BigDecimal minAmount = new BigDecimal("1");
+        String errorMsg = "";
+        if (payAmount.compareTo(minAmount) < 0) {
+            errorMsg =  "The payment amount entered must be at least 1 US dollar";
+        }
+
+        // Calculate gas credit
+        BigDecimal gasCount = payAmount.multiply(chainSalePrice.getGas().divide(chainSalePrice.getSalePrice()).multiply(new BigDecimal("100")));
+
+        CalcGasCreditRespVO calcGasPriceRespVO = CalcGasCreditRespVO.builder()
+                .gasCount(gasCount)
+                .payAmount(payAmount.multiply(new BigDecimal("100")).longValue())
+                .errorMsg(errorMsg)
                 .build();
 
         return calcGasPriceRespVO;
@@ -268,5 +313,11 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean coinbaseCallback(String json) {
+        StrategyService strategy = strategyHandler.getStrategy(PayChannelTypeEnum.PAY_COINBASE.getCode());
+        return strategy.coinbaseCallback(json);
     }
 }

@@ -26,7 +26,7 @@ public class HttpUtils {
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
 
-    private static final int TIME_OUT = 120000;
+    private static final int TIME_OUT = 5000;
 
 
     private static final String HTTPS = "https";

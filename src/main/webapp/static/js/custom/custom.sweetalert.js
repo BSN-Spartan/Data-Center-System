@@ -113,7 +113,7 @@ function alert_confirm(title, text, suFn, closeFn) {
         type: "warning",
         showCancelButton: !0,
         confirmButtonColor: "#00aeff",
-        confirmButtonText: "ok",
+        confirmButtonText: "Confirm",
         cancelButtonText: "Cancel", //cancel
         closeOnConfirm: !1,
         closeOnCancel: closeOnCancelType

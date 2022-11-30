@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spartan.dc.dao.write.DcPaymentOrderMapper">
 
     <select id="queryDcPaymentOrder" resultType="java.util.Map">
         SELECT
-        dpo.order_id orderId, dpo.payment_type_id paymentTypeId, dpo.trade_no tradeNo, dpo.other_trade_no otherTradeNo,
+        dpo.order_id orderId, dc.chain_name chainName, dpo.payment_type_id paymentTypeId, dpo.trade_no tradeNo, dpo.other_trade_no otherTradeNo,
         dpo.account_address accountAddress, dpo.pay_amount payAmount,dpo.currency currency,dpo.pay_state payState,
         dpo.gas_recharge_state gasRechargeState,dpo.is_refund isRefund,DATE_FORMAT(dpo.create_time, '%Y-%m-%d %T')
         createTime,DATE_FORMAT(dpo.pay_time, '%Y-%m-%d %T') payTime,
         dpt.pay_type payType,dpt.pay_channel_name payChannelName
         from
         dc_payment_order dpo
-        left JOIN dc_payment_type dpt on dpo.payment_type_id=dpt.payment_type_id
+        left JOIN dc_payment_type dpt on dpo.payment_type_id = dpt.payment_type_id
+        left JOIN dc_chain dc on dpo.chain_id = dc.chain_id
         <where>
             <if test="tradeNo != null and tradeNo != ''">
                 dpo.trade_no = #{tradeNo}
@@ -21,6 +23,9 @@
             </if>
             <if test="accountAddress != null and accountAddress != ''">
                 and dpo.account_address = #{accountAddress}
+            </if>
+            <if test="chainId != null">
+                and dpo.chain_id = #{chainId}
             </if>
             <if test="createStartTime != null and createStartTime != ''">
                 and dpo.create_time  <![CDATA[ >= ]]> CONCAT(#{createStartTime,jdbcType=TIMESTAMP},' 00:00:00')
@@ -46,6 +51,7 @@
         </where>
         order by dpo.create_time desc
     </select>
+
     <select id="queryDcPaymentOrderDetails"
             resultType="com.spartan.dc.core.vo.resp.DcPaymentOrderDetailsRespVO">
         SELECT dpo.trade_no,
@@ -62,6 +68,7 @@
                dpo.gas_recharge_state,
                dpo.gas_tx_time,
                dpo.gas_tx_hash,
+               dc.chain_name,
                dpr.trade_no                                                              dpr_trade_no,
                dpr.other_trade_no                                                        dpr_other_trade_no,
                (SELECT du.contacts_name from dc_user du where du.user_id = dpr.operator) operator,
@@ -76,9 +83,10 @@
                  left JOIN dc_chain dc on dc.chain_id = dpo.chain_id
         where dpo.order_id = #{orderId}
     </select>
+
     <select id="exportDcpaymentorder" resultType="com.spartan.dc.core.vo.resp.DcPaymentOrderExcelRespVO">
         SELECT
-        dpo.order_id, dpo.payment_type_id, dpo.trade_no, dpo.other_trade_no,
+        dpo.order_id, dc.chain_name chainName, dpo.payment_type_id, dpo.trade_no, dpo.other_trade_no,
         dpo.account_address, dpo.pay_amount,dpo.currency,dpo.pay_state,
         dpo.gas_recharge_state,dpo.is_refund,DATE_FORMAT(dpo.create_time, '%Y-%m-%d %T')
         create_time,DATE_FORMAT(dpo.pay_time, '%Y-%m-%d %T') pay_time,
@@ -86,6 +94,7 @@
         from
         dc_payment_order dpo
         left JOIN dc_payment_type dpt on dpo.payment_type_id=dpt.payment_type_id
+        left JOIN dc_chain dc on dpo.chain_id = dc.chain_id
         <where>
             <if test="tradeNo != null and tradeNo != ''">
                 dpo.trade_no = #{tradeNo}
@@ -95,6 +104,9 @@
             </if>
             <if test="accountAddress != null and accountAddress != ''">
                 and dpo.account_address = #{accountAddress}
+            </if>
+            <if test="chainId != null">
+                and dpo.chain_id = #{chainId}
             </if>
             <if test="createStartTime != null and createStartTime != ''">
                 and dpo.create_time  <![CDATA[ >= ]]> CONCAT(#{createStartTime,jdbcType=TIMESTAMP},' 00:00:00')

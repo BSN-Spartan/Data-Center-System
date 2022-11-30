@@ -85,7 +85,7 @@ public class PaymentHandler {
         Map<String, Object> replaceContentMap = new HashMap<>();
         replaceContentMap.put("trade_no_", dcPaymentOrder.getTradeNo());
         replaceContentMap.put("account_address_", dcPaymentOrder.getAccountAddress());
-        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount());
+        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount().longValue());
         replaceContentMap.put("pay_amount_", NumberUtil.round(dcPaymentOrder.getPayAmount(), 2));
         replaceContentMap.put("pay_link_", payLink);
 
@@ -115,7 +115,7 @@ public class PaymentHandler {
         Map<String, Object> replaceContentMap = new HashMap<>();
         replaceContentMap.put("trade_no_", dcPaymentOrder.getTradeNo());
         replaceContentMap.put("account_address_", dcPaymentOrder.getAccountAddress());
-        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount());
+        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount().longValue());
         replaceContentMap.put("pay_amount_", String.format("%.2f", payAmount));
         replaceContentMap.put("pay_time_", DateUtils.getMonthYearDate(dcPaymentOrder.getPayTime()));
         if (StringUtils.isNotBlank(dcPaymentOrder.getTxHash())) {

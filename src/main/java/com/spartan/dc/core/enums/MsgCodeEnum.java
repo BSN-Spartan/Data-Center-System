@@ -16,8 +16,12 @@ public enum MsgCodeEnum {
     ORDER_SUBMIT_SUCCESS("order_submit_success_", "Order placed successfully"),
     PAYMENT_SUCCESS("payment_success_", "Payment successful"),
     NTT_ARRIVED_SUCCESS("ntt_arrived_success_", "NTT arrival"),
-    KEY_STORE_PASSWORD("keystorePassword", "KeyStorePassword"),
-    ORDER_SUBMITTED_OFFLINE("order_submit_offline_", "Remittance order placed successfully");
+    KEY_STORE_PASSWORD_RESET("keystorePasswordReset", "keystorePasswordReset"),
+
+    KEY_STORE_PASSWORD_CONFIG("keystorePasswordConfig", "keystorePasswordConfig"),
+
+    ORDER_SUBMITTED_OFFLINE("order_submit_offline_", "Remittance order placed successfully"),
+    GAS_RECHARGE_SUCCESS("gas_recharge_success_", "Gas recharge success");
 
 
     private String code;

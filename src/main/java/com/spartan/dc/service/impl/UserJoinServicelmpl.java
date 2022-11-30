@@ -141,16 +141,20 @@ public class UserJoinServicelmpl implements UserJoinService {
                     } else {
                         logger.info("User access key notifies gateway failure：【{" + result + "}】");
                     }
-                } catch (GlobalException e) {
-                    logger.info("User access key notifies gateway failure exception【{}】", e.getMsg());
+                } catch (Exception e) {
+                    logger.info("User access key notifies gateway failure exception【{}】", e.getMessage());
+                    throw new GlobalException("User access key notifies gateway failure");
                 }
 
             }
         }
 
+        String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.HEADLINE.getCode());
+        String messageTitle = "BSN Spartan Data Center Notification: Network Access Information";
+        if(StringUtils.isNotBlank(dcCenterName)){
+            messageTitle = messageTitle.replace("BSN Spartan Data Center",dcCenterName);
+        }
 
-
-        String messageTitle = "BSN Spartan Data Center Notification: Nodes Information";
         String messageBody  = getEmailBody(userJoinReqVO,accessKey);
 
 
@@ -231,10 +235,10 @@ public class UserJoinServicelmpl implements UserJoinService {
         String emailHeader = "Welcome to BSN Spartan Network! <br/>\n" +
                 "You can access to BSN Spartan Network via these nodes:<br/><br/>";
 
-        String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.TITLE.getCode());
-        if(StringUtils.isNotBlank(dcCenterName)){
-            emailHeader = emailHeader.replace("BSN Spartan Network",dcCenterName);
-        }
+//        String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.TITLE.getCode());
+//        if(StringUtils.isNotBlank(dcCenterName)){
+//            emailHeader = emailHeader.replace("BSN Spartan Network",dcCenterName);
+//        }
 
         // Splice the content of the email
 

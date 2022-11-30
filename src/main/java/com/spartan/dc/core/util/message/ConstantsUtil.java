@@ -7,9 +7,9 @@ package com.spartan.dc.core.util.message;
  */
 public class ConstantsUtil {
 
-    public static final String USERT_JOIN_CAPTCHA_ = "user_join_captcha_";
+    public static final String USER_JOIN_CAPTCHA_ = "user_join_captcha_";
 
     public static final String GAS_RECHARGE_CAPTCHA_ = "gas_recharge_captcha_";
 
-    public static final String USERT_JOIN_EMAIL_ = "user_join_email_";
+    public static final String USER_JOIN_EMAIL_ = "user_join_email_";
 }

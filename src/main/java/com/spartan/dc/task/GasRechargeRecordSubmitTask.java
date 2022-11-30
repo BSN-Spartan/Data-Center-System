@@ -107,7 +107,7 @@ public class GasRechargeRecordSubmitTask {
             receivers.add(sysDataCenter.getContactsEmail());
 
             // Send email
-            sendEmail(MsgCodeEnum.KEY_STORE_PASSWORD.getCode(), replaceContentMap, receivers);
+            sendEmail(MsgCodeEnum.KEY_STORE_PASSWORD_CONFIG.getCode(), replaceContentMap, receivers);
             passwordReminderNo = 1;
             return;
         } else if (StringUtils.isBlank(CacheManager.get(PASSWORD_CACHE_KEY))) {

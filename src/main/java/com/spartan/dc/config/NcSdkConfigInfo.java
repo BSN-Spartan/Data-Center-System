@@ -149,7 +149,7 @@ public class NcSdkConfigInfo {
                 receivers.add(sysDataCenter.getContactsEmail());
 
                 // Send email
-                sendEmail(MsgCodeEnum.KEY_STORE_PASSWORD.getCode(), replaceContentMap, receivers);
+                sendEmail(MsgCodeEnum.KEY_STORE_PASSWORD_RESET.getCode(), replaceContentMap, receivers);
 
                 log.info("check keystore password:mail sent");
                 checkKeystorePasswordNo = 1;

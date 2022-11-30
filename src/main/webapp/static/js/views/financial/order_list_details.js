@@ -8,6 +8,7 @@ let detailsss = function (orderId) {
     $("#tradeNo").val();
 
     $.ajax({
+
         "type": "post",
         "url": "/ground/parameters/query/dcpaymentorder/details",
         "dataType": "json",
@@ -25,6 +26,7 @@ let detailsss = function (orderId) {
             $("#refundState").html(data.data.refundState)
 
             $("#tradeNo").html((data.data.tradeNo == null || data.data.tradeNo.length == 0) ? "--" : data.data.tradeNo);
+            $("#chainName").html((data.data.chainName == null || data.data.chainName.length == 0) ? "--" : data.data.chainName);
             $("#accountAddress").html((data.data.accountAddress == null || data.data.accountAddress.length == 0) ? "--" : data.data.accountAddress);
             $("#payAmount").html((data.data.currency == null || data.data.currency.length == 0) ? "--" : data.data.currency);
             $("#gasCount").html((data.data.gasCount == null || data.data.gasCount.length == 0) ? "--" : data.data.gasCount);
@@ -40,6 +42,7 @@ let detailsss = function (orderId) {
             $("#refundTime").html((data.data.refundTime == null || data.data.refundTime.length == 0) ? "--" : data.data.refundTime)
             $("#isRefund").html((data.data.isRefund == null || data.data.isRefund.length == 0) ? "--" : data.data.isRefund)
             $("#remarks").html((data.data.remarks == null || data.data.remarks.length == 0) ? "--" : data.data.remarks)
+
         }
     });
 }

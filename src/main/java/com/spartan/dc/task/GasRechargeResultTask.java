@@ -1,9 +1,15 @@
 package com.spartan.dc.task;
 
+import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.reddate.spartan.SpartanSdkClient;
 import com.reddate.spartan.dto.spartan.RechgInfo;
+import com.spartan.dc.core.dto.portal.SendMessageReqVO;
+import com.spartan.dc.core.enums.ChainTypeEnum;
+import com.spartan.dc.core.enums.MsgCodeEnum;
+import com.spartan.dc.core.util.common.DateUtils;
 import com.spartan.dc.dao.write.DcGasRechargeRecordMapper;
 import com.spartan.dc.dao.write.DcPaymentOrderMapper;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
@@ -11,7 +17,9 @@ import com.spartan.dc.core.enums.RechargeStateEnum;
 import com.spartan.dc.model.DcGasRechargeRecord;
 import com.spartan.dc.model.DcPaymentOrder;
 import com.spartan.dc.model.SysDataCenter;
+import com.spartan.dc.service.SendMessageService;
 import com.spartan.dc.service.WalletService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +28,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Query Gas Credit top-up result
@@ -50,6 +57,9 @@ public class GasRechargeResultTask {
 
     @Resource
     private DcPaymentOrderMapper dcPaymentOrderMapper;
+
+    @Resource
+    private SendMessageService sendMessageService;
 
     @Scheduled(cron = "${task.gasRechargeResult}")
     private void configureTasks() throws Exception {
@@ -107,6 +117,12 @@ public class GasRechargeResultTask {
 
             if (!Objects.isNull(selectPaymentOrder)) {
                 dcPaymentOrderMapper.updateByPrimaryKeySelective(dcPaymentOrder);
+
+                if (RechargeStateEnum.SUCCESSFUL.getCode().equals(dcPaymentOrder.getGasRechargeState())) {
+                    selectPaymentOrder.setGasTxTime(dcGasRechargeRecord.getRechargeTime());
+                    selectPaymentOrder.setGasTxHash(dcGasRechargeRecord.getTxHash());
+                    sendGasRechargeSuccessEmail(selectPaymentOrder);
+                }
             }
 
             dcGasRechargeRecordMapper.updateByPrimaryKeySelective(dcGasRechargeRecord);
@@ -121,4 +137,50 @@ public class GasRechargeResultTask {
         RechgInfo rechgInfo = spartanSdkClient.gasCreditRechargeService.getGCRechg(rechargeCode);
         return rechgInfo;
     }
+
+    public void sendGasRechargeSuccessEmail(DcPaymentOrder dcPaymentOrder) {
+        LOG.info("Send email......");
+
+        BigDecimal payAmount;
+        if (StringUtils.isNotBlank(dcPaymentOrder.getExRates())) {
+            payAmount = NumberUtil.round(dcPaymentOrder.getPayAmount().multiply(new BigDecimal(dcPaymentOrder.getExRates())), 2);
+        } else {
+            payAmount = dcPaymentOrder.getPayAmount();
+        }
+
+        String addressLink = "";
+        if (ChainTypeEnum.ETH.getCode().equals(Short.valueOf(dcPaymentOrder.getChainId().toString()))) {
+            addressLink = "https://spartanone.bsn.foundation/address/" + dcPaymentOrder.getAccountAddress();
+        } else if (ChainTypeEnum.COSMOS.getCode().equals(Short.valueOf(dcPaymentOrder.getChainId().toString()))) {
+            addressLink = "https://spartantwo.bsn.foundation/#/address/" + dcPaymentOrder.getAccountAddress();
+        } else if (ChainTypeEnum.POLYGON.getCode().equals(Short.valueOf(dcPaymentOrder.getChainId().toString()))) {
+            addressLink = "https://spartanthree.bsn.foundation/address/" + dcPaymentOrder.getAccountAddress();
+        }
+
+        // Assemble mail parameters
+        Map<String, Object> replaceContentMap = new HashMap<>();
+        replaceContentMap.put("address_link_", addressLink);
+        replaceContentMap.put("trade_no_", dcPaymentOrder.getTradeNo());
+        replaceContentMap.put("account_address_", dcPaymentOrder.getAccountAddress());
+        replaceContentMap.put("gas_count_", dcPaymentOrder.getGasCount());
+        replaceContentMap.put("pay_amount_", String.format("%.2f", payAmount));
+        replaceContentMap.put("tx_time_", DateUtils.getMonthYearDate(dcPaymentOrder.getGasTxTime()));
+        replaceContentMap.put("tx_hash_", dcPaymentOrder.getGasTxHash());
+
+        // Recipient
+        List<String> receivers = Lists.newArrayList();
+        receivers.add(dcPaymentOrder.getEmail());
+
+        // Send email
+        SendMessageReqVO sendMessageReqVO = new SendMessageReqVO();
+        sendMessageReqVO.setMsgCode(MsgCodeEnum.GAS_RECHARGE_SUCCESS.getCode());
+        sendMessageReqVO.setReplaceContentMap(replaceContentMap);
+        sendMessageReqVO.setReceivers(receivers);
+        LOG.info("Sending email general ...... Send content ...... {}]", JSONObject.toJSONString(sendMessageReqVO));
+
+        // Send email
+        sendMessageService.sendMessage(sendMessageReqVO);
+
+    }
+
 }

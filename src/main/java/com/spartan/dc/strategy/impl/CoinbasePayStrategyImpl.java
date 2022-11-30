@@ -116,7 +116,7 @@ public class CoinbasePayStrategyImpl implements StrategyService {
         // Assembly price information
         PricingEntry pricingEntry = PricingEntry.builder()
                 .currency(LOCAL_CURRENCY)
-                .amount(BigDecimal.valueOf(paymentReqVO.getPayAmount()).divide(BigDecimal.valueOf(100)).toString())
+                .amount(String.valueOf(NumberUtil.round(paymentReqVO.getPayAmount().doubleValue() / 100, 2)))
                 .build();
 
         // Assemble the parameters required by coinbase to create the order
@@ -312,6 +312,26 @@ public class CoinbasePayStrategyImpl implements StrategyService {
     @Override
     public boolean stripeCallback(String json, String reqSignature) {
         return false;
+    }
+
+    @Override
+    public boolean coinbaseCallback(String json) {
+        CreateChargeRespDTO createChargeRespDTO = JSONObject.parseObject(json, CreateChargeRespDTO.class);
+        Map<String, Object> metadata = createChargeRespDTO.getMetadata();
+        String tradeNo = metadata.get("tradeNo").toString();
+
+        // 查询订单是否存在
+        DcPaymentOrder selectOrderByTradeNo = dcPaymentOrderMapper.selectOrderByTradeNo(tradeNo);
+        if (Objects.isNull(selectOrderByTradeNo)) {
+            return false;
+        }
+
+        // 判断是否支付成功
+        if (Objects.equals(PayStateEnum.SUCCESS.getCode(), selectOrderByTradeNo.getPayState())) {
+            return false;
+        }
+
+        return dealPayResult(createChargeRespDTO, selectOrderByTradeNo);
     }
 
     /**

@@ -12,10 +12,7 @@ import java.math.BigDecimal;
  **/
 @Data
 @Builder
-public class CalcGasPriceRespVO {
-
-//    @ApiModelProperty(value = "chainAccountAddress", required = true)
-//    private String chainAccountAddress;
+public class CalcGasCreditRespVO {
 
     @ApiModelProperty(value = "gasCount", required = true)
     private BigDecimal gasCount;

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @ClassName PortalParametersServicelmpl
@@ -33,17 +34,17 @@ public class PortalParametersServicelmpl implements PortalParametersService {
 
     @Override
     public List<DcSystemConfRespVO> querySystemConf() {
-        List<DcSystemConfRespVO> dcSystemConfRespVOS = dcSystemConfMapper.querySystemConf(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode());
+        List<DcSystemConfRespVO> dcSystemConfRespVOS = dcSystemConfMapper.querySystemConf(null);
+        DcSystemConfRespVO dcSystemConfRespVO = new DcSystemConfRespVO();
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
-        for (DcSystemConfRespVO dcSystemConfRespVO : dcSystemConfRespVOS) {
-            if (dcSystemConfRespVO.getConfCode().equals(SystemConfCodeEnum.LOGO.getCode())) {
-                if (StringUtils.isNotBlank(sysDataCenter.getLogo())) {
-                    dcSystemConfRespVO.setConfValue(sysDataCenter.getLogo());
-                } else {
-                    dcSystemConfRespVO.setConfValue(iconBase64);
-                }
-            }
-
+        if (!Objects.isNull(sysDataCenter) && StringUtils.isNotBlank(sysDataCenter.getLogo())){
+            dcSystemConfRespVO.setConfCode(SystemConfCodeEnum.LOGO.getCode());
+            dcSystemConfRespVO.setConfValue(sysDataCenter.getLogo());
+            dcSystemConfRespVOS.add(dcSystemConfRespVO);
+        }else {
+            dcSystemConfRespVO.setConfCode(SystemConfCodeEnum.LOGO.getCode());
+            dcSystemConfRespVO.setConfValue(iconBase64);
+            dcSystemConfRespVOS.add(dcSystemConfRespVO);
         }
         return dcSystemConfRespVOS;
     }

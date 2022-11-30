@@ -22,6 +22,11 @@ public class DcPaymentOrderReqVO {
      * */
     private String accountAddress;
 
+    /**
+     * Chain id
+     */
+    private Long chainId;
+
     /*
     * Order creation start time
     * */
