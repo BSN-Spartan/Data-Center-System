@@ -45,12 +45,12 @@ It is recommended to build the Data Center Management System on Linux Server wit
 3. Login to MySQL service, name and create the database:
 
    ```sql
-   CREATE DATABASE db_name DEFAULT CHARACTER SET utf8 COLLATE = utf8_general_ci;
+   CREATE DATABASE <db_name> DEFAULT CHARACTER SET utf8 COLLATE = utf8_general_ci;
    ```
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/2.dbname.jpg?raw=true)
 4. Execute sql script to initialize the table:
      ```sql
-   use db_name;
+   use <db_name>;
    ```
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/3.usedb.jpg?raw=true)
 
