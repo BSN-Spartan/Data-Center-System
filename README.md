@@ -143,7 +143,7 @@ Download the configuration files, including [application.yml](https://github.com
   
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
   
-- Configure the node information
+- Configure the node information 
 
   ```yml
    chain:
