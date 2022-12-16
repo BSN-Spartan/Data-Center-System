@@ -27,10 +27,14 @@ It is recommended to build the Data Center Management System on Linux Server wit
 
 ### 1.2 Prerequisites
 
-- Java 1.8 or later
-- mysql 5.7 or later
-- jar (Optional)
-- Docker (Optional)
+| Prerequisites                                             |
+|:----------------------------------------------------------|
+| Java 1.8 or later                                         |
+| mysql 5.7 or later                                        |
+| jar (Optional)                                            |
+| Docker (Optional)                                         |
+| [NC-Ethereum](https://github.com/BSN-Spartan/NC-Ethereum) |
+
 
 ### 1.3 Creating the Database
 
@@ -38,19 +42,19 @@ It is recommended to build the Data Center Management System on Linux Server wit
     ```
     mysql -V
     ```
-    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/1.mysqlversion.jpg?raw=true)
+   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/1.mysqlversion.jpg?raw=true)
 
 2. Get [mysql script](https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.1.1/bsn_spartan_dc%20v1.1.1.sql)
 
 3. Login to MySQL service, name and create the database:
 
    ```sql
-   CREATE DATABASE db_name DEFAULT CHARACTER SET utf8 COLLATE = utf8_general_ci;
+   CREATE DATABASE bsn_spartan_dc DEFAULT CHARACTER SET utf8 COLLATE = utf8_general_ci;
    ```
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/2.dbname.jpg?raw=true)
 4. Execute sql script to initialize the table:
      ```sql
-   use db_name;
+   use bsn_spartan_dc;
    ```
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/3.usedb.jpg?raw=true)
 
@@ -78,7 +82,7 @@ Download the configuration files, including [application.yml](https://github.com
   ```yml
   spring:
     mail:
-    # The server address for the email
+    # The server address for the email, for example：smtp.gmail.com, smtp.office365.com
       host: smtp.office365.com
     # The server port
       port: 587
@@ -88,7 +92,7 @@ Download the configuration files, including [application.yml](https://github.com
       password: App_password
   ```
 
-  
+
 
 - Change the default login account information
 
@@ -104,7 +108,7 @@ Download the configuration files, including [application.yml](https://github.com
 - Configure Kong gateway
 
   Configure the username and password of Kong gateway
-  
+
   ```yml
   kongGateWayConfig:
     # Username configured in the operations and maintenance system
@@ -140,10 +144,10 @@ Download the configuration files, including [application.yml](https://github.com
     read_password: db_password
   ```
   Example:
-  
+
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
-  
-- Configure the node information 
+
+- Configure the node information
 
   ```yml
    chain:
@@ -156,6 +160,7 @@ Download the configuration files, including [application.yml](https://github.com
     # Change the path of the Keystore file to a designated directory
     walletFilePath: "your-directory/wallet"
     # This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. The system can then parse events from all blocks after this block height. For example: blockHeight: 270441
+    # Get the block height method: https://spartanone.bsn.foundation
     blockHeight: block_height
   ```
   Example:
@@ -165,34 +170,18 @@ Download the configuration files, including [application.yml](https://github.com
 - Configure the email sender name (system name)
 
   ```yml
-  # Send email sender name (system name)
+  # Send email sender name (system name), indicates the name of the sender who sends the email address.
   sys-name: BSN-Spartan
   captchaTimeOut: 5
   ```
 
-- Configure  the payment information
 
-  ```yml
-  # stripe configuration information
-  stripe:
-    currency: USD
-    cueDate: 3
-  
-  # coinbase configuration information
-  coinbase:
-    server-addr: https://api.commerce.coinbase.com/
-    api:
-      createCharge: charges
-      queryCharge: charges/
-  ```
-
-  
 
 ## 3. Starting the Service
 
 ### 3.1 Starting by Package
 
-Make sure Java 1.8 or later version has been installed in your system. 
+Make sure Java 1.8 or later version has been installed in your system.
 ```
 java -version
 ```
@@ -245,6 +234,7 @@ services:
 ## 4. Data Center Registration
 
 After successfully starting the service, the Data Center Operator can access to the system from `http://server_IP:server_port`.
+>The server_port is refering to the port in application_prod.yml
 
 ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/10.DChome.jpg?raw=true)
 
@@ -262,6 +252,6 @@ Data Center Service Providers can build portals to serve their end-users. Here i
 
 ## 7. Data Center Management System Upgrade
 
-If you have already installed the Data Center Management System with the previous version, you can upgrade it to the latest one. 
+If you have already installed the Data Center Management System with the previous version, you can upgrade it to the latest one.
 
 Please find the upgrade instructions in [tags](https://github.com/BSN-Spartan/Data-Center-System/tags) that matches the version of your Data Center Management System.
