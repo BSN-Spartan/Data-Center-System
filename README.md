@@ -172,7 +172,7 @@ Download the configuration files, including [application.yml](https://github.com
 
   Example:
 
-  ![](D:/Downloads/jsonrpc.jpg)
+  ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/8.%20prod2.jpg?raw=true)
 
 
 - Configure the email sender name (system name)
