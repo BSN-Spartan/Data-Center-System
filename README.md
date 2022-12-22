@@ -6,9 +6,10 @@ This document is a guide to install, configure and run the Data Center System of
 
 > As a clear demonstration, all commands in this document are run with root permission. These commands can also be run under normal user permissions, please set the file storage and configure the parameters properly.
 
-## 1. Installation
+## 1. Initialization
 
 ### 1.1 Hardware Requirements
+
 It is recommended to build the Data Center Management System on Linux Server with the following requirements:
 
 #### Minimum Requirements:
@@ -27,21 +28,24 @@ It is recommended to build the Data Center Management System on Linux Server wit
 
 ### 1.2 Prerequisites
 
-| Prerequisites                                             |
-|:----------------------------------------------------------|
-| Java 1.8 or later                                         |
-| mysql 5.7 or later                                        |
-| jar (Optional)                                            |
-| Docker (Optional)                                         |
-| [NC-Ethereum](https://github.com/BSN-Spartan/NC-Ethereum) |
+| Software                                                     | Version  |
+| ------------------------------------------------------------ | -------- |
+| Java                                                         | 1.8+     |
+| MySQL                                                        | 5.7+     |
+| Jar (Optional)                                               | -        |
+| Docker-ce (Optional)                                         | 20.10.0+ |
+| Docker-compose (Optional)                                    | 1.25.5+  |
+| [Spartan-I Chain Default Node](https://github.com/BSN-Spartan/NC-Ethereum) | -        |
 
 
-### 1.3 Creating the Database
+### 1.3 Database Initialization
 
 1. Make sure you have installed MySQL 5.7 or later version in your system. You can go to [MySQL official website](https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/linux-installation.html) to learn how to install MySQL on Linux.
-    ```
-    mysql -V
-    ```
+
+   ```
+   mysql -V
+   ```
+
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/1.mysqlversion.jpg?raw=true)
 
 2. Get [mysql script](https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.1.1/bsn_spartan_dc%20v1.1.1.sql)
@@ -51,23 +55,28 @@ It is recommended to build the Data Center Management System on Linux Server wit
    ```sql
    CREATE DATABASE bsn_spartan_dc DEFAULT CHARACTER SET utf8 COLLATE = utf8_general_ci;
    ```
+
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/2.dbname.jpg?raw=true)
+
 4. Execute sql script to initialize the table:
-     ```sql
+
+   ```sql
    use bsn_spartan_dc;
    ```
+
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/3.usedb.jpg?raw=true)
 
 5. Execute the rest commands in sequence. Then, check the table structure:
-    ```sql
-    show tables;
-    ```
+
+   ```sql
+   show tables;
+   ```
 
 ## 2. Download and Configuration
 
 ### 2.1 Downloading the Package
 
-Download the package of the [Data Center Management System](https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.1.1). In the same link, you can also download the source code and compile it by yourself.
+Download the [package of the Data Center Management System](https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.1.1). You can also download the source code on this page and compile it by yourself.
 
 ### 2.2 Downloading Configuration Files
 
@@ -115,10 +124,6 @@ Download the configuration files, including [application.yml](https://github.com
     username: username
     # Password configured in the operations and maintenance system
     password: password
-    # User access key URL
-    userAccessKeyUrl: /gateway/api/v0/accessKey/save
-    # User default request configuration
-    userDefaultReqConfig: /gateway/api/v0/accessKey/defaultConfig
   ```
 
 #### 2.3.2 Editing `application-prod.yml`
@@ -143,6 +148,7 @@ Download the configuration files, including [application.yml](https://github.com
     # Enter the password
     read_password: db_password
   ```
+
   Example:
 
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
@@ -151,7 +157,7 @@ Download the configuration files, including [application.yml](https://github.com
 
   ```yml
    chain:
-    # Default Node's JSON-RPC interface of Spartan-I Chain
+    # Default Node's JSON-RPC interface (--http.port) of Spartan-I Chain
     nodeRpcAddress: "http://node-IP:node-rpc-port"
     # Default Chain's network ID, do not change this configuration
     chainId: 9090
@@ -159,13 +165,15 @@ Download the configuration files, including [application.yml](https://github.com
     txPoolSleep: 1500
     # Change the path of the Keystore file to a designated directory
     walletFilePath: "your-directory/wallet"
-    # This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. The system can then parse events from all blocks after this block height. For example: blockHeight: 270441
-    # Get the block height method: https://spartanone.bsn.foundation
+    # The system will parse events from all blocks after this block height. This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. For example: blockHeight: 270441
+    # You can get the block height from the blockchain explorer: https://spartanone.bsn.foundation
     blockHeight: block_height
   ```
+
   Example:
 
-  ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/8.%20prod2.jpg?raw=true)
+  ![](D:/Downloads/jsonrpc.jpg)
+
 
 - Configure the email sender name (system name)
 
@@ -179,9 +187,12 @@ Download the configuration files, including [application.yml](https://github.com
 
 ## 3. Starting the Service
 
+Here we start the service in two ways, you may choose one of them that fits your requirement.
+
 ### 3.1 Starting by Package
 
 Make sure Java 1.8 or later version has been installed in your system.
+
 ```
 java -version
 ```
@@ -193,20 +204,39 @@ Put `Data-Center-System-1.1.1-SNAPSHOT.jar`, `application.yml`,  `application-pr
 ```yml
 java -jar Data-Center-System-1.1.1-SNAPSHOT.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8
 ```
+
 Result:
 ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/9.rundatacenter.jpg?raw=true)
 
 After starting up the Data Center System, you may find the "the basic information of data center is not configured" error message in the process. You need to configure the information after logging into the system.
 
-You can also execute in background by `nohup`command:
+If you would like to run the node in the backend system, you can run `nohup` command as follow:
 
 ```yml
 nohup java -jar Data-Center-System-1.1.1-SNAPSHOT.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8 > output.log 2>&1 &
 ```
 
+You can also check the process from the log:
+
+```
+tail -f output.log
+```
+
+To stop the service in `nohup` mode, please refer to the below command:
+
+```shell
+# Check the PID of the service
+ps -ef | grep java
+
+# Stop the service, change "PID" to the correct number
+kill -9 PID
+```
+
+
+
 ### 3.2 Starting by Docker
 
-The container is `/bsn/spartan-dc` and the service working directory can be configured by the Data Center Operator:
+The container is `/bsn/spartan-dc` and the service working directory can be configured by the Data Center Operator. The `docker-compose.yaml` file is configured as below:
 
 ```yml
 version: "3"
@@ -231,10 +261,10 @@ services:
       - TZ=Asia/Shanghai
     entrypoint: java -jar Data-Center-System-1.1.1-SNAPSHOT.jar --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml - LANG=zh_CN.UTF-8
 ```
+
 ## 4. Data Center Registration
 
-After successfully starting the service, the Data Center Operator can access to the system from `http://server_IP:server_port`.
->The server_port is refering to the port in application_prod.yml
+After successfully starting the service, the Data Center Operator can access the system from `http://server_IP:server_port`. The `server_port` is refering to the port in `application_prod.yml`.
 
 ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/10.DChome.jpg?raw=true)
 
@@ -244,9 +274,11 @@ Please refer to the [BSN Spartan Network User Manual](http://spartan.bsn.foundat
 
 
 ## 5. Data Center Gateway Deployment
-After deploying and running the Data Center Management System, Data Center Operators can deploy Kong Gateway service to manage end-user's netowrk access. Click to see more information of [Data Center Gateway Deployment](https://github.com/BSN-Spartan/Data-Center-Gateway).
+
+After deploying and running the Data Center Management System, Data Center Operators can deploy Kong Gateway service to manage end-user's network access. This is not a mandatory step if the Data Center Operator just wants to run the DC for his/her own system. However, for better protection of the node, we encourage all Data Center Operators to install and run the Kong Gateway. Click to see more information of [Data Center Gateway Deployment](https://github.com/BSN-Spartan/Data-Center-Gateway).
 
 ## 6. Data Center Portal Deployment
+
 Data Center Service Providers can build portals to serve their end-users. Here is a template of the deployment of [BSN Spartan Network Data Center Portal](https://github.com/BSN-Spartan/Data-Center-Portal).
 
 
