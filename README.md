@@ -86,23 +86,6 @@ Download the configuration files, including [application.yml](https://github.com
 
 #### 2.3.1 Editing `application.yml`
 
-- Configure the email
-
-  ```yml
-  spring:
-    mail:
-    # The server address for the email, for example：smtp.gmail.com, smtp.office365.com
-      host: smtp.office365.com
-    # The server port
-      port: 587
-    # The sender address of the email
-      username: spartan_example@hotmail.com
-    # App password gained after enabling the two-step verification 
-      password: App_password
-  ```
-
-
-
 - Change the default login account information
 
   If the database has never been initialized with any account before, the service will be initialized with this information when started:
@@ -112,18 +95,6 @@ Download the configuration files, including [application.yml](https://github.com
     adminName: admin
     adminEmail: spartan_example@hotmail.com
     defaultPassword: password
-  ```
-
-- Configure Kong gateway
-
-  Configure the username and password of Kong gateway
-
-  ```yml
-  kongGateWayConfig:
-    # Username configured in the operations and maintenance system
-    username: username
-    # Password configured in the operations and maintenance system
-    password: password
   ```
 
 #### 2.3.2 Editing `application-prod.yml`
@@ -153,6 +124,21 @@ Download the configuration files, including [application.yml](https://github.com
 
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
 
+- Configure the email
+
+  ```yml
+  spring:
+    mail:
+    # The server address for the email, for example：smtp.gmail.com, smtp.office365.com
+      host: smtp.office365.com
+    # The server port
+      port: 587
+    # The sender address of the email
+      username: spartan_example@hotmail.com
+    # App password gained after enabling the two-step verification 
+      password: App_password
+  ```
+
 - Configure the node information
 
   ```yml
@@ -174,13 +160,16 @@ Download the configuration files, including [application.yml](https://github.com
 
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/8.%20prod2.jpg?raw=true)
 
+- Configure Kong gateway
 
-- Configure the email sender name (system name)
+  Configure the username and password of Kong gateway
 
   ```yml
-  # Send email sender name (system name), indicates the name of the sender who sends the email address.
-  sys-name: BSN-Spartan
-  captchaTimeOut: 5
+  kongGateWayConfig:
+    # Username configured in the operations and maintenance system
+    username: username
+    # Password configured in the operations and maintenance system
+    password: password
   ```
 
 
@@ -236,30 +225,49 @@ kill -9 PID
 
 ### 3.2 Starting by Docker
 
-The container is `/bsn/spartan-dc` and the service working directory can be configured by the Data Center Operator. The `docker-compose.yaml` file is configured as below:
+- Create a new directory `bsn/spartan` under the root directory:
+```
+mkdir /bsn/spartan
+```
+
+- Go to directory  `bsn/spartan`:
+```
+cd /bsn/spartan
+```
+
+- Create and edit file `docker-compose.yaml`:
+```
+vim docker-compose.yaml
+```
+
+- Copy below content to file  `docker-compose.yaml`:
 
 ```yml
-version: "3"
+version: '3'
 services:
   spartan-dc:
-    image: oracle-jdk11
     container_name: spartan-dc
-    working_dir: /bsn/spartan-dc
+    image: oracle-jdk11
     restart: always
-    #privileged: true
     ports:
       - "8085:8085"
     volumes:
-      - ./Data-Center-System-1.1.1-SNAPSHOT.jar:/bsn/spartan-dc/Data-Center-System-1.1.1-SNAPSHOT.jar
-      - ./conf:/bsn/spartan-dc/conf
-      - ./logs/:/bsn/spartan-dc/logs
-      - ./wallet:/bsn/spartan-dc/src/main/resources/wallet
-      - /etc/localtime:/etc/localtime
-      #- /root/skywalking-agent/:/bsn/spartan-dc/skywalking-agent
-    environment:
-      # Specify the time zone
-      - TZ=Asia/Shanghai
-    entrypoint: java -jar Data-Center-System-1.1.1-SNAPSHOT.jar --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml - LANG=zh_CN.UTF-8
+      - ./pkg:/bsn/spartan/pkg
+      - ./logs:/bsn/spartan/logs #This directory must be the same with logPath in logback-spring.xml
+      - ./conf:/bsn/spartan/conf
+      - ./wallet:/bsn/spartan/wallet
+      - /etc/hosts:/etc/hosts
+    entrypoint: java -jar ./pkg/Data-Center-System-1.1.1-SNAPSHOT.jar --server.port=8085 --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml --logging.logpath=./logs
+```
+
+- Create a directory `/bsn/spartan/conf` and put `application-prod.yml`, `application.yml`, `logback-spring.xml` into it.
+
+- Create a directory `/bsn/spartan/pkg` and put `Data-Center-System-1.2.0.jar ` into it.
+
+- Return to the directory `/bsn/spartan` and start the service:
+```
+cd ..
+docker-compose up -d
 ```
 
 ## 4. Data Center Registration
