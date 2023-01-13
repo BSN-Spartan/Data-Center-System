@@ -1,5 +1,8 @@
 package com.spartan.dc.service.impl;
 
+import com.spartan.dc.core.enums.DcSystemConfTypeEnum;
+import com.spartan.dc.core.enums.SystemConfCodeEnum;
+import com.spartan.dc.dao.write.DcSystemConfMapper;
 import com.spartan.dc.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
+import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -25,12 +29,10 @@ import java.util.Objects;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    @Value("${sys-name}")
-    private String sysName;
-
     @Autowired
     private JavaMailSender mailSender;
-
+    @Resource
+    private DcSystemConfMapper dcSystemConfMapper;
 
     @Override
     public boolean sendHtmlEmail(String from, String[] to, String[] cc, String subject, String content,Map<String, String> inputStreamFileList) {
@@ -52,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
             }
             helper.setSubject(subject);
             helper.setText(content, isHtml);
-            helper.setFrom(new InternetAddress(from, sysName, "UTF-8"));
+            helper.setFrom(new InternetAddress(from, "", "UTF-8"));
 
             if (Objects.nonNull(fileBase64StrMap)&& fileBase64StrMap.size() > 0) {
                 for (String fileName : fileBase64StrMap.keySet()) {

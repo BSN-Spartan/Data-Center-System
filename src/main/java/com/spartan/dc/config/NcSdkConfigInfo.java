@@ -50,6 +50,9 @@ public class NcSdkConfigInfo {
     @Value("${chain.txPoolSleep}")
     private long txPoolSleep;
 
+    @Value("${keystore:#{null}}")
+    private String keystore;
+
     private static short checkKeystorePasswordNo;
 
     @Autowired
@@ -63,6 +66,14 @@ public class NcSdkConfigInfo {
 
     @Bean
     public SpartanSdkClient getDDCSdkClient() {
+
+        System.out.print("keystore: " + keystore);
+        boolean walletExists = walletService.checkWalletExists();
+
+        if (StringUtils.isNotBlank(keystore) && walletExists) {
+            CacheManager.put(PASSWORD_CACHE_KEY, keystore);
+        }
+
         // check keystore password
         checkKeystorePassword();
 

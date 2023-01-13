@@ -37,6 +37,8 @@ var initDataCenter = function () {
                         getCaptcha();
                     });
                 }
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error_text(data.msg);
             }
@@ -63,6 +65,8 @@ var getCaptcha = function () {
 
                 alert_success("", "Get success, please check in your email");
 
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error_text(data.msg);
             }
@@ -161,6 +165,8 @@ var submitForm = function () {
                 alert_success("", data.msg, function () {
                     REQ_HANDLE_.location_("/index");
                 });
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

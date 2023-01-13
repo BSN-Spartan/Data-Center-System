@@ -23,7 +23,9 @@ var getDetail = function (salePriceId) {
                 return false;
             } else if (data.code == 1) {
                 salePriceInfo = data.data;
-            }  else {
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
+            } else {
                 alert_error_text(data.msg);
             }
         }

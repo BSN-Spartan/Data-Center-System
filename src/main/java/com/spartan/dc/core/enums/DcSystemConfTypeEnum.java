@@ -9,7 +9,9 @@ public enum DcSystemConfTypeEnum {
     PORTAL_INFORMATION((short) 1, "Portal information"),
     TECHNICAL_SUPPORT((short) 2, "Technical support"),
     CONTACT_US((short) 3, "Contact us"),
-    CHAIN_INFORMATION_ACCESS((short) 4, "Chain access information");
+    CHAIN_INFORMATION_ACCESS((short) 4, "Chain access information"),
+    KEYSTORE((short)5, "Keystore"),
+    TREATY((short)6, "Treaty");
 
     private final Short code;
     private final String name;

@@ -24,6 +24,8 @@ var getDetail = function (salePriceId) {
                 return false;
             } else if (data.code == 1) {
                 salePriceInfo = data.data;
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             }  else {
                 alert_error_text(data.msg);
             }
@@ -74,7 +76,7 @@ var handleSubmitAuditResult = function () {
         },
         messages: {
             checkRemark: {
-                required: "Please enter the remark",
+                required: "Please enter the comment",
                 maxlength: "The length of comment cannot exceed 200 characters"
             }
         },
@@ -125,7 +127,9 @@ var submitFormAuditResult = function () {
         contentType: false,
         success: function (data) {
             if (data.code == 1) {
-                alert_success("","Approved",gotoIndex)
+                alert_success("","Submitted successfully",gotoIndex)
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("","Not Approved："+data.msg)
             }

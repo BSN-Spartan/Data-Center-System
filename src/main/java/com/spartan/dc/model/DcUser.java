@@ -82,4 +82,19 @@ public class DcUser {
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
     }
+
+    @Override
+    public String toString() {
+        return "DcUser{" +
+                "userId=" + userId +
+                ", contactsEmail='" + contactsEmail + '\'' +
+                ", contactsName='" + contactsName + '\'' +
+                ", contactsPhone='" + contactsPhone + '\'' +
+                ", state=" + state +
+                ", createTime=" + createTime +
+                ", salt='" + salt + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
 }

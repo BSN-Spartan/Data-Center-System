@@ -14,9 +14,11 @@ $(document).ready(function () {
     $(".reset_").click(function () {
         resetSearch(dataTable);
     });
-    $(".refund_but_").click(function () {
-        exportRefundExcel();
-    });
+    if (checkButState("export_refund_")) {
+        $(".export_refund_").show().click(function () {
+            exportRefundExcel();
+        });
+    }
 
     $("#rechargeChainType").change(function () {
         var chainId = $(this).val();

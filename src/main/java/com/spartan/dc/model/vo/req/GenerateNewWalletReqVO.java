@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Data
 public class GenerateNewWalletReqVO {
     @NotEmpty(message = "password can not be empty")
-    @Pattern(regexp = "(^$|^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z\\W]{6,10}$)", message = "The password must contain 6 to 10 letters and numbers")
+    @Pattern(regexp = "(^\\w+$)", message = "The password can only contain alphanumeric underscores")
     private String password;
 
     @NotEmpty(message = "privateKey can not be empty")

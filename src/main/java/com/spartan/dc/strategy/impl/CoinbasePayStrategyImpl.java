@@ -50,11 +50,11 @@ import java.util.Objects;
 @Slf4j
 public class CoinbasePayStrategyImpl implements StrategyService {
 
-    @Value("${coinbase.server-addr}")
+    @Value("${payment.coinbase.server-addr}")
     private String serverAddr;
-    @Value("${coinbase.api.createCharge}")
+    @Value("${payment.coinbase.api.createCharge}")
     private String createCharge;
-    @Value("${coinbase.api.queryCharge}")
+    @Value("${payment.coinbase.api.queryCharge}")
     private String queryCharge;
 
     private static OkhttpRequestUtil okhttpRequestUtil = OkhttpRequestUtil.getInstance();
@@ -320,13 +320,11 @@ public class CoinbasePayStrategyImpl implements StrategyService {
         Map<String, Object> metadata = createChargeRespDTO.getMetadata();
         String tradeNo = metadata.get("tradeNo").toString();
 
-        // 查询订单是否存在
         DcPaymentOrder selectOrderByTradeNo = dcPaymentOrderMapper.selectOrderByTradeNo(tradeNo);
         if (Objects.isNull(selectOrderByTradeNo)) {
             return false;
         }
 
-        // 判断是否支付成功
         if (Objects.equals(PayStateEnum.SUCCESS.getCode(), selectOrderByTradeNo.getPayState())) {
             return false;
         }

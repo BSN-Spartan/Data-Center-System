@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 @Data
 public class DcPaymentOrderExcelEntity {
 
-    @Alias("Order No")
+    @Alias("Order No.")
     private String tradeNo;
 
-    @Alias("Third Party Tx No")
+    @Alias("Third Party Transaction No.")
     private String otherTradeNo;
 
     @Alias("Chain Name")
@@ -33,7 +33,7 @@ public class DcPaymentOrderExcelEntity {
     @Alias("Payment Status")
     private String payState;
 
-    @Alias("Gas Credit Payment Status")
+    @Alias("Gas Credit Top-up Status")
     private String gasRechargeState;
 
     @Alias("Refund")
@@ -42,6 +42,6 @@ public class DcPaymentOrderExcelEntity {
     @Alias("Created Time")
     private String createTime;
 
-    @Alias("Paid Time")
+    @Alias("Payment Time")
     private String payTime;
 }

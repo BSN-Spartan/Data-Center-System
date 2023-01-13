@@ -59,6 +59,7 @@
                dpo.pay_amount,
                dpo.currency,
                dpo.gas_count,
+               dpo.email,
                dc.recharge_unit,
                dpo.other_trade_no,
                dpt.pay_type,

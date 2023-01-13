@@ -25,23 +25,33 @@
 
     <select id="queryList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
+            chain_access_id chainAccessId,
             access_key accessKey,
             contacts_email email,
             tps,
             tpd,
             DATE_FORMAT(create_time, '%Y-%m-%d %T') createTime,
-            notify_state notifyState
+            state state
         FROM
             dc_chain_access
         <where>
             <if test="accessKey != null and accessKey != ''">
                 and access_key = #{accessKey,jdbcType=VARCHAR}
             </if>
-            <if test="notifyState != null">
-                and notify_state = #{notifyState,jdbcType=SMALLINT}
+            <if test="state != null">
+                and state = #{state,jdbcType=SMALLINT}
             </if>
         </where>
         ORDER BY chain_access_id DESC
+    </select>
+
+    <select id="queryChainAccessState" resultType="com.spartan.dc.model.DcChainAccess">
+        select
+        <include refid="Base_Column_List"/>
+        from dc_chain_access
+        where contacts_email = #{email,jdbcType=VARCHAR}
+        order by create_time desc
+        limit 1
     </select>
 
 </mapper>

@@ -19,6 +19,8 @@ public class DcPaymentOrderDetailsRespVO {
 
     private String gasCount;
 
+    private String email;
+
     private String rechargeUnit;
 
     private String  otherTradeNo;

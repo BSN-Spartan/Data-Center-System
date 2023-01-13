@@ -21,6 +21,8 @@ var initBaseInfo = function () {
                 return false;
             } else if (data.code == 1) {
                 echoData(data.data);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             }  else {
                 alert_error_text(data.msg);
             }
@@ -107,7 +109,7 @@ var handleSubmit = function () {
             },
             copyright: {
                 required: true,
-                maxlength: 50
+                maxlength: 300
             }
         },
         messages: {
@@ -125,7 +127,7 @@ var handleSubmit = function () {
             },
             copyright: {
                 required: "copyright cannot be empty",
-                maxlength: "Cannot exceed 100 characters"
+                maxlength: "Cannot exceed 300 characters"
             }
         },
 
@@ -198,6 +200,8 @@ var submitForm = function () {
         "success": function (data) {
             if (data.code == 1) {
                 alert_success("", data.msg);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

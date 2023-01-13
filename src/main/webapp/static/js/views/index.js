@@ -15,6 +15,8 @@ $(document).ready(function () {
             subLogin();
         }
     });
+
+    showNotice();
 });
 
 const key = CryptoJS.enc.Utf8.parse('reddatespartan25');
@@ -32,6 +34,8 @@ function initSystemConf() {
 
                 $("link[rel=icon]").prop("href", data.data.icon);
 
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -48,7 +52,7 @@ function subLogin() {
 
     var userEmail = $("#email").val();
     if (isNull(userEmail)) {
-        alert_error_text("Please enter Email");
+        alert_error_text("Please enter email");
         return false;
     }
     var password = $("#password").val();
@@ -75,6 +79,8 @@ function subLogin() {
         "success": function (data) {
             if (data.code == 1) {
                 REQ_HANDLE_.location_(data.data.successUrl);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 changeCode();
                 alert_error("", data.msg);
@@ -112,4 +118,13 @@ function getDecryptionData(data) {
     });
     var decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
     return decryptedStr.toString();
+}
+
+function showNotice() {
+    var scrollup = new ScrollText("noticeScroll");
+    scrollup.LineHeight = 22;
+    scrollup.Amount = 1;
+    scrollup.Delay = 20;
+    scrollup.Start();
+    scrollup.Direction = "down";
 }

@@ -3,7 +3,23 @@ var user_list_ = "#user_list_";
 const key = CryptoJS.enc.Utf8.parse('reddatespartan25');
 const iv = CryptoJS.enc.Utf8.parse('hongzao25spartan');
 $(document).ready(function () {
+
+    if(checkButState("insert_but_")) {
+        $(".insert_but_").show();
+    }
+
+
+    $("#state").html(USER_HANDLE.getStateSelect());
+
     initUserList();
+
+    $(".search_").click(function () {
+        search();
+    });
+
+    $(".reset_").click(function () {
+        resetSearch(dataTable);
+    });
 
     $(".add_").click(function () {
         REQ_HANDLE_.location_("/user/add");
@@ -117,18 +133,68 @@ var initTableBut = function (data, type, row) {
     var state = row.state;
 
     var userId = row.userId;
-    var contactsName = row.contactsName;
+    var loginName = row.contactsName;
     var butStr = '';
     if (state == 0) {
-        butStr += '<button type="button" class="btn-info btn-xs" onclick="updateUserState(' + userId + ',\'' + contactsName + '\',\'enable\',1)"><img src="/static/images/btn/btn_able_icon.png">&nbsp;Enable</button>';
+        if (checkButState("enable_but_")) {
+            butStr += '<button type="button" class="btn-info btn-xs" onclick="updateUserState(' + userId + ',\'' + loginName + '\',\'enabled\',1)"><img src="/static/images/btn/btn_able_icon.png">&nbsp;Enabled</button>';
+        }
     } else {
-        butStr += '<button type="button" class="btn-danger btn-xs" onclick="updateUserState(' + userId + ',\'' + contactsName + '\',\'disable\',0)"><img src="/static/images/btn/btn_unable_icon.png">&nbsp;Disable</button>';
+        if (checkButState("disable_but_")) {
+            butStr += '<button type="button" class="btn-danger btn-xs" onclick="updateUserState(' + userId + ',\'' + loginName + '\',\'disabled\',0)"><img src="/static/images/btn/btn_unable_icon.png">&nbsp;Disabled</button>';
+        }
+    }
+    if (checkButState("update_but_")) {
+        butStr += '<button type="button" class="btn-info btn-xs" onclick="editUser(' + userId + ')"><img src="/static/images/btn/btn_edit_icon.png">&nbsp;Edit</button>';
+    }
+    if (checkButState("check_but_")) {
+        butStr += '<button type="button" class="btn-info btn-xs" onclick="checkUser(' + userId + ')"><img src="/static/images/btn/btn_look_icon.png">&nbsp;Details</button>';
+    }
+    if (checkButState("reset_but_")) {
+        butStr += '<button type="button" class="btn-info btn-xs" onclick="resetUserPassWord(' + userId + ',\'' + loginName + '\')"><img src="/static/images/btn/btn_reset_pass_icon.png">&nbsp;Reset Password</button>';
     }
     return butStr == "" ? "--" : butStr;
 };
 
+var checkUser = function (userId) {
+    REQ_HANDLE_.location_("/user/check/" + userId);
+};
+
+
+var editUser = function (userId) {
+    REQ_HANDLE_.location_("/user/edit/" + userId);
+};
+
+
+
+function resetUserPassWord(userId, userName) {
+    alert_confirm("", "Confirm to \"" + userName + "\" user reset password？", function () {
+        var data = {};
+        data.userId = userId;
+        resetPassWord(data)
+    }, null);
+}
+function resetPassWord(data) {
+    $.ajax({
+        "type": "post",
+        "url": "/sys/user/resetPassWord",
+        "datatype": "json",
+        "contentType": "application/json",
+        "data": JSON.stringify(data),
+        "success": function (data) {
+            if (data.code == 1) {
+                alert_success("", data.msg);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
+            } else {
+                alert_error("", data.msg);
+            }
+        }
+    });
+}
+
 function updateUserState(userId, loginName, stateName, state) {
-    alert_confirm("", "Confirm to " + stateName + " \"" + loginName + "\"?", function () {
+    alert_confirm("", "Are you sure you want to " + stateName  + " the user of \"" + loginName + "\"？", function () {
         var data = {};
         data.userId = userId;
         data.userState = state;
@@ -147,6 +213,8 @@ function updateState(data) {
             if (data.code == 1) {
                 alert_success("", data.msg);
                 search();
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -154,8 +222,12 @@ function updateState(data) {
     });
 }
 
+
+
+
 var addUser = function () {
     $("#add_user_btn").prop('disabled', true)
+
     if ($("#addUserForm").valid()) {
         const userName = $("#userName").val();
         const email = $("#email").val();
@@ -178,9 +250,12 @@ var addUser = function () {
                 if (data.code == 1) {
                     alert_success("", "Submitted successfully", function () {
                         $("#addModal").modal("hide");
+                        // window.location.href = "user/add.html";
                         document.querySelector('#addUserForm').reset();
                         search();
                     });
+                } else if (data.code == 3) {
+                    alert_success_login(data.msg);
                 } else {
                     alert_error("", data.msg);
                 }
@@ -190,8 +265,6 @@ var addUser = function () {
                 alert_error("", "Failed to add user");
             }
         });
-
-
     }
 
 }
@@ -237,3 +310,10 @@ function getEncryptionData(data) {
     var encryptedStr = encrypted.ciphertext.toString().toUpperCase();
     return encryptedStr;
 }
+
+
+var search = function () {
+    setDatatableSearchInfo($("#state").val(), "state");
+    setDatatableSearchInfo($.trim($("#userName").val()), "userName");
+    dataTable.ajax.reload();
+};

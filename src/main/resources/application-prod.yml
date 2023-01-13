@@ -15,6 +15,19 @@ mysql:
   # Enter the password
   read_password: db_password
 
+spring:
+  mail:
+    host: [smtp.exmail.qq.com]
+    port: [587]
+    username: [username]
+    password: [password]
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 chain:
   # Default Node's JSON-RPC interface (--http.port) of Spartan-I Chain
   nodeRpcAddress: "http://node-IP:node-rpc-port"
@@ -26,43 +39,14 @@ chain:
   walletFilePath: "your-directory/wallet"
   # The system will parse events from all blocks after this block height. This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. For example: blockHeight: 270441
   # You can get the block height from the blockchain explorer: https://spartanone.bsn.foundation
-  blockHeight: block_height
+  blockHeight: 1157336
+  
+kongGateWayConfig:
+  username: admin
+  password: abc123
+  userAccessKeyUrl: /gateway/api/v0/accessKey/save
+  userDefaultReqConfig: /gateway/api/v0/accessKey/defaultConfig
 
-task:
-  # Whether to start a timed task to submit a transaction/time parse
-  enabled: true
-  # Parse event
-  eventAnalytics: "0/2 * * * * ?"
-  # Submit Gas Credit top-up transaction
-  gasRechargeSubmit: "0/10 * * * * ?"
-  # Query Gas Credit top-up result
-  gasRechargeResult: "0/10 * * * * ?"
-  # Submit node registration application
-  nodeUpChain: "0/10 * * * * ?"
-  # Query gasPrice
-  chainGasPrice: "0/60 * * * * ?"
 
-metaTx:
-  # Only used by the default chain, do not change this configuration
-  chainId: 1
-  # Effective time period, in hour
-  deadline: 12
-  # Do not change this configuration
-  domainSeparator: "0x9d5e39915081369daa50abc8dc23f93c9c174abc4fc01efd13e3660e5d080276"
-  # Do not change this configuration
-  metaTransferTypeHash: "0xbf13ac0a2964a57037372fadd1f7b4fa6785ffdc315c85dfe8d1f9b1b01a7a51"
 
-# Send email sender name (system name)
-sys-name: BSN-Spartan
-captchaTimeOut: 5
 
-# stripe configuration information
-stripe:
-  currency: USD
-  cueDate: 3
-# coinbase configuration information
-coinbase:
-  server-addr: https://api.commerce.coinbase.com/
-  api:
-    createCharge: charges
-    queryCharge: charges/

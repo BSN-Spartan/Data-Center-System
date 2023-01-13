@@ -10,9 +10,13 @@ import com.spartan.dc.core.dto.user.ModifyPassReqVO;
 import com.spartan.dc.core.dto.user.UpdateUserStateReqVO;
 import com.spartan.dc.core.dto.user.UserLoginReqVO;
 import com.spartan.dc.core.exception.GlobalException;
+import com.spartan.dc.core.util.json.JsonUtil;
 import com.spartan.dc.core.util.user.UserGlobals;
 import com.spartan.dc.core.util.user.UserLoginInfo;
+import com.spartan.dc.model.DcUser;
+import com.spartan.dc.model.SysUserRole;
 import com.spartan.dc.service.DcUserService;
+import com.spartan.dc.service.SysRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +39,9 @@ public class DcUserController extends BaseController {
 
     @Autowired
     private DcUserService dcUserService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @Value("${spring.profiles.active}")
     private String activeType;
@@ -72,6 +79,8 @@ public class DcUserController extends BaseController {
 
 
                 session.setAttribute(UserGlobals.USER_SESSION_KEY, userLoginInfo);
+
+                session.setAttribute(UserGlobals.SHOW_REMINDER_KEY, true);
 
                 return ResultInfoUtil.successResult(userLoginInfo);
             } else {
@@ -124,8 +133,11 @@ public class DcUserController extends BaseController {
     }
 
     @PostMapping(value = "addUser")
-    public ResultInfo addUser(@RequestBody @Validated AddUserReqVO addUserReqVO) {
-        return ResultInfoUtil.successResult(dcUserService.addUser(addUserReqVO));
+    public ResultInfo addUser(@RequestBody Map<String, Object> map) {
+        AddUserReqVO addUserReqVO = JsonUtil.fromJson(JsonUtil.toJson(map.get("user")), AddUserReqVO.class);
+        SysUserRole[] userRole = JsonUtil.fromJson(JsonUtil.toJson(map.get("userRole")), SysUserRole[].class);
+
+        return ResultInfoUtil.successResult(dcUserService.addUser(addUserReqVO, userRole));
     }
 
     @PostMapping(value = "updateUserState")
@@ -138,4 +150,64 @@ public class DcUserController extends BaseController {
         UserLoginInfo userInfo = this.getUserInfo(session);
         return ResultInfoUtil.successResult(dcUserService.modifyPass(modifyPassReqVO, userInfo.getUserId(), session));
     }
+
+
+    @RequestMapping(value = "get/{userId}")
+    public ResultInfo get(@PathVariable("userId") String userIdStr) {
+        Long userId = null;
+        try {
+            userId = Long.parseLong(userIdStr);
+        } catch (NumberFormatException e) {
+            throw new GlobalException("System error");
+        }
+
+        Map<String, Object> map = dcUserService.getUserInfo(userId);
+
+        return ResultInfoUtil.successResult(map);
+    }
+
+    @PostMapping(value = "editUser")
+    @ResponseBody
+    public ResultInfo editUser(@RequestBody Map<String, Object> map) {
+        DcUser user = JsonUtil.fromJson(JsonUtil.toJson(map.get("user")), DcUser.class);
+        SysUserRole[] userRole = JsonUtil.fromJson(JsonUtil.toJson(map.get("userRole")), SysUserRole[].class);
+
+        if (user.getUserId() == null) {
+            return ResultInfoUtil.errorResult("User information cannot be empty");
+        }
+        if (StringUtils.isEmpty(user.getContactsName())) {
+            return ResultInfoUtil.errorResult("Name cannot be empty");
+        }
+        if (userRole == null || userRole.length == 0) {
+            return ResultInfoUtil.errorResult("The role cannot be empty");
+        }
+        int i = dcUserService.editUserAndRole(user, userRole);
+        if (i > 0) {
+            return ResultInfoUtil.successResult("User information has been modified successfully");
+        }
+        return ResultInfoUtil.errorResult("Failed to modify the user information");
+    }
+
+    @PostMapping(value = "resetPassWord")
+    public ResultInfo resetPassWord(@RequestBody DcUser dcUser) {
+
+
+
+        if (dcUser == null) {
+            return ResultInfoUtil.errorResult("User information cannot be empty");
+        }
+        if (dcUser.getUserId() == null) {
+            return ResultInfoUtil.errorResult("User information cannot be empty");
+        }
+
+
+        int count = dcUserService.resetPassWord(dcUser);
+        if (count > 0) {
+            return ResultInfoUtil.successResult("Your password has been changed successfully");
+        }
+
+        return ResultInfoUtil.errorResult("Failed to reset the password");
+    }
+
+
 }

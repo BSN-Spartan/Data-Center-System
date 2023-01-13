@@ -32,7 +32,7 @@
         from
         dc_node
         where
-        state = 0
+        state = 0 and apply_result_tx_hash is null;
     </select>
 
     <select id="getOneByNodeID" resultMap="BaseResultMap">

@@ -45,9 +45,6 @@ public class CaptchaController {
     @Resource
     private SysDataCenterMapper sysDataCenterMapper;
 
-    @Value("${captchaTimeOut}")
-    private String captchaTimeOut;
-
 
     @PostMapping("get")
     @ApiOperation(value = "Get verification code - user access")
@@ -116,7 +113,7 @@ public class CaptchaController {
 
         Map<String, Object> replaceContentMap = new HashMap<>();
         replaceContentMap.put("captcha_", code.toString());
-        replaceContentMap.put("minutes_", captchaTimeOut);
+        replaceContentMap.put("minutes_", 5);
         commonService.sendEmail(emailMsgCode, replaceContentMap, replaceContentMap, null, email);
     }
 

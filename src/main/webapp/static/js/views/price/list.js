@@ -18,27 +18,30 @@ $(document).ready(function () {
     });
     // reset chainId
     var chainId = 1;
-    $(".add_price_but_").show().click(function () {
+    if (checkButState("add_price_but_")) {
+        $(".add_price_but_").show().click(function () {
 
-        CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", chainId);
-        // get the chain price
-        var nttCount = getChainPrice(chainId);
-        var chainPrice;
-        if (nttCount == 0) {
-            chainPrice="";
-        }else{
-            chainPrice = "Default: 1 USD &#8776; "+ Math.round(1/nttCount)+ " "+ CHAIN_HANDLE.getChainRechargeUnit(chainId);
-        }
-        $("#chainPriceDiv").show();
-        $("#chainPrice").html(chainPrice);
-        $("#rechargeUnit").html(CHAIN_HANDLE.getChainRechargeUnit(chainId));
+            CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", chainId);
+            // get the chain price
+            var nttCount = getChainPrice(chainId);
+            var chainPrice;
+            if (nttCount == 0) {
+                chainPrice="";
+            }else{
+                chainPrice = "Default: 1 USD &#8776; "+ Math.round(1/nttCount)+ " "+ CHAIN_HANDLE.getChainRechargeUnit(chainId);
+            }
+            $("#chainPriceDiv").show();
+            $("#chainPrice").html(chainPrice);
+            $("#rechargeUnit").html(CHAIN_HANDLE.getChainRechargeUnit(chainId));
 
-        datePickerStartToday("#priceStartDate");
-        // startEndNewDatePicker("#priceStartDate", "#priceEndDate");
-        $("#chainSalePrice").val("");
-        $("#priceStartDate").val("");
-        $("#recharge_modal").modal("show");
-    });
+            datePickerStartToday("#priceStartDate");
+            // startEndNewDatePicker("#priceStartDate", "#priceEndDate");
+            $("#chainSalePrice").val("");
+            $("#priceStartDate").val("");
+            $("#recharge_modal").modal("show");
+        });
+    }
+
     $("#rechargeChainType").change(function () {
         chainId = $(this).val();
         // get the chain price
@@ -72,6 +75,8 @@ var getChainPrice = function (chainId) {
         "success": function (data) {
             if (data.code == 1) {
                 nttPrice = data.data;
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 nttPrice = 0;
             }
@@ -159,10 +164,14 @@ let initTableBut = function (data, type, row) {
     let state = row.state;
     let butStr = '';
     if (state === 1) {
-        butStr = butStr + '<button type="button" onclick="audit(' + salePriceId + ')" class="btn-info btn-xs" >Review</button>';
+        if (checkButState("audit_but_")) {
+            butStr = butStr + '<button type="button" onclick="audit(' + salePriceId + ')" class="btn-info btn-xs" >Review</button>';
+        }
     }
-    butStr = butStr + '<button type="button" onclick="detail(' + salePriceId + ')" class="btn-info btn-xs" >Details</button>';
-    return butStr;
+    if (checkButState("detail_but_")) {
+        butStr = butStr + '<button type="button" onclick="detail(' + salePriceId + ')" class="btn-info btn-xs" >Details</button>';
+    }
+    return butStr == "" ? "--" : butStr;
 };
 
 function detail(salePriceId) {
@@ -250,6 +259,8 @@ function submitPrice() {
                     document.querySelector('#recharge_detail_content_').reset();
                     search();
                 });
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

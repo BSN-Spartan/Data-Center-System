@@ -13,7 +13,6 @@ import javax.validation.constraints.Pattern;
 @Data
 public class UpdateKeystorePasswordReqVO {
     @NotEmpty(message = "password can not be empty")
-    @Pattern(regexp = "(^$|^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z\\W]{6,10}$)", message = "The password must contain 6 to 10 letters and numbers")
     private String keystorePassword;
 
 }

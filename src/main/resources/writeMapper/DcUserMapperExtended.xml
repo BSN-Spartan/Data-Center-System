@@ -2,12 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spartan.dc.dao.write.DcUserMapper">
 
-    <select id="getUserByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from dc_user
-        where token = #{token,jdbcType=VARCHAR} order by user_id desc limit 1
-    </select>
 
 
     <select id="queryUserList" parameterType="java.util.Map" resultType="java.util.Map">
@@ -18,6 +12,61 @@
                state,
                DATE_FORMAT(create_time, '%Y-%m-%d %T') createDate
         from dc_user
+        <where>
+            <if test="userName != null and userName != ''">
+                AND contacts_name = #{userName}
+            </if>
+            <if test="state != null">
+                AND state = #{state}
+            </if>
+        </where>
     </select>
+
+    <select id="listByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT DISTINCT
+            r.rsuc_id,
+            r.parent_id,
+            r.rsuc_code,
+            r.rsuc_name,
+            r.rsuc_url,
+            r.priority,
+            r.rsuc_type
+        FROM
+            sys_resource r,
+            sys_role_resource rr,
+            sys_user_role ur,
+            sys_role role
+        WHERE
+            r.rsuc_id = rr.rsuc_id
+          AND rr.role_id = ur.role_id
+          AND ur.role_id = role.role_id
+          AND role.state = 1
+          AND r.state = 1
+          AND ur.user_id = #{userId,jdbcType=BIGINT}
+        ORDER BY
+            r.parent_id ASC,
+            r.priority ASC
+    </select>
+
+    <select id="getUserInfo" parameterType="java.lang.Long" resultType="java.util.Map">
+        select user_id                                 userId,
+               contacts_email                          contactsEmail,
+               contacts_name                           contactsName,
+               contacts_phone                          contactsPhone,
+               state                                   state,
+               salt                                    salt,
+               DATE_FORMAT(create_time, '%Y-%m-%d %T') create_time
+        from dc_user
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertUserRole" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into sys_user_role ( user_id, role_id
+            )
+            values (#{item.userId,jdbcType=BIGINT}, #{item.roleId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
 
 </mapper>

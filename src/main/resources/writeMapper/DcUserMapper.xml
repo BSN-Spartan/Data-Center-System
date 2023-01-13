@@ -27,7 +27,8 @@
         from dc_user
         where user_id = #{userId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.spartan.dc.model.DcUser">
+    <insert id="insert" parameterType="com.spartan.dc.model.DcUser" keyColumn="user_id"
+            keyProperty="userId" useGeneratedKeys="true">
         insert into dc_user (user_id, contacts_email, contacts_name,
                              contacts_phone, state, create_time,
                              salt, password)

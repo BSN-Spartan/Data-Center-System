@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="moduleId" content="index_"/>
-    <meta name="menuId" content="index_"/>
+    <meta name="moduleId" content="config_"/>
+    <meta name="menuId" content="config_"/>
 
     <title></title>
     <link rel="icon" href="" type="image/x-icon">
@@ -133,9 +133,13 @@
                     <div class="col-sm-12 div_title">
                         Keystore Information
                     </div>
-                    <div class="col-sm-12" style="color: red;margin-bottom: 10px">The above information is configured
+                    <div class="col-sm-12" style="margin-bottom: 10px">The above information is configured
                         locally, and we will not obtain any
-                        information from you in any form!
+                        information from you in any form.
+                        <a id="deleteKeystore" onclick="deleteKeystore()" class="btn btn-danger btn-xs waves-effect waves-light"
+                                style="display: none; position: absolute; bottom: 0; right: 14px" title="If you forget the keystore password, you can delete the keystore information and configure it again.">
+                            Delete
+                        </a>
                     </div>
 
                     <div class="col-xs-12">
@@ -186,14 +190,14 @@
                                 <label class="col-sm-2 control-label"></label>
                                 <div class="col-sm-8">
                                     <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">
-                                        Generate
+                                        Save
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="keystore_info_already_exists" style="height:200px;margin-top:100px">
-                        <span class="exists">You must NEVER share the secret key with anyone! The key controls access to your funds!</span>
+                    <div class="col-sm-12" id="keystore_info_already_exists" style="height:200px;">
+                        <span class="exists">You must NEVER share the secret key with anyone! The key controls access to your funds.</span>
                     </div>
                 </div>
             </form>
@@ -203,7 +207,7 @@
                     <div class="col-sm-12 div_title">
                         Keystore Password
                     </div>
-                    <div class="col-sm-12" style="color: red;margin-bottom: 10px">Please enter the keystore password initialized above.
+                    <div class="col-sm-12" style="margin-bottom: 10px">Please enter the keystore password initialized above.
                     </div>
                     <div class="col-xs-12">
                         <hr>
@@ -237,6 +241,56 @@
                                         Save
                                     </button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form class="form-horizontal" id="reminder_config" >
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">
+                        Keystore Password Configuration Reminder
+                    </div>
+                    <div class="col-sm-12" style="margin-bottom: 10px">After restarting the system, a pop-up window will appear when logging in, asking whether to configure the keystore password.
+                    </div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div id="remind_radio" >
+                        <div class="col-sm-12">
+                            <div class="form-group ">
+                                <label for="password" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Enable:</label>
+                                <div class="col-sm-4" style="padding-top:2px;">
+                                    <ul class="list-inline" style="margin-left: 0">
+                                        <li>
+                                            <div class="radio info">
+                                                <input type="radio" name="remindRadio" id="remind1" value="0" checked>
+                                                <label for="remind1">YES</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="radio info">
+                                                <input type="radio" name="remindRadio" id="remind2" value="1">
+                                                <label for="remind2">NO</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" id="btn_Submit_keyStore_password">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">
+                                    Save
+                                </button>
                             </div>
                         </div>
                     </div>

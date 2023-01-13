@@ -107,7 +107,8 @@ public class SendMessageServiceImpl implements SendMessageService {
                     String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.HEADLINE.getCode());
                     String msgTitle = messageTemplate.getMsgTitle();
                     if(StringUtils.isNotBlank(dcCenterName)){
-                        msgTitle = msgTitle.replace("BSN Spartan Data Center",dcCenterName);
+                        msgTitle = dcCenterName + ": " + msgTitle;
+                        //msgTitle = msgTitle.replace("BSN Spartan Data Center",dcCenterName);
                     }
                     SysDataCenter sysDataCenter= sysDataCenterMapper.getSysDataCenter();
                     if (StringUtils.isNotBlank(sysDataCenter.getLogo())) {

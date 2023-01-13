@@ -30,4 +30,6 @@ public interface DcChainService {
     Map<String,String> getGatewayUrl();
 
     List<ChainAccessRespVO.NodeConfig> getNodeConfigs();
+
+    void queryChainPrice() throws Exception;
 }

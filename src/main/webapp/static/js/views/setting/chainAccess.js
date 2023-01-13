@@ -26,6 +26,8 @@ var getDetail = function () {
                 return false;
             } else if (data.code == 1) {
                 chainAccessInfo = data.data;
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             }  else {
                 alert_error_text(data.msg);
                 return false;
@@ -45,8 +47,8 @@ var initInfo = function (data) {
     $("#grpcGateway").val(!data.grpcGatewayUrl?"":data.grpcGatewayUrl);
 
 
-    $("#tps").val(!data.tps?"":data.tps);
-    $("#tpd").val(!data.tpd?"":data.tpd);
+    $("#tps").val(!data.tps?"":initTpsTpd(data.tps));
+    $("#tpd").val(!data.tpd?"":initTpsTpd(data.tpd));
 
     for (var i = 0; i < nodeConfigList.length; i++) {
 
@@ -123,6 +125,14 @@ function selectFrameType1(){
         document.getElementById('accessType12').setAttribute('disabled', 'disabled')
     }
 };
+
+var initTpsTpd = function (data) {
+    if (data == -1) {
+        return "";
+    } else {
+        return data;
+    }
+}
 
 function selectFrameType2(){
     if($("#frameType2").is(":checked")){
@@ -309,10 +319,6 @@ var submitFormResult = function () {
         }
     }
 
-
-
-
-
     var data = new Object();
     data.gatewayUrl = gateway;
     data.wsGatewayUrl = wsGatewayUrl;
@@ -338,6 +344,8 @@ var submitFormResult = function () {
             success: function (data) {
                 if (data.code == 1) {
                     alert_success("","Configuration Successful")
+                } else if (data.code == 3) {
+                    alert_success_login(data.msg);
                 } else {
                     alert_error("","Configuration Failed："+data.msg)
                     return false;

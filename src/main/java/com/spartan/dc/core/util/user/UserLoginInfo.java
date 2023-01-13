@@ -1,5 +1,7 @@
 package com.spartan.dc.core.util.user;
 
+import com.spartan.dc.model.SysResource;
+
 import java.util.List;
 
 /**
@@ -24,6 +26,8 @@ public class UserLoginInfo {
     private int dataCenterType;
 
     private String successUrl = "/index";
+
+    private List<SysResource> resourceList;
 
     public String getUserName() {
         return userName;
@@ -87,5 +91,13 @@ public class UserLoginInfo {
 
     public void setDataCenterType(int dataCenterType) {
         this.dataCenterType = dataCenterType;
+    }
+
+    public List<SysResource> getResourceList() {
+        return this.resourceList;
+    }
+
+    public void setResourceList(final List<SysResource> resourceList) {
+        this.resourceList = resourceList;
     }
 }

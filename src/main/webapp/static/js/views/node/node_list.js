@@ -28,10 +28,14 @@ $(document).ready(function () {
     $(".reset_").click(function () {
         resetSearch(dataTable);
     });
-    $(".net_application_but_").show().click(function () {
-        COMMON_HANDLE.checkPasswordExpired();
-        $("#net_application_modal").modal("show");
-    });
+
+    if (checkButState("net_application_but_")) {
+        $(".net_application_but_").show().click(function () {
+            COMMON_HANDLE.checkPasswordExpired();
+            $("#net_application_modal").modal("show");
+        });
+    }
+
     handleSubmit();
 });
 
@@ -189,6 +193,8 @@ function offNetwork(chainId) {
                     document.querySelector('#net_application_detail_content_').reset();
                     search();
                 });
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -219,6 +225,8 @@ function submitNode() {
                     document.querySelector('#net_application_detail_content_').reset();
                     search();
                 });
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

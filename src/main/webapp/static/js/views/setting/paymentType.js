@@ -9,11 +9,50 @@ var privateKey = "";
 var endpointSecret = "";
 var apiKey = "";
 var apiVersion = "";
+
+var privateKeyState = true;
+var endpointSecretState = true;
+var apiKeyState = true;
+var newPrivateKey = "";
+var newEndpointSecret = "";
+var newApiKey = "";
+
 $(document).ready(function () {
     queryPayCenter();
     queryOngoorder();
     handleSubmit();
+    handleInputParam();
 });
+
+function handleInputParam(){
+    if(!privateKeyState){
+        newPrivateKey = document.getElementById("stripe.privateKey").value;
+        if(newPrivateKey.length==0){
+            document.getElementById("privateKeyImg").setAttribute("style","display: none");
+        }else{
+            document.getElementById("privateKeyImg").setAttribute("style","width: 23px;height: 23px;");
+        }
+    }
+    if(!endpointSecretState){
+        newEndpointSecret = document.getElementById("stripe.endpointSecret").value;
+        if(newEndpointSecret.length==0){
+            document.getElementById("endpointSecretImg").setAttribute("style","display: none");
+        }else{
+            document.getElementById("endpointSecretImg").setAttribute("style","width: 23px;height: 23px;");
+        }
+    }
+    if(!apiKeyState){
+        newApiKey = document.getElementById("coinbase.apiKey").value;
+        if(newApiKey.length==0){
+            document.getElementById("apiKeyImg").setAttribute("style","display: none");
+        }else{
+            document.getElementById("apiKeyImg").setAttribute("style","width: 23px;height: 23px;");
+        }
+    }
+
+
+}
+
 
 function onlinePayTypeFunction() {
     if ($("#onlinePayType").is(":checked")) {
@@ -33,8 +72,12 @@ function onlinePayTypeFunction() {
 
 function stripePayTypeFunction() {
     if ($("#stripePayType").is(":checked")) {
-        document.getElementById('stripe.privateKey').removeAttribute('disabled')
-        document.getElementById('stripe.endpointSecret').removeAttribute('disabled')
+        if(!privateKeyState){
+            document.getElementById('stripe.privateKey').removeAttribute('disabled')
+        }
+        if(!endpointSecretState){
+            document.getElementById('stripe.endpointSecret').removeAttribute('disabled')
+        }
         stripe.enableStatus = 0
         ongoOrderStripeEnableStatus=1
     } else {
@@ -47,7 +90,10 @@ function stripePayTypeFunction() {
 
 function coinbasePayTypeFunction() {
     if ($("#coinbasePayType").is(":checked")) {
-        document.getElementById('coinbase.apiKey').removeAttribute('disabled')
+        if(newApiKey.length==0 || !apiKeyState){
+            document.getElementById('coinbase.apiKey').removeAttribute('disabled')
+        }
+
         document.getElementById('coinbase.apiVersion').removeAttribute('disabled')
         coinbase.enableStatus = 0
         ongoOrderCoinbaseEnableStatus=1
@@ -59,65 +105,78 @@ function coinbasePayTypeFunction() {
     }
 };
 
-function submitTechnicalsupport() {
-    var check = true;
-    var dcPaymentTypeReqVOS = new Array();
+function hideDisplay(elementId,hideContent){
 
-    online.bankName = document.getElementById("online.bankName").value
-    online.bankAccount = document.getElementById("online.bankAccount").value
-    online.bankAddress = document.getElementById("online.bankAddress").value
-    online.swiftCode = document.getElementById("online.swiftCode").value
-    dcPaymentTypeReqVOS.push(online)
+    document.getElementById(elementId).setAttribute('disabled', 'disabled');
 
-    stripe.privateKey = document.getElementById("stripe.privateKey").value
-    stripe.endpointSecret = document.getElementById("stripe.endpointSecret").value
-    dcPaymentTypeReqVOS.push(stripe)
-
-    coinbase.apiKey = document.getElementById("coinbase.apiKey").value
-    coinbase.apiVersion = document.getElementById("coinbase.apiVersion").value
-    dcPaymentTypeReqVOS.push(coinbase)
-
-    for (const dcPaymentTypeReqVO of dcPaymentTypeReqVOS) {
-        if (dcPaymentTypeReqVO.enableStatus == 0) {
-            if (dcPaymentTypeReqVO.payType == 1) {
-                if (stripe.privateKey == null || stripe.endpointSecret == null || stripe.privateKey == '' || stripe.endpointSecret == '') {
-                    alert_error_text("Please complete the Sripe information");
-                    return;
-                }
-            }
-            if (dcPaymentTypeReqVO.payType == 2) {
-                if (coinbase.apiKey == null || coinbase.apiVersion == null || coinbase.apiKey == '' || coinbase.apiVersion == '') {
-                    alert_error_text("Please complete the Coinbase information");
-                    return;
-                }
-            }
-            if (dcPaymentTypeReqVO.payType == 3) {
-                if (online.bankName == null || online.bankAccount == null || online.bankAddress == null || online.swiftCode == null || online.bankName == '' || online.bankAccount == '' || online.bankAddress == '' || online.swiftCode == '') {
-                    alert_error_text("Please complete the Online information");
-                    return;
-                }
-            }
-        }
+    if(hideContent.length>10){
+        const temp = hideContent.substr(6,hideContent.length-10);
+        const displayContent = hideContent.replace(temp,'******************************');
+        return displayContent;
+    }else{
+        return hideContent;
     }
-
-    $.ajax({
-        "type": "post",
-        "url": "/ground/portalconfiguration/update/paycenter",
-        "dataType": "json",
-        "contentType": "application/json",
-        "data": JSON.stringify(dcPaymentTypeReqVOS),
-        "success": function (data) {
-            if (data.code == 1) {
-                alert_success("", data.msg);
-            } else {
-                alert_error("", data.msg);
-            }
-        }
-    });
 
 }
 
+function unHideDisplay(displayContent){
+
+    switch(displayContent){
+        case 'stripe.privateKey':
+            if(privateKeyState){
+                document.getElementById("stripe.privateKey").value = newPrivateKey
+                if ($("#stripePayType").is(":checked")) {
+                    document.getElementById('stripe.privateKey').removeAttribute('disabled', 'disabled')
+                }
+
+                privateKeyState = false;
+                document.getElementById("privateKeyImg").setAttribute("src","/static/images/btn/btn_undisplay_icon.png");
+            }else{
+                newPrivateKey = document.getElementById("stripe.privateKey").value;
+                document.getElementById("stripe.privateKey").value = hideDisplay("stripe.privateKey",newPrivateKey)
+                privateKeyState = true;
+                document.getElementById("privateKeyImg").setAttribute("src","/static/images/btn/btn_display_icon.png");
+            }
+            break;
+        case 'stripe.endpointSecret':
+            if(endpointSecretState){
+                document.getElementById("stripe.endpointSecret").value = newEndpointSecret
+                if ($("#stripePayType").is(":checked")) {
+                    document.getElementById('stripe.endpointSecret').removeAttribute('disabled', 'disabled')
+                }
+                endpointSecretState = false;
+                document.getElementById("endpointSecretImg").setAttribute("src","/static/images/btn/btn_undisplay_icon.png");
+            }else{
+                newEndpointSecret = document.getElementById("stripe.endpointSecret").value;
+                document.getElementById("stripe.endpointSecret").value = hideDisplay("stripe.endpointSecret",newEndpointSecret)
+                endpointSecretState = true;
+                document.getElementById("endpointSecretImg").setAttribute("src","/static/images/btn/btn_display_icon.png");
+
+            }
+            break;
+        case 'coinbase.apiKey':
+            if(apiKeyState){
+                document.getElementById("coinbase.apiKey").value = newApiKey
+                if ($("#coinbasePayType").is(":checked")) {
+                    document.getElementById('coinbase.apiKey').removeAttribute('disabled', 'disabled')
+                }
+                apiKeyState = false;
+                document.getElementById("apiKeyImg").setAttribute("src","/static/images/btn/btn_undisplay_icon.png");
+            }else{
+                newApiKey = document.getElementById("coinbase.apiKey").value;
+                document.getElementById("coinbase.apiKey").value = hideDisplay("coinbase.apiKey",newApiKey)
+                apiKeyState = true;
+                document.getElementById("apiKeyImg").setAttribute("src","/static/images/btn/btn_display_icon.png");
+            }
+            break;
+    }
+}
+
+
 function queryPayCenter() {
+    privateKeyState = true;
+    endpointSecretState = true;
+    apiKeyState = true;
     $.ajax({
         "type": "get",
         "url": "/ground/portalconfiguration/query/paycenter",
@@ -131,10 +190,13 @@ function queryPayCenter() {
                     ongoOrderStripeEnableStatus = datum.enableStatus
                     privateKey = datum.privateKey
                     endpointSecret = datum.endpointSecret
+                    newPrivateKey = datum.privateKey
+                    newEndpointSecret = datum.endpointSecret
                 }
                 if (datum.payType == 2) {
                     ongoOrderCoinbaseEnableStatus = datum.enableStatus
                     apiKey = datum.apiKey
+                    newApiKey = datum.apiKey
                     apiVersion = datum.apiVersion
                 }
             }
@@ -179,7 +241,7 @@ function queryPayCenter() {
                 if (datum.payType == 2) {//Coinbase
                     if (datum.enableStatus == 0) {
                         document.getElementById("coinbasePayType").value = datum.payType
-                        document.getElementById("coinbase.apiKey").value = datum.apiKey
+                        document.getElementById("coinbase.apiKey").value = hideDisplay("coinbase.apiKey",datum.apiKey)
                         document.getElementById("coinbase.apiVersion").value = datum.apiVersion
                         coinbase.enableStatus = datum.enableStatus
                         coinbase.paymentTypeId = datum.paymentTypeId
@@ -188,7 +250,7 @@ function queryPayCenter() {
                     } else {
                         coinbase.paymentTypeId = datum.paymentTypeId
                         document.getElementById("coinbasePayType").value = datum.payType
-                        document.getElementById("coinbase.apiKey").value = datum.apiKey
+                        document.getElementById("coinbase.apiKey").value = hideDisplay("coinbase.apiKey",datum.apiKey)
                         document.getElementById("coinbase.apiVersion").value = datum.apiVersion
                     }
                 }
@@ -196,8 +258,8 @@ function queryPayCenter() {
                 if (datum.payType == 1) {//Stripe
                     if (datum.enableStatus == 0) {
                         document.getElementById("stripePayType").value = datum.payType
-                        document.getElementById("stripe.privateKey").value = datum.privateKey
-                        document.getElementById("stripe.endpointSecret").value = datum.endpointSecret
+                        document.getElementById("stripe.privateKey").value = hideDisplay("stripe.privateKey",datum.privateKey)
+                        document.getElementById("stripe.endpointSecret").value = hideDisplay("stripe.endpointSecret",datum.endpointSecret)
                         stripe.enableStatus = datum.enableStatus
                         stripe.paymentTypeId = datum.paymentTypeId
                         stripe = datum;
@@ -205,8 +267,8 @@ function queryPayCenter() {
                     } else {
                         stripe.paymentTypeId = datum.paymentTypeId
                         document.getElementById("stripePayType").value = datum.payType
-                        document.getElementById("stripe.privateKey").value = datum.privateKey
-                        document.getElementById("stripe.endpointSecret").value = datum.endpointSecret
+                        document.getElementById("stripe.privateKey").value = hideDisplay("stripe.privateKey",datum.privateKey)
+                        document.getElementById("stripe.endpointSecret").value = hideDisplay("stripe.endpointSecret",datum.endpointSecret)
                     }
                 }
 
@@ -229,6 +291,24 @@ function queryPayCenter() {
                 document.getElementById('stripe.privateKey').setAttribute('disabled', 'disabled')
                 document.getElementById('stripe.endpointSecret').setAttribute('disabled', 'disabled')
                 stripe.enableStatus = 1
+            }
+
+            if(newApiKey.length==0){
+                apiKeyState = false;
+                document.getElementById("apiKeyImg").setAttribute("style","display: none");
+                document.getElementById("apiKeyImg").setAttribute("src","/static/images/btn/btn_undisplay_icon.png");
+
+            }
+            if(newPrivateKey.length==0){
+                privateKeyState = false;
+                document.getElementById("privateKeyImg").setAttribute("style","display: none");
+                document.getElementById("privateKeyImg").setAttribute("src","/static/images/btn/btn_undisplay_icon.png");
+
+            }
+            if(newEndpointSecret.length==0){
+                endpointSecretState = false;
+                document.getElementById("endpointSecretImg").setAttribute("style","display: none");
+                document.getElementById("endpointSecretImg").setAttribute("src","/static/images/btn/btn_undisplay_icon.png");
             }
 
 
@@ -309,15 +389,40 @@ var submitQueryForm = function () {
     online.payType = document.getElementById("onlinePayType").value
     dcPaymentTypeReqVOS.push(online)
 
-    stripe.privateKey = document.getElementById("stripe.privateKey").value
-    stripe.endpointSecret = document.getElementById("stripe.endpointSecret").value
+    stripe.privateKey = newPrivateKey;
+    stripe.endpointSecret = newEndpointSecret;
     stripe.payType = document.getElementById("stripePayType").value
     dcPaymentTypeReqVOS.push(stripe)
 
-    coinbase.apiKey = document.getElementById("coinbase.apiKey").value
+    coinbase.apiKey = newApiKey;
     coinbase.apiVersion = document.getElementById("coinbase.apiVersion").value
     coinbase.payType = document.getElementById("coinbasePayType").value
     dcPaymentTypeReqVOS.push(coinbase)
+
+    for (const dcPaymentTypeReqVO of dcPaymentTypeReqVOS) {
+        if (dcPaymentTypeReqVO.enableStatus == 0) {
+            if (dcPaymentTypeReqVO.payType == 1) {
+                if (stripe.privateKey == null || stripe.endpointSecret == null || stripe.privateKey == "" || stripe.endpointSecret == "") {
+                    alert_error_text("Please complete the Sripe information");
+                    return;
+                }
+            }
+            if (dcPaymentTypeReqVO.payType == 2) {
+                if (coinbase.apiKey == null || coinbase.apiVersion == null || coinbase.apiKey == "" || coinbase.apiVersion == "") {
+                    alert_error_text("Please complete the Coinbase information");
+                    return;
+                }
+            }
+            if (dcPaymentTypeReqVO.payType == 3) {
+                if (online.bankName == null || online.bankAccount == null || online.bankAddress == null || online.swiftCode == null || online.bankName == "" || online.bankAccount == "" || online.bankAddress == "" || online.swiftCode == "") {
+                    alert_error_text("Please complete the Online information");
+                    return;
+                }
+            }
+        }
+    }
+
+
     if (ongoOrderStripeEnableStatus == 1 && ongoOrderCoinbaseEnableStatus == 1) {
         $.ajax({
             "type": "post",
@@ -329,6 +434,8 @@ var submitQueryForm = function () {
                 if (data.code == 1) {
                     alert_success("", data.msg);
                     queryPayCenter()
+                } else if (data.code == 3) {
+                    alert_success_login(data.msg);
                 } else {
                     alert_error("", data.msg);
                 }
@@ -348,7 +455,7 @@ var submitQueryForm = function () {
                     }
                 }
                 if (stripeNum == 0 && coinbaseNum == 0) {
-                    submitForm()
+                    submitForm(dcPaymentTypeReqVOS)
                 } else {
                     var stripeText = "";
                     if (coinbaseNum != 0) {
@@ -392,6 +499,8 @@ var submitQueryForm = function () {
                     if (data.code == 1) {
                         alert_success("", data.msg);
                         queryPayCenter()
+                    } else if (data.code == 3) {
+                        alert_success_login(data.msg);
                     } else {
                         alert_error("", data.msg);
                     }
@@ -411,7 +520,7 @@ var submitQueryForm = function () {
                         }
                     }
                     if (stripeNum == 0 && coinbaseNum == 0) {
-                        submitForm()
+                        submitForm(dcPaymentTypeReqVOS)
                     } else {
                         var stripeText = "";
                         if (stripeNum != 0) {
@@ -446,6 +555,8 @@ var submitQueryForm = function () {
                                     if (data.code == 1) {
                                         alert_success("", data.msg);
                                         queryPayCenter()
+                                    } else if (data.code == 3) {
+                                        alert_success_login(data.msg);
                                     } else {
                                         alert_error("", data.msg);
                                     }
@@ -472,7 +583,7 @@ var submitQueryForm = function () {
                     }
                 }
                 if (stripeNum == 0 && coinbaseNum == 0) {
-                    submitForm()
+                    submitForm(dcPaymentTypeReqVOS)
                 } else {
                     var stripeText = "";
                     if (coinbaseNum != 0) {
@@ -519,56 +630,14 @@ var submitQueryForm = function () {
         });
         return;
     } else {
-        submitForm()
+        submitForm(dcPaymentTypeReqVOS)
     }
 
 }
 
-var submitForm = function () {
+var submitForm = function (dcPaymentTypeReqVOS) {
     var stripeNum = 0;
     var coinbaseNum = 0;
-
-    var dcPaymentTypeReqVOS = new Array();
-
-    online.bankName = document.getElementById("online.bankName").value
-    online.bankAccount = document.getElementById("online.bankAccount").value
-    online.bankAddress = document.getElementById("online.bankAddress").value
-    online.swiftCode = document.getElementById("online.swiftCode").value
-    online.payType = document.getElementById("onlinePayType").value
-    dcPaymentTypeReqVOS.push(online)
-
-    stripe.privateKey = document.getElementById("stripe.privateKey").value
-    stripe.endpointSecret = document.getElementById("stripe.endpointSecret").value
-    stripe.payType = document.getElementById("stripePayType").value
-    dcPaymentTypeReqVOS.push(stripe)
-
-    coinbase.apiKey = document.getElementById("coinbase.apiKey").value
-    coinbase.apiVersion = document.getElementById("coinbase.apiVersion").value
-    coinbase.payType = document.getElementById("coinbasePayType").value
-    dcPaymentTypeReqVOS.push(coinbase)
-
-    for (const dcPaymentTypeReqVO of dcPaymentTypeReqVOS) {
-        if (dcPaymentTypeReqVO.enableStatus == 0) {
-            if (dcPaymentTypeReqVO.payType == 1) {
-                if (stripe.privateKey == null || stripe.endpointSecret == null || stripe.privateKey == "" || stripe.endpointSecret == "") {
-                    alert_error_text("Please complete the Sripe information");
-                    return;
-                }
-            }
-            if (dcPaymentTypeReqVO.payType == 2) {
-                if (coinbase.apiKey == null || coinbase.apiVersion == null || coinbase.apiKey == "" || coinbase.apiVersion == "") {
-                    alert_error_text("Please complete the Coinbase information");
-                    return;
-                }
-            }
-            if (dcPaymentTypeReqVO.payType == 3) {
-                if (online.bankName == null || online.bankAccount == null || online.bankAddress == null || online.swiftCode == null || online.bankName == "" || online.bankAccount == "" || online.bankAddress == "" || online.swiftCode == "") {
-                    alert_error_text("Please complete the Online information");
-                    return;
-                }
-            }
-        }
-    }
 
     if ((stripe.privateKey != privateKey || stripe.endpointSecret != endpointSecret) && (coinbase.apiKey != apiKey || coinbase.apiVersion != apiVersion)){
         $.ajax({
@@ -713,6 +782,8 @@ var submitForm = function () {
                             if (data.code == 1) {
                                 alert_success("", data.msg);
                                 queryPayCenter()
+                            } else if (data.code == 3) {
+                                alert_success_login(data.msg);
                             } else {
                                 alert_error("", data.msg);
                             }
@@ -724,7 +795,8 @@ var submitForm = function () {
         });
 
 
-    } else if (coinbase.apiKey != apiKey || coinbase.apiVersion != apiVersion) {
+    }
+    else if (coinbase.apiKey != apiKey || coinbase.apiVersion != apiVersion) {
         $.ajax({
             "type": "get",
             "url": "/ground/portalconfiguration/query/ongoorder",
@@ -769,6 +841,8 @@ var submitForm = function () {
                             if (data.code == 1) {
                                 alert_success("", data.msg);
                                 queryPayCenter()
+                            } else if (data.code == 3) {
+                                alert_success_login(data.msg);
                             } else {
                                 alert_error("", data.msg);
                             }
@@ -787,6 +861,8 @@ var submitForm = function () {
             "success": function (data) {
                 if (data.code == 1) {
                     alert_success("", data.msg);
+                } else if (data.code == 3) {
+                    alert_success_login(data.msg);
                 } else {
                     alert_error("", data.msg);
                 }

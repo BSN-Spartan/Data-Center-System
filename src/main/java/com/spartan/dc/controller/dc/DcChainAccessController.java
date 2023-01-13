@@ -4,13 +4,11 @@ import com.spartan.dc.config.interceptor.RequiredPermission;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
+import com.spartan.dc.core.vo.req.DcChainAccessReqVO;
 import com.spartan.dc.service.DcChainAccessService;
-import com.spartan.dc.service.DcChainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Map;
@@ -31,6 +29,12 @@ public class DcChainAccessController {
         Map<String, Object> map = dcChainAccessService.queryList(dataTable);
 
         return ResultInfoUtil.successResult(map);
+    }
+
+    @PostMapping("update/accessinformation")
+    @ResponseBody
+    public ResultInfo updateAccessInformation(@Validated @RequestBody DcChainAccessReqVO dcChainAccessReqVO) {
+        return ResultInfoUtil.successResult(dcChainAccessService.updateAccessInformation(dcChainAccessReqVO));
     }
 
 }

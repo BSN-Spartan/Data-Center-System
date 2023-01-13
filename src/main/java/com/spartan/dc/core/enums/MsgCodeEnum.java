@@ -19,6 +19,8 @@ public enum MsgCodeEnum {
     KEY_STORE_PASSWORD_RESET("keystorePasswordReset", "keystorePasswordReset"),
 
     KEY_STORE_PASSWORD_CONFIG("keystorePasswordConfig", "keystorePasswordConfig"),
+    GAS_BALANCE_REMINDER_CONFIG("gasBalanceReminderConfig", "gasBalanceReminderConfig"),
+    NTT_BALANCE_REMINDER_CONFIG("nttBalanceReminderConfig", "nttBalanceReminderConfig"),
 
     ORDER_SUBMITTED_OFFLINE("order_submit_offline_", "Remittance order placed successfully"),
     GAS_RECHARGE_SUCCESS("gas_recharge_success_", "Gas recharge success");

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysRoleResourceMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.SysRoleResource">
+    <id column="role_resource_id" jdbcType="BIGINT" property="roleResourceId" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="rsuc_id" jdbcType="BIGINT" property="rsucId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_resource_id, role_id, rsuc_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role_resource
+    where role_resource_id = #{roleResourceId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_role_resource
+    where role_resource_id = #{roleResourceId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.SysRoleResource">
+    insert into sys_role_resource (role_resource_id, role_id, rsuc_id
+      )
+    values (#{roleResourceId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{rsucId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.SysRoleResource">
+    insert into sys_role_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleResourceId != null">
+        role_resource_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="rsucId != null">
+        rsuc_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleResourceId != null">
+        #{roleResourceId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="rsucId != null">
+        #{rsucId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.SysRoleResource">
+    update sys_role_resource
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="rsucId != null">
+        rsuc_id = #{rsucId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where role_resource_id = #{roleResourceId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.SysRoleResource">
+    update sys_role_resource
+    set role_id = #{roleId,jdbcType=BIGINT},
+      rsuc_id = #{rsucId,jdbcType=BIGINT}
+    where role_resource_id = #{roleResourceId,jdbcType=BIGINT}
+  </update>
+</mapper>

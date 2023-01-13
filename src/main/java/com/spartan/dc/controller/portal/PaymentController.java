@@ -112,7 +112,7 @@ public class PaymentController extends BaseController {
     }
 
     @PostMapping("coinbase/callback")
-    @ApiOperation("coinbase支付回调")
+    @ApiOperation("Coinbase payment callback")
     @ApiIgnore
     public ResultInfo<Boolean> coinbaseCallback(@RequestBody String json) {
         boolean callback = paymentService.coinbaseCallback(json);

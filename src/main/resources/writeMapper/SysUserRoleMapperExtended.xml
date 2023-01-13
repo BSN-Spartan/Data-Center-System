@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysUserRoleMapper">
+
+    <insert id="insertUserRole" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into sys_user_role ( user_id, role_id
+            )
+            values (#{item.userId,jdbcType=BIGINT}, #{item.roleId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="removeByUserId" parameterType="java.lang.Long">
+        delete from sys_user_role
+        where user_id = #{userId,jdbcType=BIGINT}
+    </delete>
+</mapper>

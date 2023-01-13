@@ -24,6 +24,8 @@ var getDetail = function () {
                 return false;
             } else if (data.code == 1) {
                 techSupportInfo = data.data;
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error_text(data.msg);
             }
@@ -139,6 +141,8 @@ var submitFormResult = function () {
         success: function (data) {
             if (data.code == 1) {
                 alert_success("", "Configuration successful")
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", "Configuration Failed：" + data.msg)
             }

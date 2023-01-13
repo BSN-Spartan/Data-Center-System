@@ -70,7 +70,6 @@ public class ChainAccessServicelmpl implements ChainAccessService {
         // Gets the data center configuration information table
         DcSystemConf tpsConf = dcSystemConfMapper.querySystemConfByCode(SystemConfCodeEnum.TPS.getName());
         DcSystemConf tpdConf = dcSystemConfMapper.querySystemConfByCode(SystemConfCodeEnum.TPD.getName());
-        // tps、tpd是否有修改
         Boolean notifyState = true;
         Integer notifyTps = 0;
         Integer notifyTpd = 0;

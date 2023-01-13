@@ -41,6 +41,9 @@ $(document).ready(function () {
     // init top up url
     $("#top_up_ntt").attr('href', COMMON_HANDLE.FOUNDATION_WEBSITE_);
     $("#submit_foundation").attr('href', COMMON_HANDLE.ENERGY_RECHARGE_);
+
+    showReminder();
+    handleReminderSubmit();
 });
 var initNodeList = function () {
     dataTable = $(node_list_).DataTable({
@@ -118,6 +121,8 @@ let getBlockNumber = function (data, type, row, index) {
             "success": function (res) {
                 if (res.code == 1) {
                     $(node_list_).find("tr:eq(" + index.row + ")").find("td:eq(" + index.col + ")").html(res.data == null ? "--" : res.data);
+                } else if (data.code == 3) {
+                    alert_success_login(data.msg);
                 } else {
                     $(node_list_).find("tr:eq(" + index.row + ")").find("td:eq(" + index.col + ")").html("--");
                 }
@@ -221,6 +226,8 @@ function initTxSum() {
             if (data.code == 1) {
                 $("#flowIn").html(data.data.flowIn);
                 $("#flowOut").html(data.data.flowOut);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -240,6 +247,8 @@ function initAccountInfo() {
                 $("#nttWallet_input").html(address);
                 getNttBalance(address);
                 getGasBalance(address);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -260,6 +269,8 @@ function getNttBalance(address) {
         "success": function (data) {
             if (data.code == 1) {
                 $("#ntt").html(data.data.nttBalance);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -287,6 +298,8 @@ function getGasBalance(address) {
                     $("#metaData_tx_but").attr("disabled", false);
                 }
 
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -306,6 +319,8 @@ function initNttReward() {
             if (data.code == 1) {
                 $("#nttReward").html(data.data.nttCount);
                 $("#nttRewardTime").html(data.data.txTime);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -383,6 +398,8 @@ function submitMetaDataTx() {
                 var MetaTransfer_TYPEHASH = data.data.metaTransferTypeHash;
                 var sign = getMetaTransferDigest(dcAcc, receiver, engAmt.toString(), chainID, nonce, deadline, DOMAIN_SEPARATOR, MetaTransfer_TYPEHASH);
                 metaTxSign(data.data, sign);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -415,6 +432,8 @@ function metaTxSign(p, sign) {
                 $("#mataTxSignature").val(sign)
                 $("#metaTxSign_div").hide()
                 $("#metaTxSign_div_from").css("display", "block")
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -452,4 +471,79 @@ function getMetaTransferDigest(
             ]
         )
     )
+}
+
+function showReminder() {
+    $.ajax({
+        type: "post",
+        url: "/wallet/promptInputKeystore",
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+            if (data.code == 1) {
+                if (data.data) {
+                    $("#reminder_modal").modal("show");
+                }
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
+            } else {
+                alert_error("", data.msg);
+            }
+        }
+    });
+}
+
+let handleReminderSubmit = function () {
+    $('#reminder_content_').validate({
+        errorElement: 'span',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        rules: {
+
+        },
+        messages: {
+
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        success: function (label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr('id') == 'chainSalePrice') {
+                element.parent('div').parent('div').append(error);
+            } else {
+                element.parent('div').append(error);
+            }
+        },
+        submitHandler: function (form) {
+            submitReminder();
+        }
+    });
+};
+
+function submitReminder() {
+    var show = $("#showReminder").prop("checked");
+    var whetherHint = show ? 1 : 0;
+    var data = {};
+    data.whetherHint = whetherHint;
+    $.ajax({
+        type: "post",
+        url: "/wallet/setWhetherHintImport",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function (data) {
+            if (data.code == 1) {
+                $("#reminder_modal").modal("hide");
+                REQ_HANDLE_.location_("/config");
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
+            } else {
+                alert_error("", data.msg);
+            }
+        }
+    });
 }

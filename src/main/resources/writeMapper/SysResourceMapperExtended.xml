@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysResourceMapper">
+
+
+
+  <select id="listResourceByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+      r.rsuc_id, r.parent_id, r.rsuc_code, r.rsuc_name, r.rsuc_url, r.priority, r.rsuc_type, r.state
+    from sys_resource r,sys_role_resource rr
+    where r.rsuc_id = rr.rsuc_id  and rr.role_id = #{roleId,jdbcType=BIGINT} and r.state = 1
+  </select>
+
+  <select id="listAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_resource
+    where state = 1 order by parent_id asc, priority asc
+  </select>
+
+  <select id="listByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT DISTINCT
+      r.rsuc_id,
+      r.parent_id,
+      r.rsuc_code,
+      r.rsuc_name,
+      r.rsuc_url,
+      r.priority,
+      r.rsuc_type
+    FROM
+      sys_resource r,
+      sys_role_resource rr,
+      sys_user_role ur,
+      sys_role role
+    WHERE
+      r.rsuc_id = rr.rsuc_id
+      AND rr.role_id = ur.role_id
+      AND ur.role_id = role.role_id
+      AND role.state = 1
+      AND r.state = 1
+      AND ur.user_id = #{userId,jdbcType=BIGINT}
+    ORDER BY
+      r.parent_id ASC,
+      r.priority ASC
+  </select>
+
+</mapper>

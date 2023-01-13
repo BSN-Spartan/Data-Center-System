@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 @Data
 public class DcPaymentRefundExcelEntity {
 
-    @Alias("Refund Order No")
+    @Alias("Refund Order No.")
     private String tradeNo;
 
-    @Alias("Refund Transaction No")
+    @Alias("Refund Transaction No.")
     private String  otherTradeNo;
 
-    @Alias("Order No")
+    @Alias("Order No.")
     private String dprTradeNo;
 
     @Alias("Wallet Address")

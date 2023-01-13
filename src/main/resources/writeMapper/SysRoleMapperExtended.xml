@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysRoleMapper">
+
+  <select id="listUserRole" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+      role.role_id, role.role_code, role.role_name
+    FROM
+    sys_role role,
+    sys_user_role user_role
+    WHERE
+    role.role_id = user_role.role_id
+    AND user_role.user_id = #{userId}
+  </select>
+
+  <select id="queryRoleList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_role
+    where 1 = 1
+    <if test="roleName != null and roleName != ''">
+      AND role_name like CONCAT('%',#{roleName},'%')
+    </if>
+    <if test="state != null">
+      AND state = #{state,jdbcType=SMALLINT}
+    </if>
+  </select>
+
+
+  <select id="getRoleById" parameterType="java.lang.Long" resultType="java.util.Map">
+    select
+      role_id roleId, role_code roleCode, role_name roleName, description description, DATE_FORMAT(create_date,'%Y-%m-%d %T') createDate, state state
+    from sys_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="listAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_role
+    where state = 1
+  </select>
+
+
+  <select id="countByRoleName" parameterType="com.spartan.dc.model.SysRole" resultType="java.lang.Long">
+    select
+    count(1)
+    from sys_role
+    where role_name = #{roleName,jdbcType=VARCHAR}
+    <if test="roleId != null">
+      and role_id != #{roleId,jdbcType=BIGINT}
+    </if>
+  </select>
+
+  <select id="selectNewRoleCode" resultType="java.lang.String">
+    SELECT role_code
+    FROM sys_role
+    ORDER BY role_code desc limit 1
+  </select>
+
+
+  <insert id="insertRole" parameterType="com.spartan.dc.model.SysRole"  keyColumn="role_id"
+          keyProperty="roleId" useGeneratedKeys="true">
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleCode != null">
+        role_code,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

@@ -76,6 +76,8 @@ var submitForm = function () {
                 alert_success("", "Changed successfully", function () {
                     REQ_HANDLE_.location_("/");
                 });
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

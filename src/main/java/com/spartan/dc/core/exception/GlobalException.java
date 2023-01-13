@@ -1,7 +1,6 @@
 package com.spartan.dc.core.exception;
 
 
-
 public class GlobalException extends RuntimeException {
 
     private int code;
@@ -13,7 +12,6 @@ public class GlobalException extends RuntimeException {
         this.msg = message;
         this.code = -1;
     }
-
     public int getCode() {
         return code;
     }

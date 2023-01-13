@@ -1,7 +1,6 @@
 package com.spartan.dc.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.google.common.collect.Lists;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
@@ -110,7 +109,7 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
     public Map<String, Object> queryDcPaymentOrder(DataTable<Map<String, Object>> dataTable) {
         PageHelper.startPage(dataTable.getParam().getPageIndex(), dataTable.getParam().getPageSize());
         List<Map<String, Object>> dcPaymentOrderRespVOS = dcPaymentOrderMapper.queryDcPaymentOrder(dataTable.getCondition());
-        DecimalFormat format =new DecimalFormat("###,##0.00");
+        DecimalFormat format = new DecimalFormat("###,##0.00");
         for (Map<String, Object> dcPaymentOrderRespVO : dcPaymentOrderRespVOS) {
             dcPaymentOrderRespVO.put("payAmount", format.format(dcPaymentOrderRespVO.get("payAmount")));
         }
@@ -120,7 +119,7 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
     @Override
     public DcPaymentOrderDetailsRespVO queryDcPaymentOrderDetails(Long orderId) {
         DcPaymentOrderDetailsRespVO dcPaymentOrderDetailsRespVO = dcPaymentOrderMapper.queryDcPaymentOrderDetails(orderId);
-        DecimalFormat format =new DecimalFormat("###,##0.00");
+        DecimalFormat format = new DecimalFormat("###,##0.00");
         dcPaymentOrderDetailsRespVO.setCurrency(format.format(dcPaymentOrderDetailsRespVO.getPayAmount()) + " " + dcPaymentOrderDetailsRespVO.getCurrency());
         dcPaymentOrderDetailsRespVO.setGasCount(dcPaymentOrderDetailsRespVO.getGasCount() + " " + dcPaymentOrderDetailsRespVO.getRechargeUnit());
         return dcPaymentOrderDetailsRespVO;
@@ -143,7 +142,7 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
             paymentOrderExcelEntity.setIsRefund(memberPaymentOrderExtended.getIsRefund() == null ? "" : DcPaymentOrderIsRefundEnum.getEnumByCode(memberPaymentOrderExtended.getIsRefund()).getName());
             paymentOrderExcelEntityList.add(paymentOrderExcelEntity);
         });
-        if (CollectionUtils.isEmpty(paymentOrderExcelEntityList)){
+        if (CollectionUtils.isEmpty(paymentOrderExcelEntityList)) {
             paymentOrderExcelEntityList.add(new DcPaymentOrderExcelEntity());
         }
         HutoolExcelUtils.writeExcel("Order List", paymentOrderExcelEntityList, response);
@@ -153,7 +152,7 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
     public Map<String, Object> queryDcPaymentRefund(DataTable<Map<String, Object>> dataTable) {
         PageHelper.startPage(dataTable.getParam().getPageIndex(), dataTable.getParam().getPageSize());
         List<Map<String, Object>> dcPaymentOrderRespVOS = dcPaymentOrderMapper.queryDcPaymentRefund(dataTable.getCondition());
-        DecimalFormat format =new DecimalFormat("###,##0.00");
+        DecimalFormat format = new DecimalFormat("###,##0.00");
         for (Map<String, Object> dcPaymentOrderRespVO : dcPaymentOrderRespVOS) {
             dcPaymentOrderRespVO.put("payAmount", format.format(dcPaymentOrderRespVO.get("payAmount")));
         }
@@ -175,7 +174,7 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
             paymentOrderExcelEntity.setRefundState(memberPaymentOrderExtended.getRefundState() == null ? "" : DcPaymentRefundRefundStateEnum.getEnumByCode(memberPaymentOrderExtended.getRefundState()).getName());
             paymentRefundExcelEntityList.add(paymentOrderExcelEntity);
         });
-        if (CollectionUtils.isEmpty(paymentRefundExcelEntityList)){
+        if (CollectionUtils.isEmpty(paymentRefundExcelEntityList)) {
             paymentRefundExcelEntityList.add(new DcPaymentRefundExcelEntity());
         }
         HutoolExcelUtils.writeExcel("Refund List", paymentRefundExcelEntityList, response);
@@ -265,18 +264,18 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
 
     @Override
     public ResultInfo updatePayCenter(List<DcPaymentTypeReqVO> dcPaymentTypeReqVOS) {
-        List<DcPaymentTypeReqVO> dcSystemConfReqVOList = dcPaymentTypeReqVOS.stream()
-                .filter(dcPaymentTypeReqVO -> dcPaymentTypeReqVO.getEnableStatus().equals(DcPaymentTypeEnableStatusEnum.ENABLE.getCode()))
-                .collect(Collectors.toList());
-        List<DcPaymentTypeReqVO> payEnableStatusList = dcPaymentTypeReqVOS.stream()
-                .filter(dcPaymentTypeReqVO -> dcPaymentTypeReqVO.getEnableStatus().equals(DcPaymentTypeEnableStatusEnum.DISABLE.getCode()))
-                .collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(dcSystemConfReqVOList)) {
-            dcPaymentTypeService.updatePayCenter(dcSystemConfReqVOList);
+//        List<DcPaymentTypeReqVO> dcSystemConfReqVOList = dcPaymentTypeReqVOS.stream()
+//                .filter(dcPaymentTypeReqVO -> dcPaymentTypeReqVO.getEnableStatus().equals(DcPaymentTypeEnableStatusEnum.ENABLE.getCode()))
+//                .collect(Collectors.toList());
+//        List<DcPaymentTypeReqVO> payEnableStatusList = dcPaymentTypeReqVOS.stream()
+//                .filter(dcPaymentTypeReqVO -> dcPaymentTypeReqVO.getEnableStatus().equals(DcPaymentTypeEnableStatusEnum.DISABLE.getCode()))
+//                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(dcPaymentTypeReqVOS)) {
+            dcPaymentTypeService.updatePayCenter(dcPaymentTypeReqVOS);
         }
-        if (!CollectionUtils.isEmpty(payEnableStatusList)) {
-            dcPaymentTypeService.updatePayEnableStatus(payEnableStatusList);
-        }
+//        if (!CollectionUtils.isEmpty(payEnableStatusList)) {
+//            dcPaymentTypeService.updatePayEnableStatus(payEnableStatusList);
+//        }
         return ResultInfoUtil.successResult("Success");
     }
 
@@ -296,11 +295,11 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
         List<DcSystemConfRespVO> dcSystemConfRespVOS = dcSystemConfMapper.querySystemConf(null);
         DcSystemConfRespVO dcSystemConfRespVO = new DcSystemConfRespVO();
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
-        if (!Objects.isNull(sysDataCenter) && StringUtils.isNotBlank(sysDataCenter.getLogo())){
+        if (!Objects.isNull(sysDataCenter) && StringUtils.isNotBlank(sysDataCenter.getLogo())) {
             dcSystemConfRespVO.setConfCode(SystemConfCodeEnum.LOGO.getCode());
             dcSystemConfRespVO.setConfValue(sysDataCenter.getLogo());
             dcSystemConfRespVOS.add(dcSystemConfRespVO);
-        }else {
+        } else {
             dcSystemConfRespVO.setConfCode(SystemConfCodeEnum.LOGO.getCode());
             dcSystemConfRespVO.setConfValue(iconBase64);
             dcSystemConfRespVOS.add(dcSystemConfRespVO);
@@ -311,5 +310,35 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
     @Override
     public List<DcPaymentOrderRespVO> onGoOrder() {
         return dcPaymentOrderMapper.onGoOrder(DcPaymentTypePayTypeEnum.NCLT.getCode(), DcPaymentTypePayTypeEnum.STABLECOIN.getCode(), DcPaymentOrderPayStateEnum.DURING_IN_PAYMENT.getCode());
+    }
+
+    @Override
+    public ResultInfo updateTreaty(SysDataCenterTreatyReqVO sysDataCenterTreatyReqVO) {
+        SysDataCenter data = sysDataCenterMapper.getSysDataCenter();
+        if (Objects.nonNull(data)) {
+            DcSystemConfReqVO dcSystemConfReqVO = new DcSystemConfReqVO();
+            dcSystemConfReqVO.setConfCode(SystemConfCodeEnum.TREATY.getCode());
+            dcSystemConfReqVO.setConfValue(sysDataCenterTreatyReqVO.getTreaty());
+            ArrayList<DcSystemConfReqVO> dcSystemConfReqVOList = new ArrayList<>();
+            dcSystemConfReqVOList.add(dcSystemConfReqVO);
+            dcSystemConfMapper.updateDcSystemConf(dcSystemConfReqVOList);
+
+
+            return ResultInfoUtil.successResult("Success");
+        }
+        return ResultInfoUtil.errorResult("Data center information is not configured");
+    }
+
+    @Override
+    public String queryTreaty() {
+        SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
+        if (Objects.isNull(sysDataCenter)) {
+            throw new GlobalException("Data center information is not configured");
+        }
+        List<DcSystemConfRespVO> dcSystemConfRespVOS = dcSystemConfMapper.querySystemConf(DcSystemConfTypeEnum.TREATY.getCode());
+        if (dcSystemConfRespVOS.size()==0){
+            throw new GlobalException("Terms of service content not initialized");
+        }
+        return dcSystemConfRespVOS.get(0).getConfValue();
     }
 }

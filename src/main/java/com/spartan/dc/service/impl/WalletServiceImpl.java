@@ -49,19 +49,16 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public String generateNewWalletFile(String password) throws InvalidAlgorithmParameterException, CipherException, NoSuchAlgorithmException, IOException, NoSuchProviderException {
-        if (Strings.isEmpty(walletFilePath)) {
-            throw new GlobalException("Wallet file path is not configured");
-        }
-        FileUtil.createOrExistsDir(new File(walletFilePath));
+        // create if the file does not exist
+        checkFilepathExists();
+
         return WalletUtils.generateLightNewWalletFile(password, new File(walletFilePath));
     }
 
     @Override
     public String generateNewWalletFile(String password, String privateKey) throws CipherException, IOException {
-
-        if (Strings.isEmpty(walletFilePath)) {
-            throw new GlobalException("Wallet file path is not configured");
-        }
+        // create if the file does not exist
+        checkFilepathExists();
 
         // private key
         Credentials credentials = Credentials.create(privateKey);
@@ -105,6 +102,12 @@ public class WalletServiceImpl implements WalletService {
         return walletFileName.size() > 0;
     }
 
+    @Override
+    public boolean deleteWallet() {
+        FileUtil.deleteFolderFile(walletFilePath, false);
+        return true;
+    }
+
     private static String generateWalletFile(
             String password, Credentials credentials, File destinationDirectory)
             throws CipherException, IOException {
@@ -120,5 +123,15 @@ public class WalletServiceImpl implements WalletService {
         SpartanGovern.setNonceManagerAddress(credentials.getAddress());
 
         return fileName;
+    }
+
+    /**
+     * Create if the file does not exist
+     */
+    private void checkFilepathExists(){
+        if (Strings.isEmpty(walletFilePath)) {
+            throw new GlobalException("Wallet file path is not configured");
+        }
+        FileUtil.createOrExistsDir(new File(walletFilePath));
     }
 }

@@ -96,6 +96,7 @@ public class GasRechargeResultTask {
             if (Integer.toString(rechgInfo.getStatus()).equals(RechargeStateEnum.SUCCESSFUL.getCode().toString())) {
                 dcGasRechargeRecord.setRechargeState(RechargeStateEnum.SUCCESSFUL.getCode());
                 dcGasRechargeRecord.setUpdateTime(new Date());
+                dcGasRechargeRecord.setRechargeTime(new Date());
                 dcGasRechargeRecord.setNtt(rechgInfo.getNttAmt());
                 dcGasRechargeRecord.setRechargeResult(dcGasRechargeRecord.getTxHash());
 

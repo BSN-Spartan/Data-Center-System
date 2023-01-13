@@ -69,4 +69,16 @@ public class PortalConfigurationController {
         return ResultInfoUtil.successResult(dcbackGroundSystemService.onGoOrder());
     }
 
+    @PostMapping(value = "update/treaty")
+    @ApiOperation("Modify the terms of service")
+    public ResultInfo updateTreaty(@RequestBody SysDataCenterTreatyReqVO sysDataCenterTreatyReqVO) {
+        return ResultInfoUtil.successResult(dcbackGroundSystemService.updateTreaty(sysDataCenterTreatyReqVO));
+    }
+
+    @GetMapping(value = "query/treaty")
+    @ApiOperation("Query the terms of service")
+    public ResultInfo<String> queryTreaty() {
+        return ResultInfoUtil.successResult(dcbackGroundSystemService.queryTreaty());
+    }
+
 }

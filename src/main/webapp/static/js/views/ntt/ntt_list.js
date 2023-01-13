@@ -31,6 +31,8 @@ function initAccountInfo() {
                 $("#accountAddress").html(address);
 
                 getNttBalance(address);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -51,6 +53,8 @@ function getNttBalance(address) {
         "success": function (data) {
             if (data.code == 1) {
                 $("#nttBalance").html(data.data.nttBalance);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

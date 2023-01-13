@@ -1,11 +1,11 @@
 package com.spartan.dc.task;
 
-import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.reddate.spartan.SpartanSdkClient;
 import com.reddate.spartan.dto.wuhanchain.ReqJsonWithOfflineHashBean;
-import com.spartan.dc.core.dto.portal.SendMessageReqVO;
+import com.reddate.spartan.dto.wuhanchain.TransactionsBean;
 import com.spartan.dc.core.dto.task.req.GasRechargeReqVO;
 import com.spartan.dc.core.enums.ChainTypeEnum;
 import com.spartan.dc.core.enums.MsgCodeEnum;
@@ -20,7 +20,6 @@ import com.spartan.dc.core.enums.RechargeSubmitStateEnum;
 import com.spartan.dc.model.DcGasRechargeRecord;
 import com.spartan.dc.model.DcPaymentOrder;
 import com.spartan.dc.model.SysDataCenter;
-import com.spartan.dc.service.SendMessageService;
 import com.spartan.dc.service.WalletService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
-import sun.security.util.Password;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -46,7 +44,7 @@ import static com.spartan.dc.core.util.common.CacheManager.PASSWORD_CACHE_KEY;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "task", name = "enabled", havingValue = "true")
-public class GasRechargeRecordSubmitTask {
+public class GasRechargeRecordSubmitTask extends BaseTask {
 
     private final static Logger LOG = LoggerFactory.getLogger(GasRechargeRecordSubmitTask.class);
 
@@ -62,8 +60,6 @@ public class GasRechargeRecordSubmitTask {
     @Autowired
     private WalletService walletService;
 
-    @Autowired
-    private SendMessageService sendMessageService;
 
     @Resource
     private DcPaymentOrderMapper dcPaymentOrderMapper;
@@ -94,20 +90,9 @@ public class GasRechargeRecordSubmitTask {
         // If the keystore password is empty，Notify the data center by email
         if (StringUtils.isBlank(CacheManager.get(PASSWORD_CACHE_KEY)) && (passwordReminderNo == 0)) {
             LOG.info("Send keystore email......");
-            if (StringUtils.isBlank(sysDataCenter.getContactsEmail())) {
-                LOG.error(String.format("Send keystore email error,dc_code:%s,is empty.", sysDataCenter.getDcCode()));
-                return;
-            }
-            // Assemble mail parameters
-            Map<String, Object> replaceContentMap = new HashMap<>();
-            replaceContentMap.put("dc_code_", sysDataCenter.getDcCode());
 
-            // Recipient
-            List<String> receivers = Lists.newArrayList();
-            receivers.add(sysDataCenter.getContactsEmail());
-
-            // Send email
-            sendEmail(MsgCodeEnum.KEY_STORE_PASSWORD_CONFIG.getCode(), replaceContentMap, receivers);
+            // keystore password is empty Send email
+            emailReminder(sysDataCenter, MsgCodeEnum.KEY_STORE_PASSWORD_CONFIG, null);
             passwordReminderNo = 1;
             return;
         } else if (StringUtils.isBlank(CacheManager.get(PASSWORD_CACHE_KEY))) {
@@ -124,7 +109,7 @@ public class GasRechargeRecordSubmitTask {
             gasRechargeReqVO.setEngAmt(dcGasRechargeRecord.getGas().toBigInteger());
 
             String chargeChainAccountAddress = dcGasRechargeRecord.getChainAddress();
-            if (Objects.equals(ChainTypeEnum.COSMOS.getCode().longValue(),dcGasRechargeRecord.getChainId())) {
+            if (Objects.equals(ChainTypeEnum.COSMOS.getCode().longValue(), dcGasRechargeRecord.getChainId())) {
                 if (dcGasRechargeRecord.getChainAddress().startsWith("0x")) {
                     // Ox transition iaa
                     chargeChainAccountAddress = Bech32Utils.hexToBech32(COSMOS_ADDRESS_PREFIX, chargeChainAccountAddress.substring(2));
@@ -137,22 +122,48 @@ public class GasRechargeRecordSubmitTask {
             DcPaymentOrder selectPaymentOrder = Objects.isNull(dcGasRechargeRecord.getOrderId()) ? null : dcPaymentOrderMapper.selectByPrimaryKey(dcGasRechargeRecord.getOrderId());
             DcPaymentOrder dcPaymentOrder = new DcPaymentOrder();
             try {
+                // tx_hash not empty. You need to query whether the transaction has been submitted to the chain through hash
+                // state = 1 and recharge_state 3 (Newly submitted transactions), submitted directly to the chain
+                if (StringUtils.isNotEmpty(dcGasRechargeRecord.getTxHash())) {
+                    TransactionsBean tx = spartanSdkClient.baseService.getTransactionByHash(dcGasRechargeRecord.getTxHash());
+                    if (Objects.nonNull(tx)) {
+                        continue;
+                    }
+                }
                 gasRecharge(gasRechargeReqVO, dcGasRechargeRecord);
             } catch (Exception e) {
                 LOG.error("Task: Exception of Gas Credit top-up submission: {}", e.getMessage());
-                dcGasRechargeRecord.setRechargeResult(e.getMessage());
-                dcGasRechargeRecord.setState(RechargeSubmitStateEnum.SUBMISSION_FAILED.getCode());
-                dcGasRechargeRecord.setRechargeState(RechargeStateEnum.FAILED.getCode());
-                dcGasRechargeRecordMapper.updateByPrimaryKeySelective(dcGasRechargeRecord);
-
-                if (!Objects.isNull(selectPaymentOrder)) {
-                    dcPaymentOrder.setOrderId(selectPaymentOrder.getOrderId());
-                    dcPaymentOrder.setGasRechargeState(RechargeStateEnum.FAILED.getCode());
-                    dcPaymentOrderMapper.updateByPrimaryKeySelective(dcPaymentOrder);
-                }
 
                 // reset nonce
                 nonceManagerUtils.resetNonce();
+
+                // balance reminder
+                if (e.getMessage().contains("insufficient balance")) {
+                    if (NTT_BALANCE_REMINDER_TIME == null || DateUtil.between(NTT_BALANCE_REMINDER_TIME, new Date(), DateUnit.MINUTE) >= REMINDER_TIME) {
+                        LOG.info("Task: Exception of Gas Credit top-up submission:Send balance reminder email......[insufficient balance]");
+                        emailReminder(sysDataCenter, MsgCodeEnum.NTT_BALANCE_REMINDER_CONFIG, null);
+                        NTT_BALANCE_REMINDER_TIME = new Date();
+                    }
+                } else if (e.getMessage().contains("insufficient funds for gas")) {
+                    if (GAS_BALANCE_REMINDER_TIME == null || DateUtil.between(GAS_BALANCE_REMINDER_TIME, new Date(), DateUnit.MINUTE) >= REMINDER_TIME) {
+                        LOG.info("Task: Exception of Gas Credit top-up submission:Send balance reminder email......[insufficient funds]");
+                        emailReminder(sysDataCenter, MsgCodeEnum.GAS_BALANCE_REMINDER_CONFIG, null);
+                        GAS_BALANCE_REMINDER_TIME = new Date();
+                    }
+                } else if (e.getMessage().contains("nonce too low")) {
+                    // retry
+                } else {
+                    dcGasRechargeRecord.setRechargeResult(e.getMessage());
+                    dcGasRechargeRecord.setState(RechargeSubmitStateEnum.SUBMISSION_FAILED.getCode());
+                    dcGasRechargeRecord.setRechargeState(RechargeStateEnum.FAILED.getCode());
+                    dcGasRechargeRecordMapper.updateByPrimaryKeySelective(dcGasRechargeRecord);
+
+                    if (Objects.nonNull(selectPaymentOrder)) {
+                        dcPaymentOrder.setOrderId(selectPaymentOrder.getOrderId());
+                        dcPaymentOrder.setGasRechargeState(RechargeStateEnum.FAILED.getCode());
+                        dcPaymentOrderMapper.updateByPrimaryKeySelective(dcPaymentOrder);
+                    }
+                }
                 continue;
             }
 
@@ -162,6 +173,7 @@ public class GasRechargeRecordSubmitTask {
         }
 
     }
+
 
     /**
      * Request Gas Recharge Contract
@@ -181,16 +193,4 @@ public class GasRechargeRecordSubmitTask {
     }
 
 
-    /**
-     * Send email
-     **/
-    private void sendEmail(String msgCode, Map<String, Object> replaceContentMap, List<String> receivers) {
-        SendMessageReqVO sendMessageReqVO = new SendMessageReqVO();
-        sendMessageReqVO.setMsgCode(msgCode);
-        sendMessageReqVO.setReplaceContentMap(replaceContentMap);
-        sendMessageReqVO.setReceivers(receivers);
-
-        // Send email
-        sendMessageService.sendMessage(sendMessageReqVO);
-    }
 }

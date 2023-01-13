@@ -12,6 +12,7 @@ function alert_success(title, text, callback) {
         title: title,
         text: text,
         type: "success",
+        confirmButtonText: "Confirm",
         confirmButtonColor: "#00aeff"
     }, function (t) {
         if (callback != null && !(callback === undefined)) {
@@ -88,7 +89,7 @@ function alert_error_text(text) {
         text: text,
         type: "error",
         confirmButtonColor: "#00aeff",
-        confirmButtonText: "ok"
+        confirmButtonText: "Confirm"
     })
 }
 
@@ -98,7 +99,7 @@ function alert_error(title, text) {
         text: text,
         type: "error",
         confirmButtonColor: "#00aeff",
-        confirmButtonText: "ok"
+        confirmButtonText: "Confirm"
     })
 }
 

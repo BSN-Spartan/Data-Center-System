@@ -82,6 +82,8 @@ var syncChain = function () {
         "success": function (data) {
             if (data.code == 2) {
                 alert_error_back("", data.msg, "/");
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else if (data.code == 1) {
                 search();
             } else {
@@ -95,3 +97,20 @@ var syncChain = function () {
 var search = function () {
     dataTable.ajax.reload();
 };
+
+function refreshPrice () {
+    $.ajax({
+        "type": "post",
+        "url": "/sys/chain/queryChainPrice",
+        "dataType": "json",
+        "success": function (data) {
+            if (data.code == 1) {
+                dataTable.ajax.reload();
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
+            } else {
+                alert_error_text(data.msg);
+            }
+        }
+    });
+}

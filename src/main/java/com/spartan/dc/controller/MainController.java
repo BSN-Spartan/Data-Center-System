@@ -139,4 +139,17 @@ public class MainController {
     public String paymentType() {
         return "setting/paymentType";
     }
+
+    @RequiredPermission(isPage = true)
+    @RequestMapping("paymentTerm")
+    public String paymentTerm() {
+        return "setting/paymentTerm";
+    }
+
+    @RequestMapping(value = "role")
+    @RequiredPermission(isPage = true)
+    public String role() {
+        return "role/list";
+    }
+
 }

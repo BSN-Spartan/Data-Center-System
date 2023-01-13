@@ -121,6 +121,7 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
                 throw new GlobalException("The wallet address has been bound by another data center");
             }
         } catch (Exception e) {
+            logger.error("recharge error:", e);
             throw new GlobalException(e.getMessage());
         }
 
@@ -130,7 +131,6 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
         dcGasRechargeRecord.setState(RechargeSubmitStateEnum.PENDING_SUBMIT.getCode());
         dcGasRechargeRecord.setRechargeState(RechargeStateEnum.NO_PROCESSING_REQUIRED.getCode());
         dcGasRechargeRecord.setChainId((long) reqVO.getChainId());
-        dcGasRechargeRecord.setRechargeTime(new Date());
         dcGasRechargeRecordMapper.insertRechargeRecord(dcGasRechargeRecord);
         return dcGasRechargeRecord.getRechargeRecordId() > 0;
     }

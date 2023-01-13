@@ -24,6 +24,12 @@ $(document).ready(function () {
         resetSearch(dataTable);
     });
 
+    if (checkButState("export_order_but")) {
+        $(".exportOrders_").show().click(function () {
+            exportOrderExcel();
+        });
+    }
+
     $(".registration_").show().click(function () {
         registrations();
     });
@@ -235,8 +241,8 @@ function payStateStyle(data, type, row) {
         if (row.payType == 1 || row.payType == 2) {
             refreshId = row.orderId
             $('#refreshId').text(row.orderId)
-            return '<a type=\'button\' style="color: #53575b" onclick="refresh(this)" value="'+row.orderId+'">\n' +
-                '   <span id="activity" >' + COMMON_HANDLE.getPayStateName(row.payState) + '</span>' +'</span><img src="/static/icon/refresh.svg" width="18" height="18">'
+            return '<span id="activity" >' + COMMON_HANDLE.getPayStateName(row.payState) + '</span>' +
+                '<a type=\'button\' class="ico-item fa fa-refresh" style="font-size: 16px; margin-left: 4px;" onclick="refresh(this)" value="'+row.orderId+'">'
                 '</a>';
         }else {
             return '<span id="activity" >' + COMMON_HANDLE.getPayStateName(row.payState) + '</span>';
@@ -252,17 +258,22 @@ let initTableBut = function (data, type, row) {
     let orderId = row.orderId;
     let payType = row.payType;
     let tradeNo = row.tradeNo;
-    let butStr =
-        // '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" >Top Up</button> ' +
-        '<button type="button" onclick="details(' + orderId + ')" class="btn-info btn-xs" >Details</button>'
+    let butStr = ''
+    if (checkButState("detail_but_")) {
+        butStr += '<button type="button" onClick="details(' + orderId + ')" class="btn-info btn-xs">Details</button>';
+    }
     if (row.isRefund == 0 && row.payState == 1) {
         if (row.gasRechargeState == 2) {
-            butStr += '<button type="button" onclick="offlinerefund(' + orderId + ',\'' + payType + '\',\'' + tradeNo + '\')" class="btn-info btn-xs" >Refund</button>'
+            if (checkButState("refund_but_")) {
+                butStr += '<button type="button" onclick="offlinerefund(' + orderId + ',\'' + payType + '\',\'' + tradeNo + '\')" class="btn-info btn-xs" >Refund</button>'
+            }
         }
     }
     if (row.payType == 3) {
         if (row.payState == 0) {
-            butStr += '<button type="button" onclick="registration(' + orderId + ')" class="btn-info btn-xs" >Remittance</button>'
+            if (checkButState("remittance_but_")) {
+                butStr += '<button type="button" onclick="registration(' + orderId + ')" class="btn-info btn-xs" >Remittance</button>'
+            }
         }
     }
 
@@ -430,6 +441,8 @@ function submitRegistration() {
         "success": function (data) {
             if (data.code == 0) {
                 alert_error("", data.msg);
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 registration_id = ''
                 alert_success("", data.msg);
@@ -457,6 +470,8 @@ function submitOnline() {
             if (data.code == 1) {
                 alert_success("", data.message);
                 initFrameList();
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -479,6 +494,8 @@ function submitOffline() {
         "success": function (data) {
             if (data.code == 1) {
                 dcPaymentStartRefundReqVO.operator = data.data.userId
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             }
         }
     });
@@ -492,6 +509,8 @@ function submitOffline() {
             if (data.code == 1) {
                 alert_success("", data.message);
                 initFrameList();
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }
@@ -502,8 +521,7 @@ function submitOffline() {
     });
 };
 
-
-$(".exportOrders_").click(function () {
+function exportOrderExcel() {
     let dcPaymentOrderReqVO = {};
     dcPaymentOrderReqVO.tradeNo = $("#tradeNo").val();
     dcPaymentOrderReqVO.otherTradeNo = $("#otherTradeNo").val();
@@ -518,8 +536,4 @@ $(".exportOrders_").click(function () {
     dcPaymentOrderReqVO.isRefund = $("#isRefund").val();
     let reqUrl = "/ground/parameters/export/dcpaymentorder?data=" + encodeURIComponent(JSON.stringify(dcPaymentOrderReqVO));
     COMMON_HANDLE.exportExcel(reqUrl);
-});
-
-
-
-
+}

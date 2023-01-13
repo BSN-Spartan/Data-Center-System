@@ -15,6 +15,8 @@ public enum SystemConfCodeEnum {
     TPS("tps", "tps"),
     TPD("tpd", "tpd"),
 
+    TREATY("treaty", "treaty"),
+
     TELEGRAM("Telegram", "Telegram"),
     WHATSAPP("Whatsapp", "Whatsapp"),
     REDDIT("Reddit", "Reddit"),
@@ -23,7 +25,8 @@ public enum SystemConfCodeEnum {
 
     ADDRESS("address", "address"),
     EMAIL("email", "email"),
-    PHONE("phone", "phone");
+    PHONE("phone", "phone"),
+    NO_MORE_PROMPTS_INPUT("noMorePromptsInput", "NoMorePromptsInput");
 
     private final String code;
     private final String name;

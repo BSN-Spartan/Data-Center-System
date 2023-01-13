@@ -68,4 +68,12 @@ public interface WalletService {
      * @return
      */
     boolean checkWalletExists();
+
+    /**
+     * Delete Wallet
+     *
+     * @return
+     */
+    boolean deleteWallet();
+
 }

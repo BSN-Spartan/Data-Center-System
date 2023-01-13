@@ -20,9 +20,62 @@
     <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
     <link rel="stylesheet" href="/static/css/custom/custom.style.css">
 </head>
+
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    a, img {
+        border: 0;
+        vertical-align: middle;
+    }
+
+    .noticeText {
+        width: 600px;
+        height: 26px;
+        overflow: hidden;
+        position: fixed;
+        margin: auto;
+        top: 165px;
+        right: 0;
+        left: 0;
+        text-align: center;
+    }
+
+    .noticTipTxt {
+        color: #FFFFFF;
+        height: 22px;
+        line-height: 22px;
+        overflow: hidden;
+    }
+
+    .noticTipTxt li {
+        height: 22px;
+        line-height: 22px;
+    }
+
+    .noticTipTxt a {
+        color: #FFFFFF;
+        text-decoration: underline;
+    }
+
+    .noticTipTxt a:hover {
+        color: #ff7300;
+        text-decoration: underline !important;
+    }
+</style>
 <body>
 
 <div id="single-wrapper">
+    <div class="noticeText">
+        <ul id="noticeScroll" class="noticTipTxt">
+<!--            <li>公告：支持门户系统版本号：<a target="_blank" href="https://github.com/BSN-Spartan/Data-Center-Portal">v1.1.1</a>及以上，网关版本号：<a target="_blank" href="https://github.com/BSN-Spartan/Data-Center-Gateway">v1.0.0</a>及以上</li>-->
+        </ul>
+    </div>
+
     <form id="login_form_" method="post">
         <div class="frm-single">
             <div class="inside" id="login_info">
@@ -84,7 +137,7 @@
 <script src="/static/js/system/sweetalert.min.js"></script>
 <script src="/static/js/custom/custom.sweetalert.js"></script>
 <script src="/static/js/custom/custom.req.js"></script>
-
+<script src="/static/js/system/scrolltext.js"></script>
 
 <script src="/static/js/views/common/crypto-js.js"></script>
 <script src="/static/js/views/index.js?<%=new Date().getTime()%>"></script>

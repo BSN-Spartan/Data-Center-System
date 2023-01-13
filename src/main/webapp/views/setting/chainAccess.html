@@ -55,9 +55,9 @@
                 <div class="col-sm-12 div_select">
                     <div class="col-sm-12 div_title">Chain Access Configuration</div>
                     <div class="col-xs-12">
-                        <hr>
-                        &nbsp; &nbsp; &nbsp;  Please set the gateway URL for user access. At the same time, you can set TPS, TPD to inform the gateway to limit user access. Please confirm the
+                         Please set the gateway URL for user access. At the same time, you can set TPS, TPD to inform the gateway to limit user access. Please confirm the
                         correctness of the gateway URL and the normal operation of the gateway.
+                        <hr>
                     </div>
                     <div class="col-sm-12" style="margin-top: 20px">
                         <div class="form-group">
@@ -93,7 +93,7 @@
                             <div class="col-sm-4">
                                 <input type='text'
                                        oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
-                                       class="form-control" id="tps" name="tps">
+                                       class="form-control" id="tps" name="tps" placeholder="No transaction limits if the blank is empty">
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                             <div class="col-sm-4">
                                 <input type='text'
                                        oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
-                                       class="form-control" id="tpd" name="tpd">
+                                       class="form-control" id="tpd" name="tpd" placeholder="No transaction limits if the blank is empty">
                             </div>
                         </div>
                     </div>

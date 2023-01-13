@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysRoleResourceMapper">
+
+    <delete id="removeByRoleId" parameterType="java.lang.Long">
+        delete
+        from sys_role_resource
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="batchInsertRoleResource" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+        insert into sys_role_resource ( role_id, rsuc_id
+        )
+        values ( #{item.roleId,jdbcType=BIGINT}, #{item.rsucId,jdbcType=BIGINT}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

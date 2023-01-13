@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spartan.dc.dao.write.SysResourceMapper">
+
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.SysResource">
+    <id column="rsuc_id" jdbcType="BIGINT" property="rsucId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="rsuc_code" jdbcType="VARCHAR" property="rsucCode" />
+    <result column="rsuc_name" jdbcType="VARCHAR" property="rsucName" />
+    <result column="rsuc_url" jdbcType="VARCHAR" property="rsucUrl" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="rsuc_type" jdbcType="SMALLINT" property="rsucType" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rsuc_id, parent_id, rsuc_code, rsuc_name, rsuc_url, priority, rsuc_type, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_resource
+    where rsuc_id = #{rsucId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_resource
+    where rsuc_id = #{rsucId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.SysResource">
+    insert into sys_resource (rsuc_id, parent_id, rsuc_code, 
+      rsuc_name, rsuc_url, priority, 
+      rsuc_type, state)
+    values (#{rsucId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{rsucCode,jdbcType=VARCHAR}, 
+      #{rsucName,jdbcType=VARCHAR}, #{rsucUrl,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, 
+      #{rsucType,jdbcType=SMALLINT}, #{state,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.SysResource">
+    insert into sys_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rsucId != null">
+        rsuc_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="rsucCode != null">
+        rsuc_code,
+      </if>
+      <if test="rsucName != null">
+        rsuc_name,
+      </if>
+      <if test="rsucUrl != null">
+        rsuc_url,
+      </if>
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="rsucType != null">
+        rsuc_type,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rsucId != null">
+        #{rsucId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="rsucCode != null">
+        #{rsucCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rsucName != null">
+        #{rsucName,jdbcType=VARCHAR},
+      </if>
+      <if test="rsucUrl != null">
+        #{rsucUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="rsucType != null">
+        #{rsucType,jdbcType=SMALLINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.SysResource">
+    update sys_resource
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="rsucCode != null">
+        rsuc_code = #{rsucCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rsucName != null">
+        rsuc_name = #{rsucName,jdbcType=VARCHAR},
+      </if>
+      <if test="rsucUrl != null">
+        rsuc_url = #{rsucUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="rsucType != null">
+        rsuc_type = #{rsucType,jdbcType=SMALLINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where rsuc_id = #{rsucId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.SysResource">
+    update sys_resource
+    set parent_id = #{parentId,jdbcType=BIGINT},
+      rsuc_code = #{rsucCode,jdbcType=VARCHAR},
+      rsuc_name = #{rsucName,jdbcType=VARCHAR},
+      rsuc_url = #{rsucUrl,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      rsuc_type = #{rsucType,jdbcType=SMALLINT},
+      state = #{state,jdbcType=SMALLINT}
+    where rsuc_id = #{rsucId,jdbcType=BIGINT}
+  </update>
+</mapper>

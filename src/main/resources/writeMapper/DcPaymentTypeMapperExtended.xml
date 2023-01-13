@@ -37,10 +37,10 @@
         <if test="item.channelCode != null and item.channelCode != '' ">
           channel_code = #{item.channelCode,jdbcType=VARCHAR},
         </if>
-        <if test="item.privateKey != null and item.privateKey != '' ">
+        <if test="item.privateKey != null">
           private_key = #{item.privateKey,jdbcType=VARCHAR},
         </if>
-        <if test="item.endpointSecret != null and item.endpointSecret != '' ">
+        <if test="item.endpointSecret != null">
           endpoint_secret = #{item.endpointSecret,jdbcType=VARCHAR},
         </if>
         <if test="item.apiKey != null">

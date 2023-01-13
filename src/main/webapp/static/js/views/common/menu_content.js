@@ -10,199 +10,10 @@ icons.push({code: 'support_menu_', icon: '<i class="menu-icon fa fa-support"></i
 icons.push({code: 'financial_module_', icon: '<i class="menu-icon fa fa-credit-card-alt"></i>'});
 icons.push({code: 'index_', icon: '<i class="menu-icon fa fa-cogs"></i>'});
 icons.push({code: 'portal_config_', icon: '<i class="menu-icon fa fa-pencil-square-o"></i>'});
+icons.push({code: 'config_', icon: '<i class="menu-icon fa fa-cogs"></i>'});
 
 var resourceList = [
-    {
-        "rsucId": 6,
-        "parentId": 0,
-        "rsucCode": "dashboard_",
-        "rsucName": "Home",
-        "rsucUrl": "/index",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 5,
-        "parentId": 0,
-        "rsucCode": "node_module_",
-        "rsucName": "Node Management",
-        "rsucUrl": "javascript:;",
-        "priority": 2,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 10,
-        "parentId": 0,
-        "rsucCode": "ntt_module_",
-        "rsucName": "NTT History",
-        "rsucUrl": "/ntt",
-        "priority": 3,
-        "rsucType": 1
-    },
 
-    {
-        "rsucId": 13,
-        "parentId": 0,
-        "rsucCode": "chain_access_module_",
-        "rsucName": "Chain Access Management",
-        "rsucUrl": "javascript:;",
-        "priority": 4,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 70,
-        "parentId": 13,
-        "rsucCode": "chain_access_config_",
-        "rsucName": "Access Configuration",
-        "rsucUrl": "/chainAccess",
-        "priority": 2,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 75,
-        "parentId": 13,
-        "rsucCode": "user_access_info_",
-        "rsucName": "Access Key Management",
-        "rsucUrl": "/userAccess",
-        "priority": 2,
-        "rsucType": 1
-    },
-
-    {
-        "rsucId": 15,
-        "parentId": 0,
-        "rsucCode": "charge_module_",
-        "rsucName": "Gas Credit Management",
-        "rsucUrl": "javascript:;",
-        "priority": 4,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 40,
-        "parentId": 15,
-        "rsucCode": "charge_menu_",
-        "rsucName": "Gas Credit Management",
-        "rsucUrl": "/recharge",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 41,
-        "parentId": 15,
-        "rsucCode": "price_menu_",
-        "rsucName": "Price Settings",
-        "rsucUrl": "/price",
-        "priority": 2,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 30,
-        "parentId": 5,
-        "rsucCode": "chain_menu_",
-        "rsucName": "Chain Info",
-        "rsucUrl": "/chain",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 31,
-        "parentId": 5,
-        "rsucCode": "node_menu_",
-        "rsucName": "Node Info",
-        "rsucUrl": "/node",
-        "priority": 2,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 1,
-        "parentId": 0,
-        "rsucCode": "index_",
-        "rsucName": "Configuration",
-        "rsucUrl": "/config",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 64,
-        "parentId": 0,
-        "rsucCode": "portal_config_",
-        "rsucName": "Portal Management",
-        "rsucUrl": "javascript:;",
-        "priority": 6,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 65,
-        "parentId": 64,
-        "rsucCode": "base_info_config_",
-        "rsucName": "Basic Information",
-        "rsucUrl": "/baseInfo",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 67,
-        "parentId": 64,
-        "rsucCode": "technical_support_config_",
-        "rsucName": "Technical Support ",
-        "rsucUrl": "/technicalSupport",
-        "priority": 3,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 67,
-        "parentId": 64,
-        "rsucCode": "payment_type_config_",
-        "rsucName": "Payment Method",
-        "rsucUrl": "/paymentType",
-        "priority": 3,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 61,
-        "parentId": 0,
-        "rsucCode": "financial_module_",
-        "rsucName": "Financial Management",
-        "rsucUrl": "javascript:;",
-        "priority": 5,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 62,
-        "parentId": 61,
-        "rsucCode": "order_menu_",
-        "rsucName": "Order Management",
-        "rsucUrl": "/financial",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 63,
-        "parentId": 61,
-        "rsucCode": "refund_menu_",
-        "rsucName": "Refund Management",
-        "rsucUrl": "/refund",
-        "priority": 1,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 25,
-        "parentId": 0,
-        "rsucCode": "user_module_",
-        "rsucName": "User Management",
-        "rsucUrl": "/user",
-        "priority": 8,
-        "rsucType": 1
-    },
-    {
-        "rsucId": 60,
-        "parentId": 0,
-        "rsucCode": "support_menu_",
-        "rsucName": "BSN Technical Support",
-        "rsucUrl": "/support",
-        "priority": 9,
-        "rsucType": 1
-    }
 ];
 
 var storage = window.sessionStorage;
@@ -289,7 +100,7 @@ var getMenuIcon = function (code) {
 function getSonResourceList(data, rsucId) {
     var result = [];
     for (var i = 0; i < data.length; i++) {
-        if (data[i].parentId == rsucId) {
+        if (data[i].parentId == rsucId && data[i].rsucType != 2) {
             result.push(data[i]);
         }
     }
@@ -409,12 +220,11 @@ var initMainMenu_ = function () {
                 $("title").html(data.data.systemName);
                 $("link[rel=icon]").prop("href", data.data.systemIcon);
 
+                resourceList = data.data.resourceList;
 
                 if (resourceList != null && resourceList.length > 0) {
 
-
                     getButList();
-
 
                     var menuList = '';
                     for (var i = 0; i < resourceList.length; i++) {

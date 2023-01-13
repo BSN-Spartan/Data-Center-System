@@ -15,6 +15,8 @@ var CHAIN_HANDLE = {
                         CHAIN_HANDLE.CHAIN_INFO = data.data;
 
                         CHAIN_HANDLE.initSelect(chainId, selectId);
+                    } else if (data.code == 3) {
+                        alert_success_login(data.msg);
                     }
                 }
             });
@@ -33,6 +35,8 @@ var CHAIN_HANDLE = {
                         CHAIN_HANDLE.CHAIN_INFO = data.data;
 
                         CHAIN_HANDLE.initSelectNotAll(chainId, selectId);
+                    } else if (data.code == 3) {
+                        alert_success_login(data.msg);
                     }
                 }
             });
@@ -101,6 +105,8 @@ var CHAIN_HANDLE = {
 
                         $("#" + showNttId).html(ntt * rechargeGas);
 
+                    } else if (data.code == 3) {
+                        alert_success_login(data.msg);
                     } else {
                         alert_error("", data.msg);
                     }

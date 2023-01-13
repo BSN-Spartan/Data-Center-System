@@ -24,4 +24,6 @@ public interface DcChainAccessMapper {
 	DcChainAccess selectByEmail(String email);
 
     List<Map<String, Object>> queryList(Map<String, Object> map);
+
+    DcChainAccess queryChainAccessState(String email);
 }

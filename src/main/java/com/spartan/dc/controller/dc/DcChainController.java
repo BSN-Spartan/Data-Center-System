@@ -48,6 +48,14 @@ public class DcChainController {
         return ResultInfoUtil.successResult(list);
     }
 
+    @RequestMapping(value = "queryChainPrice")
+    @RequiredPermission
+    public ResultInfo queryChainPrice() throws Exception {
+
+        dcChainService.queryChainPrice();
+        return ResultInfoUtil.successResult();
+    }
+
 //    @RequiredPermission
 //    @GetMapping(value = "list")
 //    public ResultInfo list(@RequestBody DataTable<Map<String, Object>> dataTable) {

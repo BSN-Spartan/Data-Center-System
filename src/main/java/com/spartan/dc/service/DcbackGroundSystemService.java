@@ -6,6 +6,7 @@ import com.spartan.dc.core.vo.req.*;
 import com.spartan.dc.core.vo.resp.DcPaymentOrderDetailsRespVO;
 import com.spartan.dc.core.vo.resp.DcSystemConfRespVO;
 import com.spartan.dc.model.DcPaymentType;
+import com.spartan.dc.model.SysDataCenter;
 import com.spartan.dc.model.vo.req.RemittanceRegisterReqVO;
 import com.spartan.dc.model.vo.resp.DcPaymentOrderRespVO;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,4 +48,8 @@ public interface DcbackGroundSystemService {
     List<DcSystemConfRespVO> querySystemConf(HttpServletRequest request);
 
     List<DcPaymentOrderRespVO> onGoOrder();
+
+    ResultInfo updateTreaty(SysDataCenterTreatyReqVO sysDataCenterTreatyReqVO);
+
+    String queryTreaty();
 }

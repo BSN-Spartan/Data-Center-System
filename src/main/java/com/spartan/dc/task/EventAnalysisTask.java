@@ -38,7 +38,7 @@ import java.util.Objects;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "task", name = "enabled", havingValue = "true")
-public class EventAnalysisTask {
+public class EventAnalysisTask extends BaseTask {
 
     private final static Logger LOG = LoggerFactory.getLogger(EventAnalysisTask.class);
 
@@ -316,6 +316,7 @@ public class EventAnalysisTask {
                     dcNode.setNttCount(updateNodeStatusEventBean.getRewardNTT());
 
                     dcNodeMapper.updateByPrimaryKeySelective(dcNode);
+
                     LOG.info("Task: Modify node status according to the node ID of node registration notification event: {}", dcNode.getNodeId());
                 } else if (baseEventBean instanceof ChainInfoEventBean) {
 

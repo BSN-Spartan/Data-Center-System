@@ -17,14 +17,16 @@ $(document).ready(function () {
         resetSearch(dataTable);
     });
 
-    $(".recharge_but_").show().click(function () {
-        // check keystore password
-        COMMON_HANDLE.checkPasswordExpired();
+    if (checkButState("recharge_but_")) {
+        $(".recharge_but_").show().click(function () {
+            // check keystore password
+            COMMON_HANDLE.checkPasswordExpired();
 
-        CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", 1);
+            CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", 1);
 
-        $("#recharge_modal").modal("show");
-    });
+            $("#recharge_modal").modal("show");
+        });
+    }
 
     $("#rechargeChainType").change(function () {
         var chainId = $(this).val();
@@ -163,8 +165,12 @@ let initRechargeStateType = function (data, type, row) {
 let initTableBut = function (data, type, row) {
     let chainId = row.chainId;
     let chainAddress = row.chainAddress;
-    let butStr = '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" >Top Up</button>';
-    return butStr;
+    let butStr = '';
+
+    if (checkButState("top_up_but_")) {
+        butStr += '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" >Top Up</button>';
+    }
+    return butStr == "" ? "--" : butStr;
 };
 
 
@@ -262,6 +268,8 @@ function submitRecharge() {
                     document.querySelector('#recharge_detail_content_').reset();
                     search();
                 });
+            } else if (data.code == 3) {
+                alert_success_login(data.msg);
             } else {
                 alert_error("", data.msg);
             }

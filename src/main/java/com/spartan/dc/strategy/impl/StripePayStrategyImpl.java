@@ -49,10 +49,10 @@ import static java.awt.SystemColor.info;
 @Slf4j
 public class StripePayStrategyImpl implements StrategyService {
 
-    @Value("${stripe.currency}")
+    @Value("${payment.stripe.currency}")
     private String currency;
 
-    @Value("${stripe.cueDate}")
+    @Value("${payment.stripe.cueDate}")
     private int cueDate;
 
     private static String DEFAULT_INVOICE_STATUS = "draft";

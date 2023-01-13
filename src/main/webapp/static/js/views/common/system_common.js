@@ -21,14 +21,16 @@ var COMMON_HANDLE = {
         {"type": 1, "name": "Recharge Succeeded"},
         {"type": 2, "name": "Recharge Failed"}
     ], NTT_TX_TYPE: [
-        {"type": 0, "name": "Node Establishment Incentive Program"},
-        {"type": 1, "name": "Data Center Monthly Incentive Program"},
-        {"type": 3, "name": "Top up Gas Credit"},
+        {"type": 0, "name": "Node Registration Incentive"},
+        {"type": 1, "name": "Service Volume Incentive Program"},
+        {"type": 3, "name": "Gas Credit Top-Up"},
         {"type": 4, "name": "Top Up NTT"},
-        {"type": 7, "name": "Refund for Gas Credit top up failed"},
-        {"type": 8, "name": "NTT Collection"},
-        {"type": 9, "name": "NTT Present"},
-        {"type": 10, "name": "Emergency Gas Credit top up commission charge"}
+        {"type": 7, "name": "NTT Refund"},
+        {"type": 8, "name": "Get NTT"},
+        {"type": 9, "name": "NTT Gift"},
+        {"type": 10, "name": "Cost of Emergency Gas Credit Top-Up"},
+        {"type": 12, "name": "Monthly Incentive Program"},
+        {"type": 13, "name": "One-Time Incentive"}
     ],
     PAY_STATE:[
         {"type": 0, "name": "Payment In Progress"},

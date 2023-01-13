@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.SysUserPrincipalMapper">
+
+    <select id="getByUser" parameterType="com.spartan.dc.model.SysUserPrincipal" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user_principal
+        where
+        login_name = #{loginName,jdbcType=VARCHAR}
+        and user_state = #{userState,jdbcType=SMALLINT}
+    </select>
+
+
+    <select id="queryUserList" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        user_id userId, login_name loginName, user_name userName, user_email userEmail, phone phone, user_state
+        userState, DATE_FORMAT(create_date,'%Y-%m-%d %T') createDate
+        from sys_user_principal
+        where 1 = 1
+        <if test="loginName != null and loginName != ''">
+            AND login_name like CONCAT('%',#{loginName},'%')
+        </if>
+        <if test="userName != null and userName != ''">
+            AND user_name like CONCAT('%',#{userName},'%')
+        </if>
+        <if test="userState != null">
+            AND user_state = #{userState,jdbcType=SMALLINT}
+        </if>
+    </select>
+    <select id="getUserInfo" parameterType="java.lang.Long" resultType="java.util.Map">
+        select user_id                                 userId,
+               contacts_email                          contactsEmail,
+               contacts_name                           contactsName,
+               contacts_phone                          contactsPhone,
+               state                                   state,
+               DATE_FORMAT(create_time, '%Y-%m-%d %T') createTime
+        from  dc_user
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="countUser" parameterType="com.spartan.dc.model.SysUserPrincipal" resultType="java.lang.Integer">
+        select COUNT(1)
+        from sys_user_principal
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="insertUser" parameterType="com.spartan.dc.model.SysUserPrincipal"  keyColumn="user_id"
+            keyProperty="userId" useGeneratedKeys="true">
+        insert into sys_user_principal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userEmail != null">
+                user_email,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="salt != null">
+                salt,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="userState != null">
+                user_state,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userEmail != null">
+                #{userEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="userState != null">
+                #{userState,jdbcType=SMALLINT},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+
+
+</mapper>
