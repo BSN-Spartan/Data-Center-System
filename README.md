@@ -247,7 +247,7 @@ version: '3'
 services:
   spartan-dc:
     container_name: spartan-dc
-    image: oracle-jdk11
+    image: gengxiaofang/jre1.8:centos7.9_chinese
     restart: always
     ports:
       - "8085:8085"
