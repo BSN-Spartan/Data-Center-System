@@ -247,6 +247,7 @@ version: '3'
 services:
   spartan-dc:
     container_name: spartan-dc
+    image: oracle-jdk11
     restart: always
     ports:
       - "8085:8085"
