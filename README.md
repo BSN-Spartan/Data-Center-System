@@ -48,7 +48,7 @@ It is recommended to build the Data Center Management System on Linux Server wit
 
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/1.mysqlversion.jpg?raw=true)
 
-2. Get [mysql script](https://github.com/BSN-Spartan/Data-Center-System/blob/v1.2.0/src/main/resources/sql/v1.2.0/bsn_spartan_dc%20v1.2.0.sql)
+2. Get [mysql script](https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.2.0/bsn_spartan_dc%20v1.2.0.sql)
 
 3. Login to MySQL service, name and create the database:
 
