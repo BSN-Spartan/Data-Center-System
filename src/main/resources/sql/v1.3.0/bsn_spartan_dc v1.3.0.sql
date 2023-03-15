@@ -384,7 +384,7 @@ CREATE TABLE `dc_mail_conf` (
     `mail_port` varchar(10) NOT NULL DEFAULT '' COMMENT 'mail_port',
     `mail_user_name` varchar(50) NOT NULL DEFAULT '' COMMENT 'Email',
     `mail_pass_word` varchar(150) NOT NULL DEFAULT '' COMMENT 'Password',
-    `properties` varchar(150) NOT NULL DEFAULT '' COMMENT 'properties',
+    `properties` varchar(1000) NOT NULL DEFAULT '' COMMENT 'properties',
     `type` smallint(6) NOT NULL DEFAULT '1' COMMENT 'Type   1：java mail   2：aws',
     `access_key` varchar(100) NOT NULL DEFAULT '' COMMENT 'access_key',
     `secret_key` varchar(100) NOT NULL DEFAULT '' COMMENT 'secret_key',
