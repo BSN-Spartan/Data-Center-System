@@ -17,13 +17,22 @@
     <result column="recharge_state" jdbcType="SMALLINT" property="rechargeState" />
     <result column="nonce" jdbcType="BIGINT" property="nonce" />
     <result column="md5_sign" jdbcType="VARCHAR" property="md5Sign" />
+    <result column="audit_state" jdbcType="SMALLINT" property="auditState" />
+    <result column="auditor" jdbcType="BIGINT" property="auditor" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_remarks" jdbcType="VARCHAR" property="auditRemarks" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="recharge_type" jdbcType="SMALLINT" property="rechargeType" />
   </resultMap>
   <sql id="Base_Column_List">
-    recharge_record_id, chain_id, order_id, chain_address, gas, recharge_time, state, tx_hash,
-    update_time, recharge_code, ntt, recharge_result, recharge_state, nonce, md5_sign
+    recharge_record_id, chain_id, order_id, chain_address, gas, recharge_time, state, 
+    tx_hash, update_time, recharge_code, ntt, recharge_result, recharge_state, nonce, 
+    md5_sign, audit_state, auditor, audit_time, audit_remarks, create_user_id, create_time, 
+    recharge_type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
     from dc_gas_recharge_record
     where recharge_record_id = #{rechargeRecordId,jdbcType=BIGINT}
@@ -33,18 +42,25 @@
     where recharge_record_id = #{rechargeRecordId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.spartan.dc.model.DcGasRechargeRecord">
-    insert into dc_gas_recharge_record (recharge_record_id, chain_id, order_id, chain_address,
-                                        gas, recharge_time, state,
-                                        tx_hash, update_time, recharge_code,
-                                        ntt, recharge_result, recharge_state,
-                                        nonce, md5_sign)
-    values (#{rechargeRecordId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{chainAddress,jdbcType=VARCHAR},
-            #{gas,jdbcType=DECIMAL}, #{rechargeTime,jdbcType=TIMESTAMP}, #{state,jdbcType=SMALLINT},
-            #{txHash,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{rechargeCode,jdbcType=VARCHAR},
-            #{ntt,jdbcType=DECIMAL}, #{rechargeResult,jdbcType=VARCHAR}, #{rechargeState,jdbcType=SMALLINT},
-            #{nonce,jdbcType=BIGINT}, #{md5Sign,jdbcType=VARCHAR})
+    insert into dc_gas_recharge_record (recharge_record_id, chain_id, order_id, 
+      chain_address, gas, recharge_time, 
+      state, tx_hash, update_time, 
+      recharge_code, ntt, recharge_result, 
+      recharge_state, nonce, md5_sign, 
+      audit_state, auditor, audit_time, 
+      audit_remarks, create_user_id, create_time, 
+      recharge_type)
+    values (#{rechargeRecordId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, 
+      #{chainAddress,jdbcType=VARCHAR}, #{gas,jdbcType=DECIMAL}, #{rechargeTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=SMALLINT}, #{txHash,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{rechargeCode,jdbcType=VARCHAR}, #{ntt,jdbcType=DECIMAL}, #{rechargeResult,jdbcType=VARCHAR}, 
+      #{rechargeState,jdbcType=SMALLINT}, #{nonce,jdbcType=BIGINT}, #{md5Sign,jdbcType=VARCHAR}, 
+      #{auditState,jdbcType=SMALLINT}, #{auditor,jdbcType=BIGINT}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditRemarks,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{rechargeType,jdbcType=SMALLINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcGasRechargeRecord">
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcGasRechargeRecord"
+          useGeneratedKeys="true" keyColumn="recharge_record_id" keyProperty="rechargeRecordId">
     insert into dc_gas_recharge_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="rechargeRecordId != null">
@@ -90,7 +106,28 @@
         nonce,
       </if>
       <if test="md5Sign != null">
-        md5_sign
+        md5_sign,
+      </if>
+      <if test="auditState != null">
+        audit_state,
+      </if>
+      <if test="auditor != null">
+        auditor,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="auditRemarks != null">
+        audit_remarks,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="rechargeType != null">
+        recharge_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -137,7 +174,28 @@
         #{nonce,jdbcType=BIGINT},
       </if>
       <if test="md5Sign != null">
-        #{md5Sign,jdbcType=VARCHAR}
+        #{md5Sign,jdbcType=VARCHAR},
+      </if>
+      <if test="auditState != null">
+        #{auditState,jdbcType=SMALLINT},
+      </if>
+      <if test="auditor != null">
+        #{auditor,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditRemarks != null">
+        #{auditRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargeType != null">
+        #{rechargeType,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -184,7 +242,28 @@
         nonce = #{nonce,jdbcType=BIGINT},
       </if>
       <if test="md5Sign != null">
-        md5_sign = #{md5Sign,jdbcType=VARCHAR}
+        md5_sign = #{md5Sign,jdbcType=VARCHAR},
+      </if>
+      <if test="auditState != null">
+        audit_state = #{auditState,jdbcType=SMALLINT},
+      </if>
+      <if test="auditor != null">
+        auditor = #{auditor,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditRemarks != null">
+        audit_remarks = #{auditRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargeType != null">
+        recharge_type = #{rechargeType,jdbcType=SMALLINT},
       </if>
     </set>
     where recharge_record_id = #{rechargeRecordId,jdbcType=BIGINT}
@@ -192,19 +271,26 @@
   <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcGasRechargeRecord">
     update dc_gas_recharge_record
     set chain_id = #{chainId,jdbcType=BIGINT},
-        order_id = #{orderId,jdbcType=BIGINT},
-        chain_address = #{chainAddress,jdbcType=VARCHAR},
-        gas = #{gas,jdbcType=DECIMAL},
-        recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
-        state = #{state,jdbcType=SMALLINT},
-        tx_hash = #{txHash,jdbcType=VARCHAR},
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-        recharge_code = #{rechargeCode,jdbcType=VARCHAR},
-        ntt = #{ntt,jdbcType=DECIMAL},
-        recharge_result = #{rechargeResult,jdbcType=VARCHAR},
-        recharge_state = #{rechargeState,jdbcType=SMALLINT},
-        nonce = #{nonce,jdbcType=BIGINT},
-        md5_sign = #{md5Sign,jdbcType=VARCHAR}
+      order_id = #{orderId,jdbcType=BIGINT},
+      chain_address = #{chainAddress,jdbcType=VARCHAR},
+      gas = #{gas,jdbcType=DECIMAL},
+      recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=SMALLINT},
+      tx_hash = #{txHash,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      recharge_code = #{rechargeCode,jdbcType=VARCHAR},
+      ntt = #{ntt,jdbcType=DECIMAL},
+      recharge_result = #{rechargeResult,jdbcType=VARCHAR},
+      recharge_state = #{rechargeState,jdbcType=SMALLINT},
+      nonce = #{nonce,jdbcType=BIGINT},
+      md5_sign = #{md5Sign,jdbcType=VARCHAR},
+      audit_state = #{auditState,jdbcType=SMALLINT},
+      auditor = #{auditor,jdbcType=BIGINT},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      audit_remarks = #{auditRemarks,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      recharge_type = #{rechargeType,jdbcType=SMALLINT}
     where recharge_record_id = #{rechargeRecordId,jdbcType=BIGINT}
   </update>
 </mapper>

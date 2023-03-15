@@ -1,13 +1,13 @@
 spring:
   profiles:
-    active: prod
+    active: dev
   mvc:
     view:
       prefix: /views/
       suffix: .html
     pathmatch:
       matching-strategy: ant_path_matcher
-  
+
 mysql_conf:
   driver: com.mysql.cj.jdbc.Driver
   write_mapper_path: /writeMapper/**.xml
@@ -18,7 +18,6 @@ server:
   servlet:
     session:
       timeout: 1800 #uint: second
-
 
 system:
   name: BSN Spartan Data Center System
@@ -49,36 +48,36 @@ chainaddresscheck:
     - chainid: 2
       regularformat: "[\\w\\W]*"
       containsnodeid: true
-      
+
 task:
-  # Whether to start a timed task to submit a transaction/time parse
   enabled: true
-  # Parse event
+  # Parse Event
   eventAnalytics: "0/2 * * * * ?"
   # Submit Gas Credit top-up transaction
   gasRechargeSubmit: "0/10 * * * * ?"
   # Query Gas Credit top-up result
   gasRechargeResult: "0/10 * * * * ?"
-  # Submit node registration application
+  # Node registration application
   nodeUpChain: "0/10 * * * * ?"
-  # Query gasPrice
-  chainGasPrice: "0/60 * * * * ?"
+  # Query Gas Credit exchange rate
+  chainGasPrice: "0/10 * * * * ?"
+  # Check DataCenter Balance
+  balanceCheck: "0 0 * * * ?"
+
 
 metaTx:
-  # Only used by the default chain, do not change this configuration
   chainId: 1
-  # Effective time period, in hour
   deadline: 12
-  # Do not change this configuration
   domainSeparator: "0x9d5e39915081369daa50abc8dc23f93c9c174abc4fc01efd13e3660e5d080276"
   # Do not change this configuration
   metaTransferTypeHash: "0xbf13ac0a2964a57037372fadd1f7b4fa6785ffdc315c85dfe8d1f9b1b01a7a51"
-  
+
 payment:
   # stripe configuration information
   stripe:
     currency: USD
     cueDate: 3
+
   # coinbase configuration information
   coinbase:
     server-addr: https://api.commerce.coinbase.com/

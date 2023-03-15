@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcAccountBalanceConfMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcAccountBalanceConf">
+    <id column="account_balance_conf_id" jdbcType="BIGINT" property="accountBalanceConfId" />
+    <result column="chain_id" jdbcType="BIGINT" property="chainId" />
+    <result column="chain_address" jdbcType="VARCHAR" property="chainAddress" />
+    <result column="monitor_type" jdbcType="SMALLINT" property="monitorType" />
+    <result column="balance_limit" jdbcType="DECIMAL" property="balanceLimit" />
+    <result column="reminder_email" jdbcType="VARCHAR" property="reminderEmail" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    account_balance_conf_id, chain_id, chain_address, monitor_type, balance_limit, reminder_email, 
+    state, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dc_account_balance_conf
+    where account_balance_conf_id = #{accountBalanceConfId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dc_account_balance_conf
+    where account_balance_conf_id = #{accountBalanceConfId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.DcAccountBalanceConf">
+    insert into dc_account_balance_conf (account_balance_conf_id, chain_id, chain_address, 
+      monitor_type, balance_limit, reminder_email, 
+      state, create_time)
+    values (#{accountBalanceConfId,jdbcType=BIGINT}, #{chainId,jdbcType=BIGINT}, #{chainAddress,jdbcType=VARCHAR}, 
+      #{monitorType,jdbcType=SMALLINT}, #{balanceLimit,jdbcType=DECIMAL}, #{reminderEmail,jdbcType=VARCHAR}, 
+      #{state,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcAccountBalanceConf">
+    insert into dc_account_balance_conf
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountBalanceConfId != null">
+        account_balance_conf_id,
+      </if>
+      <if test="chainId != null">
+        chain_id,
+      </if>
+      <if test="chainAddress != null">
+        chain_address,
+      </if>
+      <if test="monitorType != null">
+        monitor_type,
+      </if>
+      <if test="balanceLimit != null">
+        balance_limit,
+      </if>
+      <if test="reminderEmail != null">
+        reminder_email,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountBalanceConfId != null">
+        #{accountBalanceConfId,jdbcType=BIGINT},
+      </if>
+      <if test="chainId != null">
+        #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="chainAddress != null">
+        #{chainAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorType != null">
+        #{monitorType,jdbcType=SMALLINT},
+      </if>
+      <if test="balanceLimit != null">
+        #{balanceLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="reminderEmail != null">
+        #{reminderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.DcAccountBalanceConf">
+    update dc_account_balance_conf
+    <set>
+      <if test="chainId != null">
+        chain_id = #{chainId,jdbcType=BIGINT},
+      </if>
+      <if test="chainAddress != null">
+        chain_address = #{chainAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorType != null">
+        monitor_type = #{monitorType,jdbcType=SMALLINT},
+      </if>
+      <if test="balanceLimit != null">
+        balance_limit = #{balanceLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="reminderEmail != null">
+        reminder_email = #{reminderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where account_balance_conf_id = #{accountBalanceConfId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcAccountBalanceConf">
+    update dc_account_balance_conf
+    set chain_id = #{chainId,jdbcType=BIGINT},
+      chain_address = #{chainAddress,jdbcType=VARCHAR},
+      monitor_type = #{monitorType,jdbcType=SMALLINT},
+      balance_limit = #{balanceLimit,jdbcType=DECIMAL},
+      reminder_email = #{reminderEmail,jdbcType=VARCHAR},
+      state = #{state,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where account_balance_conf_id = #{accountBalanceConfId,jdbcType=BIGINT}
+  </update>
+</mapper>

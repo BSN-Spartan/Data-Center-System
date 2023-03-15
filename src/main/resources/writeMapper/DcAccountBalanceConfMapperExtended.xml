@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcAccountBalanceConfMapper">
+  <select id="getReminderAccountList" resultType="com.spartan.dc.model.vo.resp.BalanceReminderRespVo">
+    SELECT
+      dabc.account_balance_conf_id,
+      dc.chain_name,
+      dabc.chain_address,
+      dabc.monitor_type,
+      dabc.balance_limit,
+      dabc.reminder_email,
+      dabc.state,
+      dabc.create_time
+    FROM
+      dc_account_balance_conf dabc,
+      dc_chain dc
+    WHERE
+      dabc.state = 1
+      AND dabc.chain_id = dc.chain_id
+    ORDER BY
+      dabc.create_time DESC
+  </select>
+
+  <select id="getReminderAccountById" parameterType="com.spartan.dc.model.DcAccountBalanceConf" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from dc_account_balance_conf
+    <where>
+      <if test="chainId != null">
+        and chain_id = #{chainId,jdbcType=BIGINT}
+      </if>
+      <if test="chainAddress != null">
+       and chain_address = #{chainAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="monitorType != null">
+        and monitor_type = #{monitorType,jdbcType=SMALLINT}
+      </if>
+      <if test="balanceLimit != null">
+        and balance_limit = #{balanceLimit,jdbcType=DECIMAL}
+      </if>
+      <if test="reminderEmail != null">
+        and reminder_email = #{reminderEmail,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+        and state = #{state,jdbcType=SMALLINT}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+</mapper>

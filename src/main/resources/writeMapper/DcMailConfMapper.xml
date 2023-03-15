@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcMailConfMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcMailConf">
+    <id column="mail_conf_id" jdbcType="BIGINT" property="mailConfId" />
+    <result column="mail_host" jdbcType="VARCHAR" property="mailHost" />
+    <result column="mail_port" jdbcType="VARCHAR" property="mailPort" />
+    <result column="mail_user_name" jdbcType="VARCHAR" property="mailUserName" />
+    <result column="mail_pass_word" jdbcType="VARCHAR" property="mailPassWord" />
+    <result column="properties" jdbcType="VARCHAR" property="properties" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="access_key" jdbcType="VARCHAR" property="accessKey" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="region_static" jdbcType="VARCHAR" property="regionStatic" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    mail_conf_id, mail_host, mail_port,mail_user_name, mail_pass_word,properties, type, access_key, secret_key, region_static, state, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dc_mail_conf
+    where mail_conf_id = #{mailConfId,jdbcType=BIGINT}
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dc_mail_conf
+    where mail_conf_id = #{mailConfId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.DcMailConf">
+    insert into dc_mail_conf (mail_conf_id, mail_host,mail_port, mail_user_name,
+      mail_pass_word,properties, type, access_key,
+      secret_key, region_static, state, create_time,
+      update_time)
+    values (#{mailConfId,jdbcType=BIGINT}, #{mailHost,jdbcType=VARCHAR}, #{mailPort,jdbcType=VARCHAR}, #{mailUserName,jdbcType=VARCHAR},
+      #{mailPassWord,jdbcType=VARCHAR}, #{properties,jdbcType=SMALLINT}, #{type,jdbcType=SMALLINT}, #{accessKey,jdbcType=VARCHAR},
+      #{secretKey,jdbcType=VARCHAR}, #{regionStatic,jdbcType=VARCHAR},
+      #{state,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcMailConf">
+    insert into dc_mail_conf
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mailConfId != null">
+        mail_conf_id,
+      </if>
+      <if test="mailHost != null">
+        mail_host,
+      </if>
+      <if test="mailPort != null">
+        mail_port,
+      </if>
+      <if test="mailUserName != null">
+        mail_user_name,
+      </if>
+      <if test="mailPassWord != null">
+        mail_pass_word,
+      </if>
+      <if test="properties != null">
+        properties,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="accessKey != null">
+        access_key,
+      </if>
+      <if test="secretKey != null">
+        secret_key,
+      </if>
+      <if test="regionStatic != null">
+        region_static,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mailConfId != null">
+        #{mailConfId,jdbcType=BIGINT},
+      </if>
+      <if test="mailHost != null">
+        #{mailHost,jdbcType=VARCHAR},
+      </if>
+      <if test="mailPort != null">
+        #{mailPort,jdbcType=VARCHAR},
+      </if>
+      <if test="mailUserName != null">
+        #{mailUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="mailPassWord != null">
+        #{mailPassWord,jdbcType=VARCHAR},
+      </if>
+      <if test="properties != null">
+        #{properties,jdbcType=SMALLINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="accessKey != null">
+        #{accessKey,jdbcType=VARCHAR},
+      </if>
+      <if test="secretKey != null">
+        #{secretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="regionStatic != null">
+        #{regionStatic,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.DcMailConf">
+    update dc_mail_conf
+    <set>
+      <if test="mailHost != null">
+        mail_host = #{mailHost,jdbcType=VARCHAR},
+      </if>
+      <if test="mailPort != null">
+        mail_port = #{mailPort,jdbcType=VARCHAR},
+      </if>
+      <if test="mailUserName != null">
+        mail_user_name = #{mailUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="mailPassWord != null">
+        mail_pass_word = #{mailPassWord,jdbcType=VARCHAR},
+      </if>
+      <if test="properties != null">
+        properties = #{properties,jdbcType=SMALLINT},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="accessKey != null">
+        access_key = #{accessKey,jdbcType=VARCHAR},
+      </if>
+      <if test="secretKey != null">
+        secret_key = #{secretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="regionStatic != null">
+        region_static = #{regionStatic,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mail_conf_id = #{mailConfId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcMailConf">
+    update dc_mail_conf
+    set mail_host = #{mailHost,jdbcType=VARCHAR},
+      mail_port = #{mailPort,jdbcType=VARCHAR},
+      mail_user_name = #{mailUserName,jdbcType=VARCHAR},
+      mail_pass_word = #{mailPassWord,jdbcType=VARCHAR},
+      properties = #{properties,jdbcType=SMALLINT},
+      type = #{type,jdbcType=SMALLINT},
+      access_key = #{accessKey,jdbcType=VARCHAR},
+      secret_key = #{secretKey,jdbcType=VARCHAR},
+      region_static = #{regionStatic,jdbcType=VARCHAR},
+      state = #{state,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where mail_conf_id = #{mailConfId,jdbcType=BIGINT}
+  </update>
+</mapper>

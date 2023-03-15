@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcTermsServiceAuditMapper">
+
+    <select id="getUnreviewed" resultType="com.spartan.dc.model.DcTermsServiceAudit">
+        select
+            <include refid="Base_Column_List" />
+        from
+            dc_terms_service_audit
+        where
+            audit_state = 0
+        limit 1
+    </select>
+
+    <select id="detail" resultType="com.spartan.dc.model.vo.resp.TermsServiceDetailRespVO">
+        select
+            dtsa.service_audit_id serviceAuditId,
+            du.contacts_name creator,
+            DATE_FORMAT(dtsa.create_time, '%Y-%m-%d %T') createTime,
+            du2.contacts_name auditor,
+            DATE_FORMAT(dtsa.audit_time, '%Y-%m-%d %T') auditTime,
+            dtsa.audit_state auditState,
+            dtsa.remark remark,
+            dtsa.terms_content termsContent
+        from
+            dc_terms_service_audit dtsa
+        left join
+            dc_user du on dtsa.creator = du.user_id
+        left join
+            dc_user du2 on dtsa.auditor = du2.user_id
+        where
+            service_audit_id = #{serviceAuditId}
+    </select>
+
+    <select id="queryTermsServiceAuditList" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+            dtsa.service_audit_id serviceAuditId,
+            du.contacts_name creator,
+            DATE_FORMAT(dtsa.create_time, '%Y-%m-%d %T') createTime,
+            du2.contacts_name auditor,
+            DATE_FORMAT(dtsa.audit_time, '%Y-%m-%d %T') auditTime,
+            dtsa.audit_state auditState,
+            dtsa.remark remark,
+            dtsa.terms_content termsContent
+        from
+            dc_terms_service_audit dtsa
+        left join
+            dc_user du on dtsa.creator = du.user_id
+        left join
+            dc_user du2 on dtsa.auditor = du2.user_id
+        order by field(dtsa.audit_state, 0, 1, 2), dtsa.audit_time desc
+    </select>
+
+    <select id="queryNewestTreaty" resultType="com.spartan.dc.model.DcTermsServiceAudit">
+        select
+        <include refid="Base_Column_List" />,<include refid="Blob_Column_List" />
+        from
+        dc_terms_service_audit
+        where
+        audit_state = 1
+        order by audit_time desc
+        limit 1
+    </select>
+
+</mapper>

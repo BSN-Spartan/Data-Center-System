@@ -15,19 +15,6 @@ mysql:
   # Enter the password
   read_password: db_password
 
-spring:
-  mail:
-    host: [smtp.exmail.qq.com]
-    port: [587]
-    username: [username]
-    password: [password]
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
 chain:
   # Default Node's JSON-RPC interface (--http.port) of Spartan-I Chain
   nodeRpcAddress: "http://node-IP:node-rpc-port"
@@ -39,14 +26,10 @@ chain:
   walletFilePath: "your-directory/wallet"
   # The system will parse events from all blocks after this block height. This number is recommended to be set as the latest block height of the Default Chain before the Data Center System started. For example: blockHeight: 270441
   # You can get the block height from the blockchain explorer: https://spartanone.bsn.foundation
-  blockHeight: 1157336
+  blockHeight: 1683752
   
 kongGateWayConfig:
   username: admin
   password: abc123
   userAccessKeyUrl: /gateway/api/v0/accessKey/save
   userDefaultReqConfig: /gateway/api/v0/accessKey/defaultConfig
-
-
-
-

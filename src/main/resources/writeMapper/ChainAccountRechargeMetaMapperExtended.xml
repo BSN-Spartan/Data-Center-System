@@ -40,4 +40,14 @@
         </trim>
     </insert>
 
+    <select id="getLatestRecord" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List" />
+        from
+            chain_account_recharge_meta
+        order by
+            recharge_meta_id desc
+        limit 1
+    </select>
+
 </mapper>

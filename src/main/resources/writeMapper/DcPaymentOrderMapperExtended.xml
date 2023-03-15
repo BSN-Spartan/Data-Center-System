@@ -24,6 +24,9 @@
             <if test="accountAddress != null and accountAddress != ''">
                 and dpo.account_address = #{accountAddress}
             </if>
+            <if test="channelCode != null">
+                and dpt.channel_code = #{channelCode}
+            </if>
             <if test="chainId != null">
                 and dpo.chain_id = #{chainId}
             </if>
@@ -130,6 +133,9 @@
             <if test="isRefund != null">
                 and dpo.is_refund = #{isRefund,jdbcType=SMALLINT}
             </if>
+            <if test="channelCode != null and channelCode != ''">
+                and dpt.channel_code = #{channelCode,jdbcType=SMALLINT}
+            </if>
         </where>
         order by dpo.create_time desc
     </select>
@@ -174,6 +180,9 @@
             </if>
             <if test="refundState != null and refundState != ''">
                 and dpr.refund_state = #{refundState}
+            </if>
+            <if test="channelCode != null and refundState != ''">
+                and dpt.channel_code = #{channelCode}
             </if>
         </where>
         order by dpr.create_time desc
@@ -224,6 +233,9 @@
             </if>
             <if test="refundState != null">
                 and dpr.refund_state = #{refundState,jdbcType=SMALLINT}
+            </if>
+            <if test="channelCode != null and channelCode != ''">
+                and dpt.channel_code = #{channelCode,jdbcType=SMALLINT}
             </if>
         </where>
         order by dpr.create_time desc

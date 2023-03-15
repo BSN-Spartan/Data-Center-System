@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spartan.dc.dao.write.DcTermsServiceAuditMapper">
+  <resultMap id="BaseResultMap" type="com.spartan.dc.model.DcTermsServiceAudit">
+    <id column="service_audit_id" jdbcType="BIGINT" property="serviceAuditId" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="auditor" jdbcType="BIGINT" property="auditor" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_state" jdbcType="SMALLINT" property="auditState" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.spartan.dc.model.DcTermsServiceAudit">
+    <result column="terms_content" jdbcType="LONGVARCHAR" property="termsContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    service_audit_id, creator, create_time, auditor, audit_time, audit_state, remark
+  </sql>
+  <sql id="Blob_Column_List">
+    terms_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from dc_terms_service_audit
+    where service_audit_id = #{serviceAuditId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dc_terms_service_audit
+    where service_audit_id = #{serviceAuditId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.spartan.dc.model.DcTermsServiceAudit">
+    insert into dc_terms_service_audit (service_audit_id, creator, create_time, 
+      auditor, audit_time, audit_state, 
+      remark, terms_content)
+    values (#{serviceAuditId,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{auditor,jdbcType=BIGINT}, #{auditTime,jdbcType=TIMESTAMP}, #{auditState,jdbcType=SMALLINT}, 
+      #{remark,jdbcType=VARCHAR}, #{termsContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.spartan.dc.model.DcTermsServiceAudit">
+    insert into dc_terms_service_audit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceAuditId != null">
+        service_audit_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="auditor != null">
+        auditor,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="auditState != null">
+        audit_state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="termsContent != null">
+        terms_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceAuditId != null">
+        #{serviceAuditId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null">
+        #{auditor,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditState != null">
+        #{auditState,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="termsContent != null">
+        #{termsContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spartan.dc.model.DcTermsServiceAudit">
+    update dc_terms_service_audit
+    <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null">
+        auditor = #{auditor,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditState != null">
+        audit_state = #{auditState,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="termsContent != null">
+        terms_content = #{termsContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where service_audit_id = #{serviceAuditId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.spartan.dc.model.DcTermsServiceAudit">
+    update dc_terms_service_audit
+    set creator = #{creator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=BIGINT},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      audit_state = #{auditState,jdbcType=SMALLINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      terms_content = #{termsContent,jdbcType=LONGVARCHAR}
+    where service_audit_id = #{serviceAuditId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spartan.dc.model.DcTermsServiceAudit">
+    update dc_terms_service_audit
+    set creator = #{creator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=BIGINT},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      audit_state = #{auditState,jdbcType=SMALLINT},
+      remark = #{remark,jdbcType=VARCHAR}
+    where service_audit_id = #{serviceAuditId,jdbcType=BIGINT}
+  </update>
+</mapper>
