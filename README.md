@@ -124,20 +124,6 @@ Download the configuration files, including [application.yml](https://github.com
 
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
 
-- Configure the email
-
-  ```yml
-  spring:
-    mail:
-    # The server address for the email, for example：smtp.gmail.com, smtp.office365.com
-      host: smtp.office365.com
-    # The server port
-      port: 587
-    # The sender address of the email
-      username: spartan_example@hotmail.com
-    # App password gained after enabling the two-step verification 
-      password: App_password
-  ```
 
 - Configure the node information
 
