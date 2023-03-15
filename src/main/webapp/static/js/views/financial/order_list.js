@@ -192,7 +192,7 @@ let initFrameList = function () {
             {data: "isRefund", render: initIsRefundState, title: "Refund", bSearchable: false, bSortable: false},
             {data: "createTime", title: "Created Time", bSearchable: false, bSortable: false},
             {data: "payTime", title: "Payment Time", bSearchable: false, bSortable: false},
-            {render: initTableBut, title: "Options", bSortable: false, width: 160}
+            {render: initTableBut, title: "Action", bSortable: false, width: 160}
         ],
         "columnDefs": [{
             "targets": "_all",
@@ -302,6 +302,7 @@ let search = function () {
     setDatatableSearchInfo($("#chainId").val(), "chainId");
     setDatatableSearchInfo($("#otherTradeNo").val(), "otherTradeNo");
     setDatatableSearchInfo($("#accountAddress").val(), "accountAddress");
+    setDatatableSearchInfo($("#channelCode").val(), "channelCode");
     setDatatableSearchInfo($("#createStartTime").val(), "createStartTime");
     setDatatableSearchInfo($("#createEndTime").val(), "createEndTime");
     setDatatableSearchInfo($("#payStartTime").val(), "payStartTime");
@@ -534,6 +535,7 @@ function exportOrderExcel() {
     dcPaymentOrderReqVO.payState = $("#payState").val();
     dcPaymentOrderReqVO.gasRechargeState = $("#gasRechargeState").val();
     dcPaymentOrderReqVO.isRefund = $("#isRefund").val();
+    dcPaymentOrderReqVO.channelCode = $("#channelCode").val();
     let reqUrl = "/ground/parameters/export/dcpaymentorder?data=" + encodeURIComponent(JSON.stringify(dcPaymentOrderReqVO));
     COMMON_HANDLE.exportExcel(reqUrl);
 }

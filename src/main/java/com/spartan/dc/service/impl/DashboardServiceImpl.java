@@ -86,7 +86,7 @@ public class DashboardServiceImpl extends BaseService implements DashboardServic
     public String getGasBalance(String address) {
 
         try {
-            BigInteger balance= spartanSdkClient.nTTService.balanceOfGas(address);
+            BigInteger balance = spartanSdkClient.nTTService.balanceOfGas(address);
             return balance.toString();
         } catch (Exception e) {
             logger.error("Failed to get GAS balance:", e);

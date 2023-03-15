@@ -1,7 +1,6 @@
 package com.spartan.dc.task;
 
 import cn.hutool.core.util.NumberUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.reddate.spartan.SpartanSdkClient;

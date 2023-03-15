@@ -116,17 +116,15 @@ public class PaymentServiceImpl implements PaymentService {
             String accessKey = UUID.randomUUID().toString().replaceAll("-", "");
 
             // Gets the data center configuration information table
-            String tpdValue = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.CHAIN_INFORMATION_ACCESS.getCode(), SystemConfCodeEnum.TPD.getName());
-            String tpsValue = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.CHAIN_INFORMATION_ACCESS.getCode(), SystemConfCodeEnum.TPS.getName());
 
             // Save user access information
             dcChainAccess = DcChainAccess.builder()
                     .accessKey(accessKey)
                     .contactsEmail(paymentReqVO.getEmail())
+                    .tps(-2)
+                    .tpd(-2)
                     .state(DcChainAccessStateEnum.START_USING.getCode())
                     .notifyState(DcChainAccessNotifyStateEnum.NOTIFY_FAILURE.getCode())
-                    .tps(Integer.valueOf(tpsValue))
-                    .tpd(Integer.valueOf(tpdValue))
                     .createTime(new Date())
                     .updateTime(new Date())
                     .build();

@@ -14,6 +14,7 @@ import com.spartan.dc.model.vo.req.PaymentReqVO;
 import com.spartan.dc.model.vo.req.RefundReqVO;
 import com.spartan.dc.model.vo.resp.PaymentRespVO;
 import com.spartan.dc.model.vo.resp.RefundRespVO;
+import com.spartan.dc.service.impl.BaseService;
 import com.spartan.dc.strategy.StrategyService;
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
@@ -47,7 +48,7 @@ import static java.awt.SystemColor.info;
  **/
 @Service
 @Slf4j
-public class StripePayStrategyImpl implements StrategyService {
+public class StripePayStrategyImpl extends BaseService implements StrategyService {
 
     @Value("${payment.stripe.currency}")
     private String currency;
@@ -457,8 +458,13 @@ public class StripePayStrategyImpl implements StrategyService {
                         .state(RechargeSubmitStateEnum.PENDING_SUBMIT.getCode())
                         .updateTime(new Date())
                         .rechargeState(RechargeStateEnum.NO_PROCESSING_REQUIRED.getCode())
+                        .auditState(RechargeAuditStateEnum.AUDIT_SUCCESS.getCode())
+                        .auditTime(new Date())
+                        .createTime(new Date())
+                        .createUserId(getUserId())
+                        .rechargeType(RechargeTypeEnum.TO_UP.getCode())
                         .build();
-                dcGasRechargeRecordMapper.insertRechargeRecord(dcGasRechargeRecord);
+                dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
 
                 // Send a payment success email
                 selectOrderByTradeNo.setPayTime(payTime);

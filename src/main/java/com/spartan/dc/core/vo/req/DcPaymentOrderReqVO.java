@@ -62,4 +62,9 @@ public class DcPaymentOrderReqVO {
     * */
     private Long isRefund;
 
+    /*
+     * Payment Method
+     * */
+    private String channelCode;
+
 }

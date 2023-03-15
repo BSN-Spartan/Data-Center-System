@@ -12,6 +12,7 @@ import com.spartan.dc.core.util.bean.BeanUtils;
 import com.spartan.dc.core.util.common.FileCode;
 import com.spartan.dc.core.util.common.UUIDUtil;
 import com.spartan.dc.core.util.excel.HutoolExcelUtils;
+import com.spartan.dc.core.util.user.UserLoginInfo;
 import com.spartan.dc.core.vo.req.*;
 import com.spartan.dc.core.vo.resp.DcPaymentOrderDetailsRespVO;
 import com.spartan.dc.core.vo.resp.DcPaymentOrderExcelRespVO;
@@ -36,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,7 +51,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService {
+public class DcbackGroundSystemServicelmpl extends BaseService implements DcbackGroundSystemService {
 
     @Resource
     private DcSystemConfMapper dcSystemConfMapper;
@@ -219,7 +221,12 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
             dcGasRechargeRecord.setTxHash("");
             dcGasRechargeRecord.setUpdateTime(new Date());
             dcGasRechargeRecord.setRechargeState(RechargeStateEnum.NO_PROCESSING_REQUIRED.getCode());
-            dcGasRechargeRecordMapper.insertRechargeRecord(dcGasRechargeRecord);
+            dcGasRechargeRecord.setAuditState(RechargeAuditStateEnum.AUDIT_SUCCESS.getCode());
+            dcGasRechargeRecord.setAuditTime(new Date());
+            dcGasRechargeRecord.setCreateUserId(getUserId());
+            dcGasRechargeRecord.setCreateTime(new Date());
+            dcGasRechargeRecord.setRechargeType(RechargeTypeEnum.TO_UP.getCode());
+            dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
         } else {
             return ResultInfoUtil.errorResult("Payment result query---The gas recharge record already exists");
         }
@@ -330,15 +337,16 @@ public class DcbackGroundSystemServicelmpl implements DcbackGroundSystemService 
     }
 
     @Override
-    public String queryTreaty() {
+    public String queryTreaty(String treatyCode) {
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
         if (Objects.isNull(sysDataCenter)) {
             throw new GlobalException("Data center information is not configured");
         }
-        List<DcSystemConfRespVO> dcSystemConfRespVOS = dcSystemConfMapper.querySystemConf(DcSystemConfTypeEnum.TREATY.getCode());
-        if (dcSystemConfRespVOS.size()==0){
+        DcSystemConf dcSystemConf = dcSystemConfMapper.querySystemConfByCode(treatyCode);
+        if (Objects.isNull(dcSystemConf)){
             throw new GlobalException("Terms of service content not initialized");
         }
-        return dcSystemConfRespVOS.get(0).getConfValue();
+        return dcSystemConf.getConfValue();
     }
+
 }

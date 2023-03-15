@@ -72,17 +72,17 @@ var handleSubmit = function () {
         },
         messages: {
             userName: {
-                required: "Please enter userName"
+                required: "Please enter the username"
             },
             email: {
-                required: "Please enter email",
+                required: "Please enter the email address",
                 email: "Please enter a valid email address"
             },
             password: {
                 required: "Please enter password"
             },
             phone: {
-                required: "Please enter phone"
+                required: "Please enter the phone number"
             }
         },
 

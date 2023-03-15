@@ -94,6 +94,20 @@
 
                     <div class="col-sm-5">
                         <div class="form-group">
+                            <label for="channelCode" class="col-sm-4 control-label">Payment Method:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="channelCode" SIZE="">
+                                    <OPTION VALUE="">All
+                                    <OPTION VALUE="OFFLINE">Remittance
+                                    <OPTION VALUE="STRIPE">Stripe
+                                    <OPTION VALUE="COINBASE">Coinbase
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
                             <label for="refundState" class="col-sm-4 control-label">Refund Status:</label>
                             <div class="col-sm-8">
                                 <select class="form-control" id="refundState"  SIZE="">
@@ -107,7 +121,7 @@
                     </div>
 
                     <div class="col-sm-5">
-                        <div class="form-group2">
+                        <div class="form-group">
                             <label for="date-range_u" class="col-sm-4 control-label">Refund Time:</label>
                             <div class="col-sm-8">
                                 <div class="input-daterange input-group" id="date-range_u">

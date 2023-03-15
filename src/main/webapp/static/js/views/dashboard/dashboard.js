@@ -174,18 +174,25 @@ var initRechargeList = function () {
             {
                 data: "rechargeCode",
                 render: COMMON_HANDLE.copyData,
-                title: "Recharge Code",
+                title: "Top-up ID",
                 bSearchable: false,
                 bSortable: false
             },
             {data: "chainName", title: "Chain Name", bSearchable: false, bSortable: false},
             {data: "chainAddress", title: "Wallet Address", bSearchable: false, bSortable: false},
+            {
+                data: "rechargeType",
+                render: initRechargeType,
+                title: "Type",
+                bSearchable: false,
+                bSortable: false
+            },
             {data: "gas", render: initGas, title: "Gas Credit", bSearchable: false, bSortable: false},
             {data: "ntt", title: "NTT", bSearchable: false, bSortable: false},
             {
                 data: "rechargeState",
                 render: initRechargeStateType,
-                title: "Status",
+                title: "Top Up Status",
                 bSearchable: false,
                 bSortable: false
             },
@@ -208,6 +215,11 @@ var initRechargeList = function () {
 let initRechargeStateType = function (data, type, row) {
     return COMMON_HANDLE.getRechargeStateName(data);
 };
+
+let initRechargeType = function (data, type, row) {
+    return COMMON_HANDLE.getRechargeType(data);
+};
+
 
 let initRechargeCode = function (data, type, row) {
     if (null === data) {
@@ -337,21 +349,21 @@ let handleSubmit = function () {
         errorClass: 'help-block',
         focusInvalid: false,
         rules: {
-            nttWallet_input: {
+            gas_amount: {
                 required: true
             },
-            gas_amount: {
+            password: {
                 required: true,
                 digits: true,
                 min: 1
             }
         },
         messages: {
-            recharge_frameType: {
-                required: "The NTT wallet address cannot be empty"
+            gas_amount: {
+                required: "Please enter the amount of Gas Credit"
             },
-            chainAccountAddress: {
-                required: "Gas credit cannot be empty"
+            password: {
+                required: "Please enter the keystore password"
             }
         },
         highlight: function (element) {
@@ -362,7 +374,11 @@ let handleSubmit = function () {
             label.remove();
         },
         errorPlacement: function (error, element) {
-            element.parent('div').append(error);
+            if (element.attr('id') == 'gas_amount') {
+                element.parent('div').parent('div').append(error);
+            } else {
+                element.parent('div').append(error);
+            }
         },
         submitHandler: function () {
             submitMetaDataTx();

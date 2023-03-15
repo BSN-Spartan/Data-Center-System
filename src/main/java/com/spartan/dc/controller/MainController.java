@@ -113,13 +113,13 @@ public class MainController {
     @RequiredPermission(isPage = true)
     @RequestMapping("baseInfo")
     public String baseInfo() {
-        return "setting/baseInfo";
+        return "portal/baseInfo";
     }
 
     @RequiredPermission(isPage = true)
     @RequestMapping("chainAccess")
     public String chainAccess() {
-        return "setting/chainAccess";
+        return "portal/chainAccess";
     }
 
     @RequiredPermission(isPage = true)
@@ -131,25 +131,37 @@ public class MainController {
     @RequiredPermission(isPage = true)
     @RequestMapping("technicalSupport")
     public String technicalSupport() {
-        return "setting/technicalSupport";
+        return "portal/technicalSupport";
     }
 
     @RequiredPermission(isPage = true)
     @RequestMapping("paymentType")
     public String paymentType() {
-        return "setting/paymentType";
+        return "portal/paymentType";
     }
 
     @RequiredPermission(isPage = true)
     @RequestMapping("paymentTerm")
     public String paymentTerm() {
-        return "setting/paymentTerm";
+        return "terms/list";
     }
 
     @RequestMapping(value = "role")
     @RequiredPermission(isPage = true)
     public String role() {
         return "role/list";
+    }
+
+    @RequiredPermission(isPage = true)
+    @RequestMapping("monitor")
+    public String balanceMonitor() {
+        return "setting/balanceMonitor";
+    }
+
+    @RequiredPermission(isPage = true)
+    @RequestMapping("email")
+    public String mailConfiguration() {
+        return "setting/mailConfiguration";
     }
 
 }

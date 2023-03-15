@@ -19,4 +19,6 @@ public interface ChainAccountRechargeMetaMapper {
     int updateByPrimaryKey(ChainAccountRechargeMeta record);
 
     int insertRechargeMetaRecord(ChainAccountRechargeMeta record);
+
+    ChainAccountRechargeMeta getLatestRecord();
 }

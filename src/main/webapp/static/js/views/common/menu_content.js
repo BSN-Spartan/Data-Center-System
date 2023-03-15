@@ -11,6 +11,8 @@ icons.push({code: 'financial_module_', icon: '<i class="menu-icon fa fa-credit-c
 icons.push({code: 'index_', icon: '<i class="menu-icon fa fa-cogs"></i>'});
 icons.push({code: 'portal_config_', icon: '<i class="menu-icon fa fa-pencil-square-o"></i>'});
 icons.push({code: 'config_', icon: '<i class="menu-icon fa fa-cogs"></i>'});
+icons.push({code: 'setting_module_', icon: '<i class="menu-icon fa fa-gear"></i>'});
+
 
 var resourceList = [
 

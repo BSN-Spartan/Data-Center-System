@@ -142,6 +142,9 @@ let handleSubmit = function () {
             },
             nodeCode: {
                 required: true
+            },
+            password: {
+                required: true
             }
         },
         messages: {
@@ -159,6 +162,9 @@ let handleSubmit = function () {
             },
             nodeCode: {
                 required: "Please confirm the node ID"
+            },
+            password: {
+                required: "Please enter the keystore password"
             }
         },
         highlight: function (element) {

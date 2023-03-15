@@ -132,7 +132,7 @@ let initFrameList = function () {
                 bSearchable: false,
                 bSortable: false
             },
-            {render: initTableBut, title: "Options", bSortable: false}
+            {render: initTableBut, title: "Action", bSortable: false}
         ],
         "columnDefs": [{
             "targets": "_all",

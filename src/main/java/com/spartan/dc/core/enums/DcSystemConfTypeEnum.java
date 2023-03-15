@@ -11,7 +11,12 @@ public enum DcSystemConfTypeEnum {
     CONTACT_US((short) 3, "Contact us"),
     CHAIN_INFORMATION_ACCESS((short) 4, "Chain access information"),
     KEYSTORE((short)5, "Keystore"),
-    TREATY((short)6, "Treaty");
+
+    TREATY((short)6, "Treaty"),
+
+    NTT_BALANCE_REMINDER((short) 7, "Ntt balance reminder"),
+    GAS_BALANCE_REMINDER((short) 8, "Gas balance reminder");
+
 
     private final Short code;
     private final String name;

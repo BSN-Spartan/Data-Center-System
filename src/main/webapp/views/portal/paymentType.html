@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="portal_config_"/>
+    <meta name="menuId" content="payment_type_config_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+
+        .div_title {
+            margin-left: 0;
+        }
+        .icon_img {
+            line-height: 35px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Payment Method</div>
+                    <div class="col-xs-12"><hr></div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="onlinePayType" class="col-sm-2 control-label">Payment Method:</label>
+                            <div class="col-sm-4" >
+                                <div class="checkbox info">
+                                    <input type="checkbox" id="onlinePayType" onclick="onlinePayTypeFunction()" ><label for="onlinePayType">Remittance</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="online.bankName" class="col-sm-2 control-label">Bank Name:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" value=""  id="online.bankName" placeholder="Please enter bank name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="online.bankAccount" class="col-sm-2 control-label">Bank Account No.:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="bankAccount" value="" id="online.bankAccount" placeholder="Please enter bank account no.">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="online.bankAddress" class="col-sm-2 control-label">Bank Address:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="bankAddress" value="" id="online.bankAddress" placeholder="Please enter bank address">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="online.swiftCode" class="col-sm-2 control-label">Swift Code:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="swiftCode" value="" id="online.swiftCode" placeholder="Please enter swift code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12"><hr></div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="stripePayType" class="col-sm-2 control-label">Payment Method:</label>
+                            <div class="col-sm-4">
+
+                                <div class="checkbox info">
+                                    <input type="checkbox" id="stripePayType" onclick="stripePayTypeFunction()" ><label for="stripePayType">Stripe</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="stripe.privateKey" class="col-sm-2 control-label">Private Key:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" value="" id="stripe.privateKey" onchange="handleInputParam()" placeholder="Example: sk_test_51Ls0JmJ2alptVT5uzCXsadfasdfsadfaefwe12s3d1f3a2s512wqqqw3y3heXwc6gvO00gnrRDif3">
+                            </div>
+                            <a class="ico-item icon_img" target="_blank" id="displayPrivateKey" onclick="unHideDisplay('stripe.privateKey')"><img id="privateKeyImg" src="/static/images/btn/btn_display_icon.png" style="width: 23px;height: 23px;"></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">
+                                <a href="https://dashboard.stripe.com/test/apikeys" target="_blank">how to get it</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="stripe.endpointSecret" class="col-sm-2 control-label">endpointSecret:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control"  value="" id="stripe.endpointSecret" onchange="handleInputParam()" placeholder="Example: whsec_bWaZJefasdfasd2asdfasfx8x8vPnm">
+                            </div>
+                            <a class="ico-item icon_img" target="_blank" id="displayEndpointSecret" onclick="unHideDisplay('stripe.endpointSecret')"><img id="endpointSecretImg" src="/static/images/btn/btn_display_icon.png" style="width: 23px;height: 23px;"></a>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">
+                                   Click<a href="https://dashboard.stripe.com/test/webhooks" target="_blank"> here</a>
+                                to add an endpoint, endpoint URL: "domain_name/v1/payment/stripe/callback"
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12"><hr></div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="coinbasePayType" class="col-sm-2 control-label">Payment Method:</label>
+                            <div class="col-sm-4">
+                                <div class="checkbox info">
+                                    <input type="checkbox" id="coinbasePayType" onclick="coinbasePayTypeFunction()" ><label for="coinbasePayType">Coinbase</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="coinbase.apiKey" class="col-sm-2 control-label">apiKey:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" value="" id="coinbase.apiKey" onchange="handleInputParam()" placeholder="Example: 53123193a-5b54-4238-967b-71326512f711">
+                            </div>
+                            <a class="ico-item icon_img" target="_blank" id="displayApiKey" onclick="unHideDisplay('coinbase.apiKey')"> <img id="apiKeyImg" src="/static/images/btn/btn_display_icon.png" style="width: 23px;height: 23px;"></a>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">
+                                <a href="https://beta.commerce.coinbase.com/settings/security" target="_blank">how to get it</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="coinbase.apiVersion" class="col-sm-2 control-label">apiVersion:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" value="" id="coinbase.apiVersion" placeholder="Example: 2008-08-22">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" id="submit_div">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/views/portal/paymentType.js"></script>
+
+</body>
+</html>

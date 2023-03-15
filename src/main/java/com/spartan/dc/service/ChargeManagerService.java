@@ -49,4 +49,6 @@ public interface ChargeManagerService {
     String getMataTxSignature(MetaDataTxReqVO reqVO, Credentials cre);
 
     String getChainPrice(Integer chainId);
+
+    boolean checkPasswordExpired();
 }

@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.reddate.spartan.SpartanSdkClient;
 import com.reddate.spartan.dto.spartan.*;
 import com.spartan.dc.core.conf.EventBlockConf;
-import com.spartan.dc.core.enums.NodeStateEnum;
-import com.spartan.dc.core.enums.NttTxEnum;
-import com.spartan.dc.core.enums.RechargeStateEnum;
-import com.spartan.dc.core.enums.RechargeSubmitStateEnum;
+import com.spartan.dc.core.enums.*;
 import com.spartan.dc.core.util.common.Md5Utils;
 import com.spartan.dc.dao.write.*;
 import com.spartan.dc.model.*;
@@ -187,6 +184,10 @@ public class EventAnalysisTask extends BaseTask {
                     dcGasRechargeRecord.setRechargeResult(metaECRechgEventBean.getTransactionInfoBean().getHash());
                     dcGasRechargeRecord.setNonce(metaECRechgEventBean.getNonce().longValue());
                     dcGasRechargeRecord.setMd5Sign(md5Sign);
+                    dcGasRechargeRecord.setAuditState(RechargeAuditStateEnum.AUDIT_SUCCESS.getCode());
+                    dcGasRechargeRecord.setAuditTime(new Date());
+                    dcGasRechargeRecord.setCreateTime(new Date());
+                    dcGasRechargeRecord.setRechargeType(RechargeTypeEnum.TO_UP.getCode());
                     dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
                     LOG.info("Task: Add top-up record based on the Emergency Gas Credit top-up event: {}", md5Sign);
 

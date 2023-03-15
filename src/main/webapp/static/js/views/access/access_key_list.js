@@ -91,7 +91,7 @@ var initAccessKeyList = function () {
             {data: "tpd", render: initTpd, title: "TPD", bSearchable: false, bSortable: false},
             {data: "createTime", title: "Created Time", bSearchable: false, bSortable: false},
             {data: "state",render: ACCESS_HANDLE.getStateName,  title: "Status", bSearchable: false, bSortable: false},
-            {render: initTableBut, title: "Options", bSortable: false}
+            {render: initTableBut, title: "Action", bSortable: false}
         ],
         "columnDefs": [{
             "targets": "_all",

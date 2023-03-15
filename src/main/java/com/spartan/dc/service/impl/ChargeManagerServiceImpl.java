@@ -1,16 +1,15 @@
 package com.spartan.dc.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.reddate.spartan.SpartanSdkClient;
 import com.spartan.dc.core.datatables.DataTable;
+import com.spartan.dc.core.enums.*;
 import com.spartan.dc.core.exception.GlobalException;
 import com.spartan.dc.core.util.bech32.Bech32Utils;
 import com.spartan.dc.core.util.common.AddressUtils;
-import com.spartan.dc.core.enums.ChainTypeEnum;
 import com.spartan.dc.dao.write.ChainAccountRechargeMetaMapper;
 import com.spartan.dc.dao.write.ChainPriceMapper;
 import com.spartan.dc.dao.write.DcGasRechargeRecordMapper;
-import com.spartan.dc.core.enums.RechargeStateEnum;
-import com.spartan.dc.core.enums.RechargeSubmitStateEnum;
 import com.spartan.dc.dao.write.SysDataCenterMapper;
 import com.spartan.dc.model.ChainAccountRechargeMeta;
 import com.spartan.dc.model.ChainPrice;
@@ -20,7 +19,7 @@ import com.spartan.dc.model.vo.req.MetaDataTxReqVO;
 import com.spartan.dc.model.vo.resp.MetaDataTxRespVO;
 import com.spartan.dc.model.vo.req.RechargeReqVO;
 import com.spartan.dc.service.ChargeManagerService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.fisco.bcos.web3j.crypto.WalletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +73,8 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
     @Resource
     private SysDataCenterMapper sysDataCenterMapper;
 
+    @Autowired
+    private SpartanSdkClient spartanSdkClient;
 
     @Override
     public Map<String, Object> queryChargeList(DataTable<Map<String, Object>> dataTable) {
@@ -131,7 +132,11 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
         dcGasRechargeRecord.setState(RechargeSubmitStateEnum.PENDING_SUBMIT.getCode());
         dcGasRechargeRecord.setRechargeState(RechargeStateEnum.NO_PROCESSING_REQUIRED.getCode());
         dcGasRechargeRecord.setChainId((long) reqVO.getChainId());
-        dcGasRechargeRecordMapper.insertRechargeRecord(dcGasRechargeRecord);
+        dcGasRechargeRecord.setAuditState(RechargeAuditStateEnum.AUDIT_HANDLE.getCode());
+        dcGasRechargeRecord.setCreateUserId(getUserId());
+        dcGasRechargeRecord.setCreateTime(new Date());
+        dcGasRechargeRecord.setRechargeType(RechargeTypeEnum.PRESENTER.getCode());
+        dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
         return dcGasRechargeRecord.getRechargeRecordId() > 0;
     }
 
@@ -150,13 +155,38 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
             throw new GlobalException("Please configure metaTx metaTransferTypeHash");
         }
 
+        SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
+        if (sysDataCenter == null) {
+            throw new GlobalException("The basic information of the data center has not been configured yet");
+        }
+
         // check data center
         checkDataCenterInfo(reqVO.getPassword(), credentials);
+
+        Long localNonce = 1L;
+        Long chainNonce = null;
+        try {
+            chainNonce = spartanSdkClient.gasCreditRechargeService.getNonce(sysDataCenter.getNttAccountAddress()).longValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new GlobalException(e.getMessage());
+        }
+
+        // Get the current and latest record
+        ChainAccountRechargeMeta latestRecord = rechargeMetaMapper.getLatestRecord();
+        if (latestRecord != null) {
+            localNonce = latestRecord.getRechargeMetaId() + 1;
+        }
+
+        if (chainNonce > localNonce) {
+            localNonce = chainNonce + 5;
+        }
 
         long timestamp = System.currentTimeMillis() + (3600 * 1000 * deadline);
 
         // insert metaTx
         ChainAccountRechargeMeta metaTx = new ChainAccountRechargeMeta();
+        metaTx.setRechargeMetaId(localNonce);
         metaTx.setDeadline(timestamp);
         metaTx.setGas(new BigDecimal(reqVO.getNttCount()));
         metaTx.setChainAccountAddress(reqVO.getNttWallet());
@@ -168,11 +198,11 @@ public class ChargeManagerServiceImpl extends BaseService implements ChargeManag
         resp.setReceiver(reqVO.getNttWallet());
         resp.setChainID(chainId);
         resp.setEngAmt(reqVO.getNttCount());
-        resp.setNonce(metaTx.getRechargeMetaId().toString());
+        resp.setNonce(localNonce.toString());
         resp.setDeadline(String.valueOf(timestamp));
         resp.setDomainSeparator(domainSeparator);
         resp.setMetaTransferTypeHash(metaTransferTypeHash);
-        resp.setMateTxId(metaTx.getRechargeMetaId().toString());
+        resp.setMateTxId(localNonce.toString());
         return resp;
     }
 

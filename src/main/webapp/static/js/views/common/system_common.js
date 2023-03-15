@@ -78,6 +78,15 @@ var COMMON_HANDLE = {
         {"type": 0, "name": "Nonsupport"},
         {"type": 1, "name": "Support"}
     ],
+    AUDIT_STATE: [
+        {"type": 0, "name": "Pending Review"},
+        {"type": 1, "name": "Approved"},
+        {"type": 2, "name": "Not Approved"}
+    ],
+    RECHARGE_TYPE: [
+        {"type": 0, "name": "Free"},
+        {"type": 1, "name": "Paid"}
+    ],
     getRechargeStateSelect: function () {
         return COMMON_HANDLE.getSelect(COMMON_HANDLE.RECHARGE_STATE);
     },
@@ -149,6 +158,19 @@ var COMMON_HANDLE = {
     },
     getUserAccessStateName: function (type) {
         return COMMON_HANDLE.getName(type, COMMON_HANDLE.USER_ACCESS_TYPE);
+    },
+    getAuditStateName: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.AUDIT_STATE);
+    },
+    getAuditStateSelect: function () {
+        return COMMON_HANDLE.getSelect(COMMON_HANDLE.AUDIT_STATE);
+    },
+
+    getRechargeType: function (type) {
+        return COMMON_HANDLE.getName(type, COMMON_HANDLE.RECHARGE_TYPE);
+    },
+    getRechargeTypeSelect: function () {
+        return COMMON_HANDLE.getSelect(COMMON_HANDLE.RECHARGE_TYPE);
     },
 
     getSelect: function (list) {

@@ -4,26 +4,24 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.spartan.dc.core.dto.portal.SendMessageReqVO;
-import com.spartan.dc.core.enums.DcSystemConfTypeEnum;
-import com.spartan.dc.core.enums.MessageTypeEnum;
-import com.spartan.dc.core.enums.MsgCodeEnum;
-import com.spartan.dc.core.enums.SystemConfCodeEnum;
+import com.spartan.dc.core.enums.*;
+import com.spartan.dc.core.exception.GlobalException;
+import com.spartan.dc.core.util.common.AesUtil;
+import com.spartan.dc.core.util.common.CacheManager;
 import com.spartan.dc.core.util.message.MessageTemplateUtil;
-import com.spartan.dc.dao.write.DcSystemConfMapper;
-import com.spartan.dc.dao.write.SysDataCenterMapper;
-import com.spartan.dc.dao.write.SysMailRecordMapper;
-import com.spartan.dc.dao.write.SysMessageTemplateMapper;
+import com.spartan.dc.dao.write.*;
+import com.spartan.dc.model.DcMailConf;
 import com.spartan.dc.model.SysDataCenter;
 import com.spartan.dc.model.SysMailRecord;
 import com.spartan.dc.model.SysMessageTemplate;
 import com.spartan.dc.service.EmailService;
 import com.spartan.dc.service.SendMessageService;
+import com.spartan.dc.strategy.EmailStrategyHandler;
 import com.spartan.dc.tread.DefaultThreadPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -56,22 +54,59 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Resource
     private SysDataCenterMapper sysDataCenterMapper;
 
+    @Resource
+    private DcMailConfMapper dcMailConfMapper;
 
     @Autowired
-    private EmailService emailService;
+    private EmailStrategyHandler emailStrategyHandler;
 
-    @Value("${spring.mail.username}")
-    private String from;
 
     @Value("${system.iconBase64}")
     private String iconBase64;
 
     public static final int MAIL_CONTENT_MAX_LENGTH = 1000;
     public static ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("sysMessage-%d").build();
-    public static  ExecutorService executorService = new ThreadPoolExecutor(5, 10, 1L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), namedThreadFactory);
+    public static ExecutorService executorService = new ThreadPoolExecutor(5, 10, 1L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), namedThreadFactory);
+
 
     @Override
     public boolean sendMessage(SendMessageReqVO sendMessageReqVO) {
+        String awsDcMailConf = CacheManager.get("dcMailConf");
+
+        DcMailConf conf;
+        if (StringUtils.isNotBlank(awsDcMailConf)) {
+            conf = JSONObject.parseObject(awsDcMailConf, DcMailConf.class);
+        } else {
+            conf = dcMailConfMapper.queryDcMailConf(null);
+            if (Objects.isNull(conf)){
+                throw new GlobalException("Data Center System has not configured email settings yet");
+            }
+            CacheManager.put("dcMailConf", JSONObject.toJSONString(conf));
+        }
+
+        try {
+            if (StringUtils.isNotBlank(conf.getMailPassWord())) {
+                conf.setMailPassWord(AesUtil.decrypt(conf.getMailPassWord(), MailConfSecretKeyEnum.SPRING_MAIL_KEY.getCode()));
+            }
+            if (StringUtils.isNotBlank(conf.getAccessKey())) {
+                conf.setAccessKey(AesUtil.decrypt(conf.getAccessKey(), MailConfSecretKeyEnum.AWS_ACCESS_KEY.getCode()));
+            }
+            if (StringUtils.isNotBlank(conf.getSecretKey())) {
+                conf.setSecretKey(AesUtil.decrypt(conf.getSecretKey(), MailConfSecretKeyEnum.AWS_SECRET_KEY.getCode()));
+            }
+        } catch (Exception e) {
+            throw new GlobalException(e.getMessage());
+        }
+
+        return send(sendMessageReqVO, conf);
+    }
+
+    @Override
+    public boolean sendMessageTest(SendMessageReqVO sendMessageReqVO, DcMailConf dcMailConf) {
+        return send(sendMessageReqVO, dcMailConf);
+    }
+
+    private boolean send(SendMessageReqVO sendMessageReqVO, DcMailConf dcMailConf) {
         executorService.submit(() -> {
             List<SysMessageTemplate> messageTemplateList = sysMessageTemplateMapper.listByCode(sendMessageReqVO.getMsgCode());
             if (CollectionUtils.isEmpty(messageTemplateList)) {
@@ -106,14 +141,14 @@ public class SendMessageServiceImpl implements SendMessageService {
                     // replace message content
                     String dcCenterName = dcSystemConfMapper.querySystemValue(DcSystemConfTypeEnum.PORTAL_INFORMATION.getCode(), SystemConfCodeEnum.HEADLINE.getCode());
                     String msgTitle = messageTemplate.getMsgTitle();
-                    if(StringUtils.isNotBlank(dcCenterName)){
-                        msgTitle = dcCenterName + ": " + msgTitle;
-                        //msgTitle = msgTitle.replace("BSN Spartan Data Center",dcCenterName);
+                    if (StringUtils.isNotBlank(dcCenterName)) {
+//                        msgTitle = dcCenterName + ": " + msgTitle;
+                        msgTitle = msgTitle.replace("${portalName_}",dcCenterName+":");
                     }
-                    SysDataCenter sysDataCenter= sysDataCenterMapper.getSysDataCenter();
+                    SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
                     if (StringUtils.isNotBlank(sysDataCenter.getLogo())) {
-                        msgContent = msgContent.replace("${logo}",sysDataCenter.getLogo());
-                    }else {
+                        msgContent = msgContent.replace("${logo}", sysDataCenter.getLogo());
+                    } else {
                         msgContent = msgContent.replace("${logo}", iconBase64);
                     }
 
@@ -128,7 +163,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                             .templateId(messageTemplate.getTemplateId())
                             .mailTitle(msgTitle)
                             .mailContent(mailContent)
-                            .sender(from)
+                            .sender(dcMailConf.getMailUserName())
                             .receiver(JSONArray.toJSONString(receivers))
                             .ccPeople(cc == null ? "" : JSONArray.toJSONString(sendMessageReqVO.getCc()))
                             .sendTime(new Date())
@@ -140,7 +175,9 @@ public class SendMessageServiceImpl implements SendMessageService {
                     // Sending
                     boolean sendState = false;
                     try {
-                        sendState = emailService.sendHtmlEmail(from, sendMessageReqVO.getReceivers().toArray(new String[0]), cc, msgTitle, msgContent, sendMessageReqVO.getFileBase64StrMap());
+                        DcMailConfTypeEnum enumByCode = DcMailConfTypeEnum.getEnumByCode(dcMailConf.getType());
+                        EmailService strategy = emailStrategyHandler.getStrategy(enumByCode.getName());
+                        sendState = strategy.sendHtmlEmail(dcMailConf.getMailUserName(), sendMessageReqVO.getReceivers().toArray(new String[0]), cc, msgTitle, msgContent, sendMessageReqVO.getFileBase64StrMap(), dcMailConf);
                     } catch (Exception e) {
                         log.info("Failed to send the email:【{}】", JSONObject.toJSONString(sendMessageReqVO), e);
                     }
@@ -153,7 +190,8 @@ public class SendMessageServiceImpl implements SendMessageService {
                     }
 
                 }
-            }});
+            }
+        });
         return true;
     }
 
@@ -175,75 +213,11 @@ public class SendMessageServiceImpl implements SendMessageService {
         SysDataCenter sysDataCenter = sysDataCenterMapper.getSysDataCenter();
         if (StringUtils.isNotBlank(sysDataCenter.getLogo())) {
             emailContent = emailContent.replace("${logo}", sysDataCenter.getLogo());
-        }else {
+        } else {
             emailContent = emailContent.replace("${logo}", iconBase64);
         }
         return emailContent;
     }
-
-
-    @Override
-    public boolean sendMessageByContent(String title, String messageContent, String to) {
-
-        DefaultThreadPool.asyncTask(() -> {
-
-            // Send email
-            List<String> receivers = new ArrayList<>();
-            receivers.add(to);
-            if (!CollectionUtils.isEmpty(receivers)) {
-
-                // Get the initial template of the email
-                String emailTemplate = getEmailContent(MsgCodeEnum.EMAIL_TEMPLATE.getCode());
-                log.info("Get the initial template of the email【{}】", emailTemplate);
-                // Email Contact Template
-                String emailContactTemplate = getContactsTemplate();
-                log.info("Email Contact Template【{}】", emailContactTemplate);
-
-                String[] cc = null;
-
-                //
-                String msgContent = MessageTemplateUtil.initEmailContent(emailTemplate, messageContent, emailContactTemplate);
-                log.info("Sending email content......【{}】", msgContent);
-
-                String mailContent = messageContent;
-                if (mailContent.length() > MAIL_CONTENT_MAX_LENGTH) {
-                    mailContent = mailContent.substring(0, MAIL_CONTENT_MAX_LENGTH);
-                }
-
-                SysMailRecord mailRecord = SysMailRecord.builder()
-                        .templateId(Long.valueOf(00))
-                        .mailTitle(title)
-                        .mailContent(mailContent)
-                        .sender(from)
-                        .receiver(JSONArray.toJSONString(receivers))
-                        .ccPeople(String.valueOf(cc))
-                        .sendTime(new Date())
-                        .state((short) 0)
-                        .build();
-                // save
-                sysMailRecordMapper.insertSelective(mailRecord);
-
-                // Sending
-                boolean sendState = false;
-                try {
-                    sendState = emailService.sendHtmlEmail(from, receivers.toArray(new String[0]), cc, title, msgContent, null);
-                } catch (Exception e) {
-                    log.info("Failed to send the email:【{}】", JSONObject.toJSONString(null), e);
-                }
-
-
-                if (sendState) {
-                    // Update email status
-                    SysMailRecord updateMailRecord = SysMailRecord.builder().state((short) 1).recordId(mailRecord.getRecordId()).build();
-                    sysMailRecordMapper.updateByPrimaryKeySelective(updateMailRecord);
-                }
-            }
-            return true;
-        });
-
-        return true;
-    }
-
 
     private String getContactsTemplate() {
 

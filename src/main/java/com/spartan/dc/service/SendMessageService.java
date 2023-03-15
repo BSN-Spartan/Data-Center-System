@@ -2,6 +2,7 @@ package com.spartan.dc.service;
 
 
 import com.spartan.dc.core.dto.portal.SendMessageReqVO;
+import com.spartan.dc.model.DcMailConf;
 
 /**
  * Desc：
@@ -12,5 +13,6 @@ public interface SendMessageService {
 
     boolean sendMessage(SendMessageReqVO sendMessageReqVO);
 
-    boolean sendMessageByContent(String title,String messageContent,String to);
+    boolean sendMessageTest(SendMessageReqVO sendMessageReqVO, DcMailConf dcMailConf);
+
 }

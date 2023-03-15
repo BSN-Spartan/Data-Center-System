@@ -1,6 +1,7 @@
 package com.spartan.dc.controller.dc.recharge;
 
 
+import com.spartan.dc.config.interceptor.RequiredPermission;
 import com.spartan.dc.service.ChainPriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class PriceManagePageController {
     @Autowired
     private ChainPriceService chainPriceService;
 
-//    @RequiredPermission(isPage = true)
+    @RequiredPermission(isPage = true)
     @RequestMapping(value = "getDetail/{salePriceId}")
     public String priceDetail(@PathVariable("salePriceId") Integer salePriceId) {
         logger.info("Go to price details page");
@@ -37,7 +38,7 @@ public class PriceManagePageController {
         return "/price/detail";
     }
 
-//    @RequiredPermission(isPage = true)
+    @RequiredPermission(isPage = true)
     @RequestMapping(value = "toAudit/{salePriceId}", method = RequestMethod.GET)
     public String auditPrice(@PathVariable("salePriceId") Integer salePriceId) {
         logger.info("Enter the price review page");

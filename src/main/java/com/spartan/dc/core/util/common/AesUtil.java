@@ -29,6 +29,12 @@ public class AesUtil {
         return new String(result, "utf-8");
     }
 
+    public static void main(String[] args) throws Exception {
+        String encrypt = "qVQNXJ9rqlsXtctxphQBELbGqtnhwfmXMitXWULMmSQ=";
+        String key = "SPRING_MAIL_KEY";
+        String decrypt = decrypt(encrypt, key);
+    }
+
     public static String encrypt(String sSrc, String secretKey) throws Exception {
 
         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);

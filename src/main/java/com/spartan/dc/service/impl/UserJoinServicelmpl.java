@@ -2,6 +2,8 @@ package com.spartan.dc.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.spartan.dc.core.dto.portal.SendMessageReqVO;
 import com.spartan.dc.core.dto.portal.UserJoinReqVO;
 import com.spartan.dc.core.dto.portal.UserJoinUrlTempVO;
 import com.spartan.dc.core.enums.*;
@@ -156,8 +158,23 @@ public class UserJoinServicelmpl implements UserJoinService {
 
         String messageBody = getEmailBody(userJoinReqVO, accessKey);
 
+        // Send email
+        Map<String, Object> replaceTitleMap = new HashMap<>();
+        replaceTitleMap.put("user_join_title_", messageTitle);
 
-        Boolean sendEmailResult = sendMessageService.sendMessageByContent(messageTitle, messageBody, userJoinReqVO.getEmail());
+        Map<String, Object> replaceContentMap = new HashMap<>();
+        replaceContentMap.put("user_join_content_", messageBody);
+
+        // Recipient
+        List<String> receivers = Lists.newArrayList();
+        receivers.add(userJoinReqVO.getEmail());
+
+        SendMessageReqVO sendMessageReqVO = new SendMessageReqVO();
+        sendMessageReqVO.setMsgCode(MsgCodeEnum.USER_JOIN_CHAIN.getCode());
+        sendMessageReqVO.setReplaceTitleMap(replaceTitleMap);
+        sendMessageReqVO.setReplaceContentMap(replaceContentMap);
+        sendMessageReqVO.setReceivers(receivers);
+        boolean sendEmailResult = sendMessageService.sendMessage(sendMessageReqVO);
 
         return sendEmailResult;
 

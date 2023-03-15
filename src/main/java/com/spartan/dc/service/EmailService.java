@@ -1,5 +1,7 @@
 package com.spartan.dc.service;
 
+import com.spartan.dc.model.DcMailConf;
+
 import java.util.Map;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Map;
  */
 public interface EmailService {
 
-
-    boolean sendHtmlEmail(String from, String[] to, String[] cc, String subject, String content,  Map<String, String> fileBase64StrMap);
+    String fetchKey();
+    boolean sendHtmlEmail(String from, String[] to, String[] cc, String subject, String content, Map<String, String> fileBase64StrMap, DcMailConf dcMailConf);
 
 }

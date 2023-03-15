@@ -10,6 +10,8 @@ import com.spartan.dc.core.util.user.UserLoginInfo;
 import com.spartan.dc.service.WalletService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.web3j.crypto.Credentials;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -26,6 +28,25 @@ public class BaseController {
 
     @Autowired
     private WalletService walletService;
+
+    public UserLoginInfo getUserInfo() {
+        try {
+            HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+            Object userInfoObj = session.getAttribute(UserGlobals.USER_SESSION_KEY);
+            UserLoginInfo userLoginInfo = JSONObject.parseObject(JSON.toJSONString(userInfoObj), UserLoginInfo.class);
+            return userLoginInfo;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Long getUserId() {
+        UserLoginInfo userInfo = getUserInfo();
+        if (userInfo == null) {
+            return 0L;
+        }
+        return userInfo.getUserId();
+    }
 
     public UserLoginInfo getUserInfo(HttpSession session) {
         Object userInfoObj = session.getAttribute(UserGlobals.USER_SESSION_KEY);

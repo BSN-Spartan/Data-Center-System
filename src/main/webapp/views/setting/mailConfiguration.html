@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="setting_module_"/>
+    <meta name="menuId" content="email_menu_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+
+        .div_title {
+            margin-left: 0;
+        }
+
+        .form-horizontal .radio {
+            padding-top: 9px;
+        }
+
+        .icon_img {
+            line-height: 35px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Email Settings</div>
+                    <div class="send_type_select">
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="sendType1" class="col-sm-2 control-label">Send by:</label>
+                                <div class="col-sm-4">
+                                    <div class="radio info">
+                                        <input type="radio" name="sendType" id="sendType1"
+                                               onclick="selectSendType(this)" value="1">
+                                        <label for="sendType1">Spring Mail</label>
+                                        <a href="javascript:;" onclick="showReference()" style="margin-left: 20px;">SMTP Service Example</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="mailHost" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Server:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="" id="mailHost"
+                                           placeholder="Please enter the mail host" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        The server address for the email, for example：smtp.gmail.com, smtp.office365.com
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="mailPort" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Port:</label>
+                                <div class="col-sm-4">
+                                    <input type="number" class="form-control" value="" id="mailPort"
+                                           placeholder="587" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        The server port, port: 587
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="mailUserName" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Sender:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="" id="mailUserName"
+                                           placeholder="Please enter the email address" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        The sender's email address
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="mailPassWord" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Password:</label>
+                                <div class="col-sm-4">
+                                    <input type="password" class="form-control" value="" id="mailPassWord"
+                                           placeholder="Please enter the password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    <i class="fa fa-eye-slash"
+                                       style="position:absolute;right:25px ;top:10px;font-size:15px;cursor:pointer;"></i>
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        App password gained after enabling the two-step verification
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="properties" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Properties:</label>
+                                <div class="col-sm-4">
+                                    <textarea class="form-control" name="properties" id="properties" onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                                              placeholder=""></textarea>
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        Configure different properties (json format) for different SMTP servers. To
+                                        ensure stable use, please do not change frequently.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="send_type_select">
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="sendType2" class="col-sm-2 control-label">Send by:</label>
+                                <div class="col-sm-4">
+                                    <div class="radio info">
+                                        <input type="radio" name="sendType" id="sendType2"
+                                               onclick="selectSendType(this)" value="2">
+                                        <label for="sendType2">AWS Mail</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-top: 20px">
+                            <div class="form-group">
+                                <label for="mailUserName" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Sender:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="" id="mailUserName"
+                                           placeholder="Please enter the email address" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        The sender's email address
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="accessKey" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Access Key:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="" id="accessKey"
+                                           onchange="changeInput(this)"
+                                           onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                                           placeholder="Example: AKIA3B3ORUEC6MKMLTY0">
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        <a href="https://us-east-1.console.aws.amazon.com/iamv2/home?region=ap-southeast-1#/users"
+                                           target="_blank">How to get it.</a>
+                                        <span> Learn more about how to apply for AWS SES services and read the instructions, please refer to</span>
+                                        <a href="https://github.com/BSN-Spartan/Data-Center-System/tree/main/Documentation/Set up Amazon SES.pdf" target="_blank"> GitHub</a>
+                                    </p>
+                                </div>
+                                <a class="ico-item icon_img displayPrivateKey" target="_blank" id=""
+                                   onclick="unHideDisplay(this)">
+                                    <img class="privateKeyImg" src="/static/images/btn/btn_display_icon.png"
+                                         style="width: 23px;height: 23px;">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="secretKey" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Secret Key:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="" id="secretKey"
+                                           onchange="changeInput(this)"
+                                           onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                                           placeholder="Example: lKl0E0lgaPMkv/mCGCyB0XKCKeDuFblEGmDfJ7H0">
+                                    <p style="font-size: 12px; margin-top: 2px;">
+                                        <a href="https://us-east-1.console.aws.amazon.com/iamv2/home?region=ap-southeast-1#/users"
+                                           target="_blank">How to get it</a>
+                                    </p>
+                                </div>
+                                <a class="ico-item icon_img displayPrivateKey" target="_blank" id="x"
+                                   onclick="unHideDisplay(this)">
+                                    <img class="privateKeyImg" src="/static/images/btn/btn_display_icon.png"
+                                         style="width: 23px;height: 23px;">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px">
+                            <div class="form-group">
+                                <label for="regionStatic" class="col-sm-2 control-label"><span
+                                        class="xin">*</span>Region:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="" id="regionStatic"
+                                           placeholder="Example: ap-southeast-1" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12" id="submit_div">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <a type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_"
+                                   onclick="saveData()">
+                                    Submit
+                                </a>
+                                <a type="submit" class="btn btn-bordered btn-xs waves-effect waves-light sendTest_"
+                                   style="margin-left: 20px" onclick="showTestModel()">
+                                    Send Test Email
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="test_send_modal" tabindex="-1" role="dialog" aria-labelledby="test_send_modal"
+     style="display: none; padding-left: 17px;top: 240px;">
+
+    <div class="modal-dialog" role="document" style="width:41%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="deploy_detail_label_">Send test email</h4>
+
+                <form class="form-horizontal" id="recharge_detail_content_">
+                    <div class="modal-body col-sm-12"
+                         style="max-height: 500px;overflow-y: auto;margin-bottom: 15px;margin-top: 15px">
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="recipient" class="col-sm-4 control-label"><span
+                                    class="xin">*</span>Recipient:
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="recipient" onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                                       name="recipient" placeholder="Please enter the email address" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                <p style="font-size: 12px; margin-top: 2px;">
+                                    Only 1 recipient can be added
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 ">
+                            <label for="cc" class="col-sm-4 control-label">Cc:
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="cc" onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                                       name="cc" placeholder="Please enter the email address" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                <p style="font-size: 12px; margin-top: 2px;">
+                                    Only 1 Cc can be added
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <a type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_"
+                                   id="submit" onclick="sendTest()">
+                                    Submit
+                                </a>
+                                <button type="button"
+                                        class="btn btn-default waves-effect waves-light btn-xs confirm_but_ i18n"
+                                        data-dismiss="modal">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="modal fade" id="smtp_reference" tabindex="-1" role="dialog" aria-labelledby="smtp_reference"
+     style="display: none; padding-left: 17px;top: 140px;">
+
+    <div class="modal-dialog" role="document" style="width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="deploy_detail_label_">SMTP Service Example</h4>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered display" style="margin-top: 15px; table-layout:fixed;" max-height="500">
+                        <tr>
+                            <th style="width: 90px;">Type</th>
+                            <th style="width: 200px;">Server</th>
+                            <th style="width: 60px;">Port</th>
+                            <th>Properties</th>
+                        </tr>
+                        <tr>
+                            <td>Goolgle</td>
+                            <td>smtp.gmail.com</td>
+                            <td>587</td>
+                            <td style="word-break:break-all; word-wrap:break-all">{"mail.smtp.auth":true,"mail.smtp.starttls.enable":true}</td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft</td>
+                            <td>smtp.office365.com</td>
+                            <td>587</td>
+                            <td style="word-break:break-all; word-wrap:break-all">{"mail.smtp.auth":true,"mail.smtp.starttls.enable":true}</td>
+                        </tr>
+                        <tr>
+                            <td>Tencent Exmail</td>
+                            <td>hwsmtp.exmail.qq.com</td>
+                            <td>465</td>
+                            <td style="word-break:break-all; word-wrap:break-all">{"mail.smtp.auth":true,"mail.smtp.starttls.enable":true,"mail.smtp.quitwait":false,"mail.smtp.socketFactory.fallback":false,"mail.smtp.socketFactory.port":465,"mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory"}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/views/setting/mailConfiguration.js"></script>
+
+</body>
+</html>

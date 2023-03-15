@@ -50,5 +50,10 @@ public class DcPaymentRefundReqVO {
     * */
     private Long refundState;
 
+    /*
+     * Channel ID
+     * */
+    private String channelCode;
+
 
 }

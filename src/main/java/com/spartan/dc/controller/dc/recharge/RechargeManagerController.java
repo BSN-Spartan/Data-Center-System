@@ -5,10 +5,16 @@ import com.spartan.dc.controller.BaseController;
 import com.spartan.dc.core.datatables.DataTable;
 import com.spartan.dc.core.dto.ResultInfo;
 import com.spartan.dc.core.dto.ResultInfoUtil;
+import com.spartan.dc.core.enums.RechargeAuditStateEnum;
+import com.spartan.dc.core.enums.RechargeStateEnum;
+import com.spartan.dc.model.DcGasRechargeRecord;
 import com.spartan.dc.model.vo.req.MetaDataTxReqVO;
+import com.spartan.dc.model.vo.req.RechargeAuditReqVO;
 import com.spartan.dc.model.vo.req.RechargeReqVO;
 import com.spartan.dc.model.vo.resp.MetaDataTxRespVO;
-import com.spartan.dc.service.impl.ChargeManagerServiceImpl;
+import com.spartan.dc.model.vo.resp.RechargeDetailRespVO;
+import com.spartan.dc.service.ChargeManagerService;
+import com.spartan.dc.service.DcGasRechargeRecordService;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.web3j.crypto.Credentials;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.Date;
 import java.util.Map;
 
 
@@ -35,8 +42,10 @@ public class RechargeManagerController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(RechargeManagerController.class);
 
     @Autowired
-    private ChargeManagerServiceImpl chargeManagerService;
+    private ChargeManagerService chargeManagerService;
 
+    @Autowired
+    private DcGasRechargeRecordService dcGasRechargeRecordService;
 
     @RequiredPermission
     @PostMapping(value = "list")
@@ -46,7 +55,6 @@ public class RechargeManagerController extends BaseController {
         Map<String, Object> chargeList = chargeManagerService.queryChargeList(dataTable);
         return ResultInfoUtil.successResult(chargeList);
     }
-
 
     @RequiredPermission
     @PostMapping(value = "recharge")
@@ -59,6 +67,42 @@ public class RechargeManagerController extends BaseController {
         } else {
             return ResultInfoUtil.errorResult("The new failure");
         }
+    }
+
+    @RequiredPermission
+    @PostMapping(value = "audit")
+    public ResultInfo rechargeAudit(@RequestBody @Validated RechargeAuditReqVO vo) throws Exception {
+        DcGasRechargeRecord dcGasRechargeRecord = dcGasRechargeRecordService.selectByPrimaryKey(vo.getRechargeRecordId());
+        if (dcGasRechargeRecord == null) {
+            return ResultInfoUtil.errorResult("Record does not exist");
+        }
+
+        if (!dcGasRechargeRecord.getAuditState().equals(RechargeAuditStateEnum.AUDIT_HANDLE.getCode())) {
+            return ResultInfoUtil.errorResult("Current status does not allow audit");
+        }
+
+        dcGasRechargeRecord.setAuditState(vo.getDecision());
+        if(vo.getDecision().equals(RechargeAuditStateEnum.AUDIT_FAIL.getCode())){
+            dcGasRechargeRecord.setRechargeState(RechargeStateEnum.FAILED.getCode());
+            dcGasRechargeRecord.setRechargeTime(null);
+        }
+        dcGasRechargeRecord.setAuditTime(new Date());
+        dcGasRechargeRecord.setAuditor(getUserId());
+        dcGasRechargeRecord.setAuditRemarks(vo.getAuditRemarks());
+
+        dcGasRechargeRecordService.updateByPrimaryKeySelective(dcGasRechargeRecord);
+
+        return ResultInfoUtil.successResult("Success");
+    }
+
+    @RequiredPermission
+    @RequestMapping(value = "detail/{rechargeRecordId}")
+    public ResultInfo<RechargeDetailRespVO> rechargeDetail(@PathVariable("rechargeRecordId") Integer rechargeRecordId) throws Exception {
+        RechargeDetailRespVO rechargeDetailRespVO = dcGasRechargeRecordService.rechargeDetail(Long.valueOf(rechargeRecordId));
+        if (rechargeDetailRespVO == null) {
+            return ResultInfoUtil.errorResult("Record does not exist");
+        }
+        return ResultInfoUtil.successResult(rechargeDetailRespVO);
     }
 
     @RequiredPermission

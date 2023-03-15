@@ -51,5 +51,5 @@ public interface DcbackGroundSystemService {
 
     ResultInfo updateTreaty(SysDataCenterTreatyReqVO sysDataCenterTreatyReqVO);
 
-    String queryTreaty();
+    String queryTreaty(String treatyCode);
 }

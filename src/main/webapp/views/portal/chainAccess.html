@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="chain_access_module_"/>
+    <meta name="menuId" content="chain_access_config_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+        .div_title {
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Chain Access Configuration</div>
+                    <div class="col-xs-12">
+                         Please set the gateway URL for user access. At the same time, you can set TPS, TPD to inform the gateway to limit user access. Please confirm the
+                        correctness of the gateway URL and the normal operation of the gateway.
+                        <hr>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="gateway" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Gateway URL:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="gateway" id="gateway">
+                                <a href="https://github.com/BSN-Spartan/Data-Center-Gateway/#kong-gateway-request-format" target="_blank">Tutorial</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="wsGateway" class="col-sm-2 control-label">WebSocket Gateway URL:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="wsGateway" id="wsGateway">
+                                <a href=" https://github.com/BSN-Spartan/Data-Center-Gateway/#websocket-request" target="_blank">Tutorial</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="grpcGateway" class="col-sm-2 control-label">gRPC Gateway URL:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="grpcGateway" id="grpcGateway">
+                                <a href="https://github.com/BSN-Spartan/Data-Center-Gateway/#grpc-request" target="_blank">Tutorial</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="tps" class="col-sm-2 control-label">TPS:</label>
+                            <div class="col-sm-4">
+                                <input type='text'
+                                       oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
+                                       class="form-control" id="tps" name="tps" placeholder="No transaction limits if the blank is empty">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="tpd" class="col-sm-2 control-label">TPD:</label>
+                            <div class="col-sm-4">
+                                <input type='text'
+                                       oninput="value=value.replace(/^(0+)|[^\d]+/g,'');if(value.length>9) value=value.substring(0,9)"
+                                       class="form-control" id="tpd" name="tpd" placeholder="No transaction limits if the blank is empty">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 div_title">Node Configuration</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="frameType1" class="col-sm-2 control-label">Chain Name:</label>
+                            <div class="col-sm-4">
+
+                                <div class="checkbox info">
+                                    <input type="checkbox" value="1" name = "frameType1" id="frameType1" onclick="selectFrameType1()"><label
+                                        for="frameType1">Spartan-I Chain (Powered by NC Ethereum)</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="chainCode1" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Chain Type:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="chainCode1" id="chainCode1">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    In Kong gateway, this is the unique ID mapped to different chains.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Access Method:</label>
+                            <div class="col-sm-4">
+
+                                <div class="checkbox info">
+                                    <input type="checkbox" name="accessType11" id="accessType11" value="Json RPC"><label
+                                        for="accessType11" style="margin-right: 10px">Json RPC</label>
+                                    <input type="checkbox" name="accessType12" id="accessType12"
+                                           value="WebSocket"><label for="accessType12">WebSocket</label>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="frameType2" class="col-sm-2 control-label">Chain Name:</label>
+                            <div class="col-sm-4">
+                                <div class="checkbox info">
+                                    <input type="checkbox" value="2" name = "frameType2" id="frameType2" onclick="selectFrameType2()"><label
+                                        for="frameType2">Spartan-II Chain (Powered by NC Cosmos)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="chainCode2" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Chain Type:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="chainCode2" id="chainCode2">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    In Kong gateway, this is the unique ID mapped to different chains.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Access Method:</label>
+                            <div class="col-sm-4">
+
+                                <div class="checkbox info">
+                                    <input type="checkbox" name="accessType21" id="accessType21" value="Json RPC"><label
+                                        for="accessType21" style="margin-right: 10px">Json RPC</label>
+                                    <input type="checkbox" name="accessType22" id="accessType22"
+                                           value="WebSocket"><label for="accessType22" style="margin-right: 10px">WebSocket</label>
+                                    <input type="checkbox" name="accessType23" id="accessType23"
+                                           value="gRPC"><label for="accessType23">gRPC</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="frameType3" class="col-sm-2 control-label">Chain Name:</label>
+                            <div class="col-sm-4">
+                                <div class="checkbox info">
+                                    <input type="checkbox" value="3" name = "frameType3" id="frameType3" onclick="selectFrameType3()"><label
+                                        for="frameType3">Spartan-III Chain (Powered by NC PolygonEdge)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="chainCode3" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Chain Type:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="chainCode3" id="chainCode3">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    In Kong gateway, this is the unique ID mapped to different chains.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Access Method:</label>
+                            <div class="col-sm-4">
+                                <div class="checkbox info">
+                                    <input type="checkbox" name="accessType31" id="accessType31" value="Json RPC"><label
+                                        for="accessType31" style="margin-right: 10px">Json RPC</label>
+                                    <input type="checkbox" name="accessType32" id="accessType32"
+                                           value="WebSocket"><label for="accessType32">WebSocket</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" id="submit_div">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/views/portal/chainAccess.js"></script>
+
+</body>
+</html>

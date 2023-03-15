@@ -4,6 +4,10 @@ var recharge_list = "#gas_recharge_list";
 $(document).ready(function () {
     $("#txType").html(COMMON_HANDLE.getTxTypeSelect());
 
+    $("#rechargeType").html(COMMON_HANDLE.getRechargeTypeSelect());
+    $("#auditState").html(COMMON_HANDLE.getAuditStateSelect());
+
+
     // init frame info
     CHAIN_HANDLE.initChainInfo("chainId", null);
     // init
@@ -23,7 +27,7 @@ $(document).ready(function () {
             COMMON_HANDLE.checkPasswordExpired();
 
             CHAIN_HANDLE.initChainInfoNotAll("rechargeChainType", 1);
-
+            $("#rechargeUnit").html(CHAIN_HANDLE.getChainRechargeUnit(1));
             $("#recharge_modal").modal("show");
         });
     }
@@ -74,6 +78,14 @@ let recharge = function (chainId, chainAddress) {
 
 }
 
+function detail(rechargeRecordId) {
+    REQ_HANDLE_.location_('/recharge/getDetail/' + rechargeRecordId);
+}
+
+function audit(rechargeRecordId) {
+    REQ_HANDLE_.location_('/recharge/toAudit/' + rechargeRecordId);
+}
+
 
 let initFrameList = function () {
     dataTable = $(recharge_list).DataTable({
@@ -118,19 +130,37 @@ let initFrameList = function () {
             },
             {data: "chainName", title: "Chain Name", bSearchable: false, bSortable: false},
             {data: "chainAddress",render: COMMON_HANDLE.copyData, title: "Wallet Address", bSearchable: false, bSortable: false},
-            {data: "gas",render:initGas, title: "Gas Credit", bSearchable: false, bSortable: false},
-            {data: "ntt", title: "NTT", bSearchable: false, bSortable: false},
-            {data: "reason",render:initReaon, title: "Reason", bSearchable: false, bSortable: false},
             {
-                data: "rechargeState",
-                render: initRechargeStateType,
-                title: "Status",
+                data: "rechargeType",
+                render: initRechargeType,
+                title: "Type",
                 bSearchable: false,
                 bSortable: false
             },
-            {data: "rechargeTime", title: "Created Time", bSearchable: false, bSortable: false},
-            {data: "txHash", render: COMMON_HANDLE.copyData, title: "Tx Hash", bSearchable: false, bSortable: false},
-            {render: initTableBut, title: "Options", bSortable: false}
+            {data: "gas",render:initGas, title: "Gas Credit", bSearchable: false, bSortable: false},
+            {data: "ntt", title: "NTT", bSearchable: false, bSortable: false},
+            {data: "txHash", render: COMMON_HANDLE.copyData, title: "Transaction Hash", bSearchable: false, bSortable: false},
+            {data: "createTime", title: "Created Time", bSearchable: false, bSortable: false},
+            {data: "auditTime", title: "Review Time", bSearchable: false, bSortable: false},
+            {data: "rechargeTime", title: "Top Up Time", bSearchable: false, bSortable: false},
+            {
+                data: "auditState",
+                render: initAuditState,
+                title: "Review Status",
+                bSearchable: false,
+                bSortable: false
+            },
+            {
+                data: "rechargeState",
+                render: initRechargeStateType,
+                title: "Top Up Status",
+                bSearchable: false,
+                bSortable: false
+            },
+
+            // {data: "reason",render:initReaon, title: "Reason", bSearchable: false, bSortable: false},
+
+            {render: initTableBut, title: "Action", bSortable: false}
         ],
         "columnDefs": [{
             "targets": "_all",
@@ -160,16 +190,37 @@ let initRechargeStateType = function (data, type, row) {
     return COMMON_HANDLE.getRechargeStateName(data);
 };
 
+let initAuditState = function (data, type, row) {
+    return COMMON_HANDLE.getAuditStateName(data);
+};
+
+let initRechargeType = function (data, type, row) {
+    return COMMON_HANDLE.getRechargeType(data);
+};
+
+
+
 
 // init options
 let initTableBut = function (data, type, row) {
     let chainId = row.chainId;
     let chainAddress = row.chainAddress;
+    let rechargeRecordId = row.rechargeRecordId;
+    let auditState = row.auditState;
     let butStr = '';
 
     if (checkButState("top_up_but_")) {
-        butStr += '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" >Top Up</button>';
+        butStr += '<button type="button" onclick="recharge(' + chainId + ',\'' + chainAddress + '\')" class="btn-info btn-xs" style="margin-top:10px;">Top Up</button>';
     }
+    if (checkButState("recharge_detail_but_")) {
+        butStr += '<button type="button" onclick="detail(' + rechargeRecordId  + ')" class="btn-info btn-xs" style="margin-top:10px;">Details</button>';
+    }
+    if (auditState === 0) {
+        if (checkButState("recharge_audit_but_")) {
+            butStr += '<button type="button" onclick="audit(' + rechargeRecordId  + ')" class="btn-info btn-xs" style="margin-top:10px;">Review</button>';
+        }
+    }
+
     return butStr == "" ? "--" : butStr;
 };
 
@@ -181,6 +232,9 @@ let search = function () {
     setDatatableSearchInfo($("#startTime").val(), "startTime");
     setDatatableSearchInfo($("#endTime").val(), "endTime");
     setDatatableSearchInfo($("#chainAddress").val(), "chainAddress");
+    setDatatableSearchInfo($("#rechargeType").val(), "rechargeType");
+    setDatatableSearchInfo($("#auditState").val(), "auditState");
+
     dataTable.ajax.reload();
 };
 
@@ -207,7 +261,10 @@ let handleSubmit = function () {
                 required: true,
                 digits: true,
                 min: 1
-            }
+            },
+            password: {
+                required: true
+            },
         },
         messages: {
             rechargeChainType: {
@@ -225,6 +282,9 @@ let handleSubmit = function () {
             recharge_amount: {
                 required: "Please enter the recharge amount",
                 min: "The recharge amount should be greater than 0"
+            },
+            password: {
+                required: "Please enter the keystore password"
             }
         },
         highlight: function (element) {

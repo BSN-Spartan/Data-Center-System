@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="moduleId" content="portal_config_"/>
+    <meta name="menuId" content="base_info_config_"/>
+
+    <title></title>
+    <link rel="icon" href="" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/system/style.min.css">
+    <link rel="stylesheet" href="/static/css/system/jquery.mcustomscrollbar.min.css">
+    <link rel="stylesheet" href="/static/css/system/waves.min.css">
+    <link rel="stylesheet" href="/static/css/system/sweetalert.css">
+    <link rel="stylesheet" href="/static/css/system/percircle.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.min.css">
+    <link rel="stylesheet" href="/static/css/system/fullcalendar.print.css" media='print'>
+    <link rel="stylesheet" href="/static/css/system/color-switcher.min.css">
+    <link id="custom-color-themes" rel="stylesheet" href="/static/css/system/light-blue.min.css">
+    <style>
+        .div_title {
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-menu">
+    <header class="header">
+
+    </header>
+    <div class="content">
+        <div class="navigation">
+            <ul class="menu js__accordion menu_">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="wrapper">
+    <div class="main-content">
+        <div class="row small-spacing">
+            <form class="form-horizontal" id="submit_dc_div">
+                <div class="col-sm-12 div_select">
+                    <div class="col-sm-12 div_title">Basic Information</div>
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Browser Title:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="title" id="title"
+                                       placeholder="BSN Spartan Network Data Center Portal">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    This value will replace the name on the browser bar.
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="uploadLogo" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Logo <br/>(Shown on the top-left corner of the home page):</label>
+                            <div class="col-sm-2">
+                                <input type="button" id="uploadLogo" value="Upload"
+                                       style="margin-top:5px; padding:5px 25px;"
+                                       class="btn btn-info btn-xs waves-effect waves-light"/>
+                                <input type="file" accept="image/*" id="logoInputFile" onchange="logoUpload(this)"
+                                       style="display: none">
+                                <p class="help-block">Upload the logo</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <img id="logoImg" src="" style="width: 150px; margin-top: 6px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <p style="font-size: 12px; color: red">
+                                    It is recommended to provide 192 * 40 images in the format of svg/png/jpg/jpeg, and in a size no more than 64KB. The image should be the company logo and not deformed.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="headline" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Portal Title:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="headline" id="headline"
+                                       placeholder="BSN Spartan Network Data Center Portal">
+                                <hr/>
+                                <p style="font-size: 12px;color: red">
+                                    This value will replace the title of the portal and the title of the email.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="introduce" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Introduction:</label>
+                            <div class="col-sm-4">
+                                <textarea class="form-control" name="introduce" id="introduce" rows="3"
+                                          placeholder="BSN Spartan Data Center is a lightweight software platform that provides access to the Spartan Network. In the data center, the operator can install and access nodes of the public chain, the mission of the Spartan. By removing cryptocurrency from the first layer of the public chain, the mission of the Spartan Network is to provide all IT systems around the world with non-cryptocurrency public chain services, so as to to gain the benefits of a public IT infrastructure."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" style="margin-top: 20px">
+                        <div class="form-group">
+                            <label for="copyright" class="col-sm-2 control-label"><span
+                                    class="xin">*</span>Copyright Information:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="copyright" id="copyright" placeholder="@">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" id="submit_div">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-info btn-xs waves-effect waves-light submit_">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="/static/js/system/html5shiv.min.js"></script>
+<script src="/static/js/system/respond.min.js"></script>
+<![endif]-->
+<script src="/static/js/system/jquery.min.js"></script>
+
+<script src="/static/js/views/common/menu_content.js"></script>
+<script type="text/javascript">
+    initMainMenu_();
+    initHeader();
+</script>
+
+
+<script src="/static/js/system/modernizr.min.js"></script>
+<script src="/static/js/system/bootstrap.min.js"></script>
+<script src="/static/js/system/jquery.mcustomscrollbar.concat.min.js"></script>
+<script src="/static/js/system/waves.min.js"></script>
+<script src="/static/js/system/jquery.fullscreen-min.js"></script>
+
+<script src="/static/js/system/percircle.js"></script>
+<script src="/static/js/system/loader.js"></script>
+<script src="/static/js/system/moment.js"></script>
+<script src="/static/js/system/fullcalendar.min.js"></script>
+<script src="/static/js/system/fullcalendar.init.js"></script>
+<script src="/static/js/system/nprogress.js"></script>
+<script src="/static/js/system/main.min.js"></script>
+<script src="/static/js/system/color-switcher.min.js"></script>
+<script src="/static/js/system/sweetalert.min.js"></script>
+
+<script src="/static/js/custom/custom.sweetalert.js"></script>
+<script src="/static/js/system/jquery.validate.js"></script>
+<script src="/static/js/custom/custom.validate.js"></script>
+<script src="/static/js/custom/custom.req.js"></script>
+
+<script src="/static/js/views/portal/baseInfo.js"></script>
+
+</body>
+</html>

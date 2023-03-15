@@ -21,6 +21,7 @@ import com.spartan.dc.model.vo.req.PaymentReqVO;
 import com.spartan.dc.model.vo.req.RefundReqVO;
 import com.spartan.dc.model.vo.resp.PaymentRespVO;
 import com.spartan.dc.model.vo.resp.RefundRespVO;
+import com.spartan.dc.service.impl.BaseService;
 import com.spartan.dc.strategy.StrategyService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -48,7 +49,7 @@ import java.util.Objects;
  **/
 @Service
 @Slf4j
-public class CoinbasePayStrategyImpl implements StrategyService {
+public class CoinbasePayStrategyImpl extends BaseService implements StrategyService {
 
     @Value("${payment.coinbase.server-addr}")
     private String serverAddr;
@@ -378,8 +379,13 @@ public class CoinbasePayStrategyImpl implements StrategyService {
                         .state(RechargeSubmitStateEnum.PENDING_SUBMIT.getCode())
                         .updateTime(new Date())
                         .rechargeState(RechargeStateEnum.NO_PROCESSING_REQUIRED.getCode())
+                        .auditState(RechargeAuditStateEnum.AUDIT_SUCCESS.getCode())
+                        .auditTime(new Date())
+                        .createUserId(getUserId())
+                        .createTime(new Date())
+                        .rechargeType(RechargeTypeEnum.TO_UP.getCode())
                         .build();
-                dcGasRechargeRecordMapper.insertRechargeRecord(dcGasRechargeRecord);
+                dcGasRechargeRecordMapper.insertSelective(dcGasRechargeRecord);
             } else {
                 log.info("Payment result Query --gas recharge record already exists");
             }

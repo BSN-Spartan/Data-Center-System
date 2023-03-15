@@ -10,9 +10,10 @@ import java.util.Date;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class DcGasRechargeRecord {
+
     private Long rechargeRecordId;
 
     private Long chainId;
@@ -42,5 +43,19 @@ public class DcGasRechargeRecord {
     private Long nonce;
 
     private String md5Sign;
+
+    private Short auditState;
+
+    private Long auditor;
+
+    private Date auditTime;
+
+    private String auditRemarks;
+
+    private Long createUserId;
+
+    private Date createTime;
+
+    private Short rechargeType;
 
 }

@@ -23,7 +23,14 @@ public enum MsgCodeEnum {
     NTT_BALANCE_REMINDER_CONFIG("nttBalanceReminderConfig", "nttBalanceReminderConfig"),
 
     ORDER_SUBMITTED_OFFLINE("order_submit_offline_", "Remittance order placed successfully"),
-    GAS_RECHARGE_SUCCESS("gas_recharge_success_", "Gas recharge success");
+    GAS_RECHARGE_SUCCESS("gas_recharge_success_", "Gas recharge success"),
+
+    GAS_BALANCE_REMINDER("gasBalanceReminder", "gasBalanceReminder"),
+    NTT_BALANCE_REMINDER("nttBalanceReminder", "nttBalanceReminder"),
+    EMAIL_SEND_TEST_("email_send_test_", "emailSendTest"),
+
+    USER_JOIN_CHAIN("user_join_email_", "userJoinEmail")
+    ;
 
 
     private String code;

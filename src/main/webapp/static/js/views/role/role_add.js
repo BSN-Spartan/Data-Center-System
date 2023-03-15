@@ -58,11 +58,11 @@ var handleSubmit = function () {
         },
         messages: {
             roleName: {
-                required: "Role name cannot be empty",
+                required: "Please enter the role name",
                 rangelength: "Role name must be between 1 to 20 characters."
             },
             description: {
-                required: "Role Description cannot be empty",
+                required: "Please enter the role description",
                 rangelength: "Role description must be between 1 to 200 characters."
             }
         },
@@ -99,7 +99,7 @@ var handleSubmit = function () {
 var submitForm = function () {
     var checkedNodes = $('#resourceList').treeview('getChecked');
     if (checkedNodes == null || checkedNodes.length == 0) {
-        alert_error("Please the role's permission");
+        alert_error("Please select the role's permission");
         return false;
     }
     var roleResource = new Array();

@@ -116,7 +116,7 @@ var initUserList = function () {
             {data: "contactsEmail", title: "Email", bSearchable: false, bSortable: false},
             {data: "createDate", title: "Created Time", bSearchable: false, bSortable: false},
             {data: "state", render: initState, title: "Status", bSearchable: false, bSortable: false},
-            {render: initTableBut, title: "Options", bSortable: false}
+            {render: initTableBut, title: "Action", bSortable: false}
         ]
     });
 

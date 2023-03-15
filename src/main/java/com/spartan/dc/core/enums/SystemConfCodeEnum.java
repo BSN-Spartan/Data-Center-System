@@ -16,6 +16,7 @@ public enum SystemConfCodeEnum {
     TPD("tpd", "tpd"),
 
     TREATY("treaty", "treaty"),
+    TREATYTEMP("treatyTemp", "treatyTemp"),
 
     TELEGRAM("Telegram", "Telegram"),
     WHATSAPP("Whatsapp", "Whatsapp"),
@@ -26,7 +27,13 @@ public enum SystemConfCodeEnum {
     ADDRESS("address", "address"),
     EMAIL("email", "email"),
     PHONE("phone", "phone"),
-    NO_MORE_PROMPTS_INPUT("noMorePromptsInput", "NoMorePromptsInput");
+    NO_MORE_PROMPTS_INPUT("noMorePromptsInput", "NoMorePromptsInput"),
+
+    CHECK_STATE("checkState","checkState"),
+    BALANCE_LIMIT("balanceLimit", "balanceLimit"),
+
+    BALANCE_REMINDER("balanceReminder","balanceReminder")
+    ;
 
     private final String code;
     private final String name;

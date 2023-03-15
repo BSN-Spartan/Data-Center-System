@@ -1,8 +1,13 @@
 package com.spartan.dc.task;
 
 import com.google.common.collect.Lists;
+import com.reddate.spartan.SpartanSdkClient;
 import com.spartan.dc.core.dto.portal.SendMessageReqVO;
+import com.spartan.dc.core.enums.BalanceCheckStateEnum;
+import com.spartan.dc.core.enums.DcSystemConfTypeEnum;
 import com.spartan.dc.core.enums.MsgCodeEnum;
+import com.spartan.dc.core.enums.SystemConfCodeEnum;
+import com.spartan.dc.dao.write.DcSystemConfMapper;
 import com.spartan.dc.model.SysDataCenter;
 import com.spartan.dc.service.SendMessageService;
 import org.apache.commons.lang.StringUtils;
@@ -10,10 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * @author wxq
@@ -36,12 +40,19 @@ public class BaseTask {
     @Autowired
     private SendMessageService sendMessageService;
 
+    @Resource
+    private SpartanSdkClient spartanSdkClient;
+
+    @Resource
+    private DcSystemConfMapper dcSystemConfMapper;
+
     /**
      * Send email
      **/
-    public void sendEmail(String msgCode, Map<String, Object> replaceContentMap, List<String> receivers) {
+    public void sendEmail(String msgCode, Map<String, Object> replaceTitleMap,Map<String, Object> replaceContentMap, List<String> receivers) {
         SendMessageReqVO sendMessageReqVO = new SendMessageReqVO();
         sendMessageReqVO.setMsgCode(msgCode);
+        sendMessageReqVO.setReplaceTitleMap(replaceTitleMap);
         sendMessageReqVO.setReplaceContentMap(replaceContentMap);
         sendMessageReqVO.setReceivers(receivers);
 
@@ -58,9 +69,10 @@ public class BaseTask {
         // Recipient
         List<String> receivers = Lists.newArrayList();
         receivers.add(sysDataCenter.getContactsEmail());
+        Map<String, Object> replaceTitleMap = new HashMap<>();
 
         // Send email
-        sendEmail(msgCodeEnum.getCode(), replaceContentMap, receivers);
+        sendEmail(msgCodeEnum.getCode(), replaceTitleMap, replaceContentMap, receivers);
         return false;
     }
 

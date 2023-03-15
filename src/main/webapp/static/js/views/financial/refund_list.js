@@ -182,6 +182,7 @@ let search = function () {
     setDatatableSearchInfo($("#refundStartTime").val(), "refundStartTime");
     setDatatableSearchInfo($("#refundEndTime").val(), "refundEndTime");
     setDatatableSearchInfo($("#refundState").val(), "refundState");
+    setDatatableSearchInfo($("#channelCode").val(), "channelCode");
     dataTable.ajax.reload();
 };
 
@@ -196,6 +197,7 @@ function exportRefundExcel() {
     dcPaymentRefundReqVO.updateEndTime = $("#updateEndTime").val();
     dcPaymentRefundReqVO.refundStartTime = $("#refundStartTime").val();
     dcPaymentRefundReqVO.refundEndTime = $("#refundEndTime").val();
+    dcPaymentRefundReqVO.channelCode = $("#channelCode").val();
     let reqUrl = "/ground/parameters/export/dcpaymentrefund?data=" + encodeURIComponent(JSON.stringify(dcPaymentRefundReqVO));
     COMMON_HANDLE.exportExcel(reqUrl);
 }

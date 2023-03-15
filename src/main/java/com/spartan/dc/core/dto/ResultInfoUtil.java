@@ -46,4 +46,8 @@ public class ResultInfoUtil {
         return new ResultInfo(ERROR_CODE, messageCode);
     }
 
+    public static ResultInfo definitionResult(int code, String message, Object date) {
+        return createResult(code, message, date);
+    }
+
 }

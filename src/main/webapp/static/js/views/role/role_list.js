@@ -63,7 +63,7 @@ var initRoleList = function () {
             {data: "roleName", title: "Role Name", bSearchable: false, bSortable: false},
             {data: "description", render: initValue, title: "Role Description", bSearchable: false, bSortable: false},
             {data: "state", render: initState, title: "Status", bSearchable: false, bSortable: false},
-            {render: initTableBut, title: "Options", bSortable: false}
+            {render: initTableBut, title: "Action", bSortable: false}
         ]
     });
 
