@@ -48,7 +48,7 @@ It is recommended to build the Data Center Management System on Linux Server wit
 
    ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/1.mysqlversion.jpg?raw=true)
 
-2. Get [mysql script](https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.1.1/bsn_spartan_dc%20v1.1.1.sql)
+2. Get [mysql script](https://github.com/BSN-Spartan/Data-Center-System/blob/main/src/main/resources/sql/v1.2.0/bsn_spartan_dc%20v1.2.0.sql)
 
 3. Login to MySQL service, name and create the database:
 
@@ -76,7 +76,7 @@ It is recommended to build the Data Center Management System on Linux Server wit
 
 ### 2.1 Downloading the Package
 
-Download the [package of the Data Center Management System](https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.1.1). You can also download the source code on this page and compile it by yourself.
+Download the [package of the Data Center Management System](https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.2.0). You can also download the source code on this page and compile it by yourself.
 
 ### 2.2 Downloading Configuration Files
 
@@ -124,20 +124,6 @@ Download the configuration files, including [application.yml](https://github.com
 
   ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/7.%20appprod.jpg?raw=true)
 
-- Configure the email
-
-  ```yml
-  spring:
-    mail:
-    # The server address for the email, for example：smtp.gmail.com, smtp.office365.com
-      host: smtp.office365.com
-    # The server port
-      port: 587
-    # The sender address of the email
-      username: spartan_example@hotmail.com
-    # App password gained after enabling the two-step verification 
-      password: App_password
-  ```
 
 - Configure the node information
 
@@ -188,10 +174,10 @@ java -version
 
 ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/5.jpg?raw=true)
 
-Put `Data-Center-System-1.1.1-SNAPSHOT.jar`, `application.yml`,  `application-prod.yml` and `logback-spring.xml` files into the same directory and run the command below:
+Put `Data-Center-System-1.2.0.jar`, `application.yml`,  `application-prod.yml` and `logback-spring.xml` files into the same directory and run the command below:
 
 ```yml
-java -jar Data-Center-System-1.1.1-SNAPSHOT.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8
+java -jar Data-Center-System-1.2.0.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8
 ```
 
 Result:
@@ -202,7 +188,7 @@ After starting up the Data Center System, you may find the "the basic informatio
 If you would like to run the node in the backend system, you can run `nohup` command as follow:
 
 ```yml
-nohup java -jar Data-Center-System-1.1.1-SNAPSHOT.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8 > output.log 2>&1 &
+nohup java -jar Data-Center-System-1.2.0.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8 > output.log 2>&1 &
 ```
 
 You can also check the process from the log:
@@ -247,7 +233,7 @@ version: '3'
 services:
   spartan-dc:
     container_name: spartan-dc
-    image: oracle-jdk11
+    image: bsnspartan/jre1.8:centos7.9
     restart: always
     ports:
       - "8085:8085"
@@ -257,7 +243,7 @@ services:
       - ./conf:/bsn/spartan/conf
       - ./wallet:/bsn/spartan/wallet
       - /etc/hosts:/etc/hosts
-    entrypoint: java -jar ./pkg/Data-Center-System-1.1.1-SNAPSHOT.jar --server.port=8085 --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml --logging.logpath=./logs
+    entrypoint: java -jar ./pkg/Data-Center-System-1.2.0.jar --server.port=8085 --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml --logging.logpath=./logs
 ```
 
 - Create a directory `/bsn/spartan/conf` and put `application-prod.yml`, `application.yml`, `logback-spring.xml` into it.
@@ -272,7 +258,7 @@ docker-compose up -d
 
 ## 4. Data Center Registration
 
-After successfully starting the service, the Data Center Operator can access the system from `http://server_IP:server_port`. The `server_port` is refering to the port in `application_prod.yml`.
+After successfully starting the service, the Data Center Operator can access the system from `http://server_IP:server_port`. The `server_port` is refering to the port in `application-prod.yml`.
 
 ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/10.DChome.jpg?raw=true)
 
