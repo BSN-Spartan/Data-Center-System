@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   mvc:
     view:
       prefix: /views/
