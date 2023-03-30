@@ -174,10 +174,10 @@ java -version
 
 ![](https://github.com/BSN-Spartan/Data-Center-System/blob/main/images/5.jpg?raw=true)
 
-Put `Data-Center-System-1.3.0.jar`, `application.yml`,  `application-prod.yml` and `logback-spring.xml` files into the same directory and run the command below:
+Put `Data-Center-System-1.3.1.jar`, `application.yml`,  `application-prod.yml` and `logback-spring.xml` files into the same directory and run the command below:
 
 ```yml
-java -jar Data-Center-System-1.3.0.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8
+java -jar Data-Center-System-1.3.1.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8
 ```
 
 Result:
@@ -188,7 +188,7 @@ After starting up the Data Center System, you may find the "the basic informatio
 If you would like to run the node in the backend system, you can run `nohup` command as follow:
 
 ```yml
-nohup java -jar Data-Center-System-1.3.0.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8 > output.log 2>&1 &
+nohup java -jar Data-Center-System-1.3.1.jar --spring.config.location=./application.yml --spring.config.location=./application-prod.yml --logging.config=./logback-spring.xml - LANG=zh_CN.UTF-8 > output.log 2>&1 &
 ```
 
 You can also check the process from the log:
@@ -243,12 +243,12 @@ services:
       - ./conf:/bsn/spartan/conf
       - ./wallet:/bsn/spartan/wallet
       - /etc/hosts:/etc/hosts
-    entrypoint: java -jar ./pkg/Data-Center-System-1.3.0.jar --server.port=8085 --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml --logging.logpath=./logs
+    entrypoint: java -jar ./pkg/Data-Center-System-1.3.1.jar --server.port=8085 --spring.config.location=./conf/application.yml --spring.config.location=./conf/application-prod.yml --logging.config=./conf/logback-spring.xml --logging.logpath=./logs
 ```
 
 - Create a directory `/bsn/spartan/conf` and put `application-prod.yml`, `application.yml`, `logback-spring.xml` into it.
 
-- Create a directory `/bsn/spartan/pkg` and put `Data-Center-System-1.3.0.jar ` into it.
+- Create a directory `/bsn/spartan/pkg` and put `Data-Center-System-1.3.1.jar ` into it.
 
 - Return to the directory `/bsn/spartan` and start the service:
 ```
