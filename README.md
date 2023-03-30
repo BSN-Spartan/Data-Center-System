@@ -76,7 +76,7 @@ It is recommended to build the Data Center Management System on Linux Server wit
 
 ### 2.1 Downloading the Package
 
-Download the [package of the Data Center Management System](https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.3.0). You can also download the source code on this page and compile it by yourself.
+Download the [package of the Data Center Management System](https://github.com/BSN-Spartan/Data-Center-System/releases/tag/v1.3.1). You can also download the source code on this page and compile it by yourself.
 
 ### 2.2 Downloading Configuration Files
 
