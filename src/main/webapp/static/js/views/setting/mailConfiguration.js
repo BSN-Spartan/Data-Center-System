@@ -1,6 +1,6 @@
 var dataD = [];
 var hideData = {};
-var emailRegExp = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+var emailRegExp =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 var judgeFn = /\s+/g;
 
 $(document).ready(function () {
