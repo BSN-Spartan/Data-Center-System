@@ -19,7 +19,7 @@ public class FileCode {
         try {
             imageBytes = file.getBytes();
             Base64.Encoder base64Encoder = Base64.getEncoder();
-            base64EncoderImg = IconPrefixEnum.getEnumByCode(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."))).getName() + base64Encoder.encode(imageBytes);
+            base64EncoderImg = IconPrefixEnum.getEnumByCode(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."))).getName() + base64Encoder.encodeToString(imageBytes);
             base64EncoderImg = base64EncoderImg.replaceAll("[\\s*\t\n\r]", "");
         } catch (IOException e) {
             throw new RuntimeException(e);
